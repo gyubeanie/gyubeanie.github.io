@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Climate Warming Trajectory Survey</title>
+    <link href="https://cdn.tailwindcss.com" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+    <style>
+        .control-point {
+            cursor: move;
+            touch-action: none;
+        }
+        
+        .dark .chart-container canvas {
+            filter: invert(0.9) hue-rotate(180deg);
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(93, 92, 222, 0.3);
+            border-radius: 50%;
+            border-top-color: #5D5CDE;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Custom chart tooltip styling */
+        .custom-tooltip {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 6px;
+            padding: 8px 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            color: #333;
+            border: 1px solid #ddd;
+            pointer-events: none;
+        }
+
+        .dark .custom-tooltip {
+            background-color: rgba(30, 30, 30, 0.8);
+            color: #f0f0f0;
+            border-color: #444;
+        }
+
+        /* Make sure slider thumbs are visible in dark mode */
+        .dark input[type="range"]::-webkit-slider-thumb {
+            background: #5D5CDE;
+        }
+        .dark input[type="range"]::-moz-range-thumb {
+            background: #5D5CDE;
+        }
+    </style>
+    <script>
+        // Dark mode detection and handling
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // Configure Tailwind
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        'primary-light': '#7A79E3',
+                        'primary-dark': '#4A49B8',
+                        historical: '#3B82F6', // blue-500
+                        prediction: '#EF4444', // red-500
+                        'ssp1': '#10B981', // green-500
+                        'ssp2': '#84CC16', // lime-500
+                        'ssp3': '#FBBF24', // amber-400
+                        'ssp4': '#F97316', // orange-500
+                        'ssp5': '#DC2626', // red-600
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300">
+    <div class="min-h-screen w-full flex flex-col items-center">
+        <header class="w-full py-6 px-4 text-center">
+            <h1 class="text-2xl md:text-3xl font-bold text-primary dark:text-primary-light">Climate Warming Trajectory Survey</h1>
+            <p class="mt-2 text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                Predict global temperature changes through the year 2100 and compare your prediction with scientific models
+            </p>
+        </header>
+
+        <main class="w-full max-w-4xl px-4 pb-12">
+            <!-- Progress Indicator -->
+            <div class="mb-8">
+                <div class="flex justify-between">
+                    <div class="step-indicator flex flex-col items-center">
+                        <div id="step1-circle" class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white">
+                            1
+                        </div>
+                        <span class="mt-1 text-sm">Instructions</span>
+                    </div>
+                    <div class="flex-1 flex items-center mx-2">
+                        <div class="h-1 w-full bg-gray-200 dark:bg-gray-700">
+                            <div id="progress-line-1" class="h-1 bg-primary" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="step-indicator flex flex-col items-center">
+                        <div id="step2-circle" class="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-400">
+                            2
+                        </div>
+                        <span class="mt-1 text-sm">Prediction</span>
+                    </div>
+                    <div class="flex-1 flex items-center mx-2">
+                        <div class="h-1 w-full bg-gray-200 dark:bg-gray-700">
+                            <div id="progress-line-2" class="h-1 bg-primary" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="step-indicator flex flex-col items-center">
+                        <div id="step3-circle" class="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-400">
+                            3
+                        </div>
+                        <span class="mt-1 text-sm">Results</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 1: Instructions -->
+            <div id="step-1" class="step-content bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-bold mb-4">Understanding Climate Predictions</h2>
+                
+                <div class="space-y-4">
+                    <p>
+                        This survey allows you to create your own prediction of how global temperatures might change through the year 2100.
+                    </p>
+                    
+                    <div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-md">
+                        <h3 class="font-semibold mb-2">What you'll do:</h3>
+                        <ol class="list-decimal pl-5 space-y-2">
+                            <li>View historical temperature data from 1950-2023</li>
+                            <li>Create your own temperature prediction curve by adjusting control points</li>
+                            <li>Compare your prediction with scientific climate models</li>
+                        </ol>
+                    </div>
+                    
+                    <p>
+                        The temperature data shows <strong>anomalies</strong> relative to pre-industrial levels (1850-1900 average).
+                        As of 2023, global temperatures were approximately 1.24°C above pre-industrial levels.
+                    </p>
+                    
+                    <p>
+                        On the next screen, you'll use three control points to shape your prediction:
+                    </p>
+                    
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>2025 point (fixed year, adjustable temperature)</li>
+                        <li>Middle point (adjustable year and temperature, default at 2050)</li>
+                        <li>2100 point (fixed year, adjustable temperature)</li>
+                    </ul>
+                    
+                    <p>
+                        Your prediction will be compared with scientific climate models based on different socioeconomic pathways (SSPs).
+                    </p>
+                </div>
+                
+                <div class="mt-8 flex justify-end">
+                    <button id="next-to-prediction" class="bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-md transition-colors">
+                        Continue to Prediction
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Prediction Interface -->
+            <div id="step-2" class="step-content hidden bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-bold mb-4">Create Your Prediction</h2>
+                
+                <p class="mb-4">
+                    The blue line shows historical temperature anomalies from 1950-2023. 
+                    Create your prediction by adjusting the control points (red dots) below.
+                </p>
+                
+                <div class="chart-container relative">
+                    <canvas id="prediction-chart" class="w-full h-64 md:h-80"></canvas>
+                    
+                    <!-- Control point values display -->
+                    <div class="control-points-display flex flex-wrap justify-between text-sm mt-2">
+                        <div class="control-point-info">
+                            <span class="font-medium">2025:</span> 
+                            <span id="point1-value">+1.28°C</span>
+                        </div>
+                        <div class="control-point-info">
+                            <span class="font-medium">Mid (<span id="mid-year">2050</span>):</span> 
+                            <span id="point2-value">+1.70°C</span>
+                        </div>
+                        <div class="control-point-info">
+                            <span class="font-medium">2100:</span> 
+                            <span id="point3-value">+2.50°C</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="control-sliders mt-8 space-y-4">
+                    <div>
+                        <label for="point1-slider" class="block mb-1 font-medium">2025 Temperature (°C)</label>
+                        <input 
+                            type="range" 
+                            id="point1-slider" 
+                            min="1.24" 
+                            max="1.5" 
+                            step="0.01" 
+                            value="1.28"
+                            class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                        >
+                    </div>
+                    
+                    <div>
+                        <label for="midpoint-year-slider" class="block mb-1 font-medium">Middle Point Year</label>
+                        <input 
+                            type="range" 
+                            id="midpoint-year-slider" 
+                            min="2030" 
+                            max="2090" 
+                            step="1" 
+                            value="2050"
+                            class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                        >
+                    </div>
+                    
+                    <div>
+                        <label for="point2-slider" class="block mb-1 font-medium">Middle Point Temperature (°C)</label>
+                        <input 
+                            type="range" 
+                            id="point2-slider" 
+                            min="1.2" 
+                            max="4.0" 
+                            step="0.05" 
+                            value="1.7"
+                            class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                        >
+                    </div>
+                    
+                    <div>
+                        <label for="point3-slider" class="block mb-1 font-medium">2100 Temperature (°C)</label>
+                        <input 
+                            type="range" 
+                            id="point3-slider" 
+                            min="1.0" 
+                            max="6.0" 
+                            step="0.05" 
+                            value="2.5"
+                            class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                        >
+                    </div>
+                </div>
+                
+                <div class="mt-8 flex justify-between">
+                    <button id="reset-prediction" class="border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 px-4 py-2 rounded-md transition-colors">
+                        Reset
+                    </button>
+                    <div>
+                        <button id="back-to-instructions" class="mr-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 px-4 py-2 rounded-md transition-colors">
+                            Back
+                        </button>
+                        <button id="submit-prediction" class="bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-md transition-colors">
+                            See Results
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Results Comparison -->
+            <div id="step-3" class="step-content hidden bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-bold mb-4">Your Prediction vs. Scientific Models</h2>
+                
+                <div id="loading-screen" class="flex flex-col items-center justify-center py-12">
+                    <div class="loading-spinner mb-4"></div>
+                    <p>Comparing your prediction with scientific models...</p>
+                </div>
+                
+                <div id="results-content" class="hidden">
+                    <p class="mb-4">
+                        Here's how your prediction compares to established scientific climate models:
+                    </p>
+                    
+                    <div class="chart-container relative">
+                        <canvas id="comparison-chart" class="w-full h-64 md:h-80"></canvas>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <h3 class="font-semibold mb-2">About the Climate Models:</h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-md border-l-4 border-ssp1">
+                                <h4 class="font-medium">SSP1-1.9: Sustainability</h4>
+                                <p class="text-sm mt-1">Rapid shift to sustainable practices, low greenhouse gas emissions, high climate mitigation.</p>
+                                <p class="text-sm font-bold mt-1">2100 warming: +1.34°C</p>
+                            </div>
+                            
+                            <div class="bg-lime-50 dark:bg-lime-900/20 p-4 rounded-md border-l-4 border-ssp2">
+                                <h4 class="font-medium">SSP2-2.6: Middle of the Road (Low)</h4>
+                                <p class="text-sm mt-1">Social, economic, and technological trends follow historical patterns, moderate mitigation.</p>
+                                <p class="text-sm font-bold mt-1">2100 warming: +1.75°C</p>
+                            </div>
+                            
+                            <div class="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-md border-l-4 border-ssp3">
+                                <h4 class="font-medium">SSP3-4.5: Regional Rivalry (Medium)</h4>
+                                <p class="text-sm mt-1">Focus on national security and self-reliance, slower technological change.</p>
+                                <p class="text-sm font-bold mt-1">2100 warming: +2.62°C</p>
+                            </div>
+                            
+                            <div class="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-md border-l-4 border-ssp4">
+                                <h4 class="font-medium">SSP4-Baseline: Inequality</h4>
+                                <p class="text-sm mt-1">Increasing disparities, technology access limited to high-income areas, minimal mitigation.</p>
+                                <p class="text-sm font-bold mt-1">2100 warming: +3.76°C</p>
+                            </div>
+                            
+                            <div class="md:col-span-2 bg-red-50 dark:bg-red-900/20 p-4 rounded-md border-l-4 border-ssp5">
+                                <h4 class="font-medium">SSP5-Baseline: Fossil-fueled Development</h4>
+                                <p class="text-sm mt-1">Rapid economic growth driven by fossil fuels, increased energy demand, no significant mitigation.</p>
+                                <p class="text-sm font-bold mt-1">2100 warming: +5.05°C</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 flex justify-center">
+                        <button id="draw-new-prediction" class="bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-md transition-colors">
+                            Draw Another Prediction
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Historical temperature anomaly data (1950-2023)
+        const historicalData = [
+            {year: 1950, temp: 0.08}, {year: 1951, temp: 0.11}, {year: 1952, temp: 0.13},
+            {year: 1953, temp: 0.20}, {year: 1954, temp: 0.07}, {year: 1955, temp: 0.06},
+            {year: 1956, temp: 0.04}, {year: 1957, temp: 0.15}, {year: 1958, temp: 0.16},
+            {year: 1959, temp: 0.19}, {year: 1960, temp: 0.14}, {year: 1961, temp: 0.18},
+            {year: 1962, temp: 0.19}, {year: 1963, temp: 0.23}, {year: 1964, temp: 0.06},
+            {year: 1965, temp: 0.08}, {year: 1966, temp: 0.09}, {year: 1967, temp: 0.12},
+            {year: 1968, temp: 0.11}, {year: 1969, temp: 0.20}, {year: 1970, temp: 0.18},
+            {year: 1971, temp: 0.10}, {year: 1972, temp: 0.17}, {year: 1973, temp: 0.28},
+            {year: 1974, temp: 0.12}, {year: 1975, temp: 0.11}, {year: 1976, temp: 0.08},
+            {year: 1977, temp: 0.24}, {year: 1978, temp: 0.19}, {year: 1979, temp: 0.24},
+            {year: 1980, temp: 0.31}, {year: 1981, temp: 0.37}, {year: 1982, temp: 0.22},
+            {year: 1983, temp: 0.38}, {year: 1984, temp: 0.23}, {year: 1985, temp: 0.21},
+            {year: 1986, temp: 0.27}, {year: 1987, temp: 0.39}, {year: 1988, temp: 0.40},
+            {year: 1989, temp: 0.34}, {year: 1990, temp: 0.47}, {year: 1991, temp: 0.42},
+            {year: 1992, temp: 0.31}, {year: 1993, temp: 0.33}, {year: 1994, temp: 0.40},
+            {year: 1995, temp: 0.48}, {year: 1996, temp: 0.40}, {year: 1997, temp: 0.54},
+            {year: 1998, temp: 0.66}, {year: 1999, temp: 0.46}, {year: 2000, temp: 0.46},
+            {year: 2001, temp: 0.58}, {year: 2002, temp: 0.63}, {year: 2003, temp: 0.64},
+            {year: 2004, temp: 0.58}, {year: 2005, temp: 0.65}, {year: 2006, temp: 0.63},
+            {year: 2007, temp: 0.66}, {year: 2008, temp: 0.58}, {year: 2009, temp: 0.68},
+            {year: 2010, temp: 0.75}, {year: 2011, temp: 0.66}, {year: 2012, temp: 0.70},
+            {year: 2013, temp: 0.74}, {year: 2014, temp: 0.79}, {year: 2015, temp: 0.94},
+            {year: 2016, temp: 1.02}, {year: 2017, temp: 0.94}, {year: 2018, temp: 0.89},
+            {year: 2019, temp: 0.99}, {year: 2020, temp: 1.02}, {year: 2021, temp: 0.89},
+            {year: 2022, temp: 0.91}, {year: 2023, temp: 1.24}
+        ];
+
+        // SSP Scenario data
+        const sspScenarios = {
+            'SSP1-1.9': [
+                {year: 2025, temp: 1.33}, {year: 2030, temp: 1.37}, {year: 2035, temp: 1.39},
+                {year: 2040, temp: 1.42}, {year: 2045, temp: 1.42}, {year: 2050, temp: 1.41},
+                {year: 2055, temp: 1.40}, {year: 2060, temp: 1.40}, {year: 2065, temp: 1.39},
+                {year: 2070, temp: 1.37}, {year: 2075, temp: 1.36}, {year: 2080, temp: 1.36},
+                {year: 2085, temp: 1.35}, {year: 2090, temp: 1.35}, {year: 2095, temp: 1.34},
+                {year: 2100, temp: 1.34}
+            ],
+            'SSP2-2.6': [
+                {year: 2025, temp: 1.31}, {year: 2030, temp: 1.41}, {year: 2035, temp: 1.51},
+                {year: 2040, temp: 1.61}, {year: 2045, temp: 1.68}, {year: 2050, temp: 1.73},
+                {year: 2055, temp: 1.75}, {year: 2060, temp: 1.76}, {year: 2065, temp: 1.76},
+                {year: 2070, temp: 1.76}, {year: 2075, temp: 1.76}, {year: 2080, temp: 1.76},
+                {year: 2085, temp: 1.76}, {year: 2090, temp: 1.75}, {year: 2095, temp: 1.75},
+                {year: 2100, temp: 1.75}
+            ],
+            'SSP3-4.5': [
+                {year: 2025, temp: 1.32}, {year: 2030, temp: 1.44}, {year: 2035, temp: 1.58},
+                {year: 2040, temp: 1.71}, {year: 2045, temp: 1.84}, {year: 2050, temp: 1.96},
+                {year: 2055, temp: 2.09}, {year: 2060, temp: 2.21}, {year: 2065, temp: 2.31},
+                {year: 2070, temp: 2.40}, {year: 2075, temp: 2.46}, {year: 2080, temp: 2.51},
+                {year: 2085, temp: 2.55}, {year: 2090, temp: 2.57}, {year: 2095, temp: 2.60},
+                {year: 2100, temp: 2.62}
+            ],
+            'SSP4-Baseline': [
+                {year: 2025, temp: 1.33}, {year: 2030, temp: 1.48}, {year: 2035, temp: 1.65},
+                {year: 2040, temp: 1.84}, {year: 2045, temp: 2.04}, {year: 2050, temp: 2.25},
+                {year: 2055, temp: 2.45}, {year: 2060, temp: 2.66}, {year: 2065, temp: 2.87},
+                {year: 2070, temp: 3.08}, {year: 2075, temp: 3.28}, {year: 2080, temp: 3.44},
+                {year: 2085, temp: 3.55}, {year: 2090, temp: 3.66}, {year: 2095, temp: 3.71},
+                {year: 2100, temp: 3.76}
+            ],
+            'SSP5-Baseline': [
+                {year: 2025, temp: 1.33}, {year: 2030, temp: 1.51}, {year: 2035, temp: 1.73},
+                {year: 2040, temp: 1.96}, {year: 2045, temp: 2.22}, {year: 2050, temp: 2.51},
+                {year: 2055, temp: 2.82}, {year: 2060, temp: 3.12}, {year: 2065, temp: 3.44},
+                {year: 2070, temp: 3.74}, {year: 2075, temp: 4.04}, {year: 2080, temp: 4.32},
+                {year: 2085, temp: 4.56}, {year: 2090, temp: 4.78}, {year: 2095, temp: 4.93},
+                {year: 2100, temp: 5.05}
+            ]
+        };
+
+        // Default prediction control points
+        let predictionPoints = [
+            {year: 2025, temp: 1.28},
+            {year: 2050, temp: 1.70},
+            {year: 2100, temp: 2.50}
+        ];
+
+        // Store user's prediction for the results page
+        let userPrediction = [];
+
+        // Initialize charts on document load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Step navigation
+            setupStepNavigation();
+            
+            // Initialize the prediction chart
+            initPredictionChart();
+            
+            // Set up slider controls
+            setupSliderControls();
+        });
+
+        function setupStepNavigation() {
+            // Step 1 to Step 2
+            document.getElementById('next-to-prediction').addEventListener('click', function() {
+                showStep(2);
+            });
+            
+            // Step 2 to Step 1 (back button)
+            document.getElementById('back-to-instructions').addEventListener('click', function() {
+                showStep(1);
+            });
+            
+            // Step 2 to Step 3 (submit prediction)
+            document.getElementById('submit-prediction').addEventListener('click', function() {
+                savePredictionAndShowResults();
+            });
+            
+            // Step 3 to Step 2 (draw new prediction)
+            document.getElementById('draw-new-prediction').addEventListener('click', function() {
+                showStep(2);
+            });
+            
+            // Reset prediction button
+            document.getElementById('reset-prediction').addEventListener('click', resetPrediction);
+        }
+
+        function showStep(stepNumber) {
+            // Hide all steps
+            document.querySelectorAll('.step-content').forEach(step => {
+                step.classList.add('hidden');
+            });
+            
+            // Show the target step
+            document.getElementById(`step-${stepNumber}`).classList.remove('hidden');
+            
+            // Update progress indicator
+            updateProgressIndicator(stepNumber);
+            
+            // If showing the comparison step, show loading screen first
+            if (stepNumber === 3) {
+                document.getElementById('loading-screen').classList.remove('hidden');
+                document.getElementById('results-content').classList.add('hidden');
+                
+                // Simulate loading and then show results
+                setTimeout(() => {
+                    document.getElementById('loading-screen').classList.add('hidden');
+                    document.getElementById('results-content').classList.remove('hidden');
+                    initComparisonChart();
+                }, 1200);
+            }
+        }
+
+        function updateProgressIndicator(currentStep) {
+            // Reset all circles and progress lines
+            for (let i = 1; i <= 3; i++) {
+                const circle = document.getElementById(`step${i}-circle`);
+                if (i < currentStep) {
+                    // Completed steps
+                    circle.classList.remove('bg-gray-300', 'dark:bg-gray-700', 'text-gray-600', 'dark:text-gray-400');
+                    circle.classList.add('bg-primary', 'text-white');
+                } else if (i === currentStep) {
+                    // Current step
+                    circle.classList.remove('bg-gray-300', 'dark:bg-gray-700', 'text-gray-600', 'dark:text-gray-400');
+                    circle.classList.add('bg-primary', 'text-white');
+                } else {
+                    // Future steps
+                    circle.classList.remove('bg-primary', 'text-white');
+                    circle.classList.add('bg-gray-300', 'dark:bg-gray-700', 'text-gray-600', 'dark:text-gray-400');
+                }
+            }
+            
+            // Update progress lines
+            document.getElementById('progress-line-1').style.width = currentStep > 1 ? '100%' : '0%';
+            document.getElementById('progress-line-2').style.width = currentStep > 2 ? '100%' : '0%';
+        }
+
+        function initPredictionChart() {
+            const ctx = document.getElementById('prediction-chart').getContext('2d');
+            
+            // Create chart
+            window.predictionChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [
+                        {
+                            label: 'Historical Data',
+                            data: historicalData,
+                            parsing: {
+                                xAxisKey: 'year',
+                                yAxisKey: 'temp'
+                            },
+                            borderColor: '#3B82F6', // blue
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)', // light blue
+                            pointRadius: 3,
+                            pointHoverRadius: 5,
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: false
+                        },
+                        {
+                            label: 'Your Prediction',
+                            data: generateSmoothPrediction(),
+                            parsing: {
+                                xAxisKey: 'year',
+                                yAxisKey: 'temp'
+                            },
+                            borderColor: '#EF4444', // red
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)', // light red
+                            pointRadius: 0,
+                            borderWidth: 2,
+                            borderDash: [0],
+                            tension: 0.4,
+                            fill: false
+                        },
+                        {
+                            label: 'Control Points',
+                            data: predictionPoints,
+                            parsing: {
+                                xAxisKey: 'year',
+                                yAxisKey: 'temp'
+                            },
+                            borderColor: '#EF4444', // red
+                            backgroundColor: '#EF4444', // red
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            borderWidth: 0,
+                            showLine: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    aspectRatio: window.innerWidth < 768 ? 1.2 : 2,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            min: 1950,
+                            max: 2100,
+                            title: {
+                                display: true,
+                                text: 'Year',
+                                color: getTextColor()
+                            },
+                            ticks: {
+                                stepSize: 10,
+                                color: getTextColor()
+                            },
+                            grid: {
+                                color: getGridColor()
+                            }
+                        },
+                        y: {
+                            type: 'linear',
+                            min: 0,
+                            max: 6,
+                            title: {
+                                display: true,
+                                text: 'Temperature Anomaly (°C)',
+                                color: getTextColor()
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return '+' + value.toFixed(1) + '°C';
+                                },
+                                color: getTextColor()
+                            },
+                            grid: {
+                                color: getGridColor()
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': +' + context.parsed.y.toFixed(2) + '°C';
+                                }
+                            }
+                        },
+                        annotation: {
+                            annotations: {
+                                connectLine: {
+                                    type: 'line',
+                                    xMin: historicalData[historicalData.length - 1].year,
+                                    xMax: predictionPoints[0].year,
+                                    yMin: historicalData[historicalData.length - 1].temp,
+                                    yMax: predictionPoints[0].temp,
+                                    borderColor: '#EF4444',
+                                    borderWidth: 2,
+                                    borderDash: [5, 5]
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Adjust chart on window resize
+            window.addEventListener('resize', function() {
+                if (window.predictionChart) {
+                    window.predictionChart.options.aspectRatio = window.innerWidth < 768 ? 1.2 : 2;
+                    window.predictionChart.update();
+                }
+            });
+        }
+
+        function getTextColor() {
+            return document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)';
+        }
+
+        function getGridColor() {
+            return document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+        }
+
+        function setupSliderControls() {
+            // 2025 Point Temperature Slider
+            const point1Slider = document.getElementById('point1-slider');
+            point1Slider.addEventListener('input', function() {
+                predictionPoints[0].temp = parseFloat(this.value);
+                document.getElementById('point1-value').textContent = '+' + predictionPoints[0].temp.toFixed(2) + '°C';
+                updatePredictionChart();
+            });
+            
+            // Middle Point Year Slider
+            const midpointYearSlider = document.getElementById('midpoint-year-slider');
+            midpointYearSlider.addEventListener('input', function() {
+                predictionPoints[1].year = parseInt(this.value);
+                document.getElementById('mid-year').textContent = predictionPoints[1].year;
+                updatePredictionChart();
+            });
+            
+            // Middle Point Temperature Slider
+            const point2Slider = document.getElementById('point2-slider');
+            point2Slider.addEventListener('input', function() {
+                predictionPoints[1].temp = parseFloat(this.value);
+                document.getElementById('point2-value').textContent = '+' + predictionPoints[1].temp.toFixed(2) + '°C';
+                updatePredictionChart();
+            });
+            
+            // 2100 Point Temperature Slider
+            const point3Slider = document.getElementById('point3-slider');
+            point3Slider.addEventListener('input', function() {
+                predictionPoints[2].temp = parseFloat(this.value);
+                document.getElementById('point3-value').textContent = '+' + predictionPoints[2].temp.toFixed(2) + '°C';
+                updatePredictionChart();
+            });
+        }
+
+        function updatePredictionChart() {
+            // Update prediction curve
+            window.predictionChart.data.datasets[1].data = generateSmoothPrediction();
+            
+            // Update control points
+            window.predictionChart.data.datasets[2].data = predictionPoints;
+            
+            // Update connector line annotation
+            window.predictionChart.options.plugins.annotation.annotations.connectLine.yMax = predictionPoints[0].temp;
+            
+            // Update chart
+            window.predictionChart.update();
+        }
+
+        function generateSmoothPrediction() {
+            // Create a smooth curve from historical data through control points
+            
+            // Start from the last historical data point
+            const lastHistorical = historicalData[historicalData.length - 1];
+            
+            // Generate points along the prediction curve
+            const predictionData = [];
+            
+            // Add the last historical point
+            predictionData.push(lastHistorical);
+            
+            // Generate points between the last historical data and the first control point
+            const firstSegmentYears = predictionPoints[0].year - lastHistorical.year;
+            for (let i = 1; i < firstSegmentYears; i++) {
+                const year = lastHistorical.year + i;
+                const progress = i / firstSegmentYears;
+                const temp = lastHistorical.temp + (predictionPoints[0].temp - lastHistorical.temp) * progress;
+                predictionData.push({year, temp});
+            }
+            
+            // Add the control points
+            predictionPoints.forEach(point => {
+                predictionData.push({...point});
+            });
+            
+            // Generate more points between control points for a smoother curve
+            for (let i = 0; i < predictionPoints.length - 1; i++) {
+                const start = predictionPoints[i];
+                const end = predictionPoints[i + 1];
+                const years = end.year - start.year;
+                
+                // Skip if years is too small
+                if (years <= 2) continue;
+                
+                // Add intermediate points
+                const numPoints = Math.floor(years / 2);
+                for (let j = 1; j < numPoints; j++) {
+                    const progress = j / numPoints;
+                    const year = Math.round(start.year + (end.year - start.year) * progress);
+                    
+                    // Cubic interpolation for smoother curve
+                    const t = progress;
+                    const t2 = t * t;
+                    const t3 = t2 * t;
+                    const temp = (2*t3-3*t2+1) * start.temp + (t3-2*t2+t) * (end.temp - start.temp) + (-2*t3+3*t2) * end.temp;
+                    
+                    // Insert at the right position to maintain order
+                    const insertIndex = predictionData.findIndex(p => p.year > year);
+                    if (insertIndex === -1) {
+                        predictionData.push({year, temp});
+                    } else {
+                        predictionData.splice(insertIndex, 0, {year, temp});
+                    }
+                }
+            }
+            
+            // Sort by year to ensure the line is drawn correctly
+            predictionData.sort((a, b) => a.year - b.year);
+            
+            return predictionData;
+        }
+
+        function resetPrediction() {
+            // Reset to default prediction values
+            predictionPoints = [
+                {year: 2025, temp: 1.28},
+                {year: 2050, temp: 1.70},
+                {year: 2100, temp: 2.50}
+            ];
+            
+            // Update sliders
+            document.getElementById('point1-slider').value = predictionPoints[0].temp;
+            document.getElementById('midpoint-year-slider').value = predictionPoints[1].year;
+            document.getElementById('point2-slider').value = predictionPoints[1].temp;
+            document.getElementById('point3-slider').value = predictionPoints[2].temp;
+            
+            // Update display values
+            document.getElementById('point1-value').textContent = '+' + predictionPoints[0].temp.toFixed(2) + '°C';
+            document.getElementById('mid-year').textContent = predictionPoints[1].year;
+            document.getElementById('point2-value').textContent = '+' + predictionPoints[1].temp.toFixed(2) + '°C';
+            document.getElementById('point3-value').textContent = '+' + predictionPoints[2].temp.toFixed(2) + '°C';
+            
+            // Update chart
+            updatePredictionChart();
+        }
+
+        function savePredictionAndShowResults() {
+            // Save the user's prediction for the comparison chart
+            userPrediction = generateSmoothPrediction();
+            
+            // Show the results step
+            showStep(3);
+        }
+
+        function initComparisonChart() {
+            const ctx = document.getElementById('comparison-chart').getContext('2d');
+            
+            // Create datasets for the comparison chart
+            const datasets = [
+                {
+                    label: 'Historical Data',
+                    data: historicalData,
+                    parsing: {
+                        xAxisKey: 'year',
+                        yAxisKey: 'temp'
+                    },
+                    borderColor: '#3B82F6', // blue
+                    backgroundColor: 'rgba(59, 130, 246, 0.05)',
+                    pointRadius: 2,
+                    pointHoverRadius: 4,
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: false,
+                    order: 7
+                },
+                {
+                    label: 'Your Prediction',
+                    data: userPrediction,
+                    parsing: {
+                        xAxisKey: 'year',
+                        yAxisKey: 'temp'
+                    },
+                    borderColor: '#EF4444', // red
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                    pointRadius: 0,
+                    pointHoverRadius: 0,
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: false,
+                    order: 1
+                }
+            ];
+            
+            // Add SSP scenarios
+            let sspOrder = 2;
+            Object.entries(sspScenarios).forEach(([key, data]) => {
+                let color, bgColor;
+                
+                switch(key) {
+                    case 'SSP1-1.9':
+                        color = '#10B981'; // green
+                        bgColor = 'rgba(16, 185, 129, 0.1)';
+                        break;
+                    case 'SSP2-2.6':
+                        color = '#84CC16'; // lime
+                        bgColor = 'rgba(132, 204, 22, 0.1)';
+                        break;
+                    case 'SSP3-4.5':
+                        color = '#FBBF24'; // amber
+                        bgColor = 'rgba(251, 191, 36, 0.1)';
+                        break;
+                    case 'SSP4-Baseline':
+                        color = '#F97316'; // orange
+                        bgColor = 'rgba(249, 115, 22, 0.1)';
+                        break;
+                    case 'SSP5-Baseline':
+                        color = '#DC2626'; // red
+                        bgColor = 'rgba(220, 38, 38, 0.1)';
+                        break;
+                }
+                
+                datasets.push({
+                    label: key,
+                    data: data,
+                    parsing: {
+                        xAxisKey: 'year',
+                        yAxisKey: 'temp'
+                    },
+                    borderColor: color,
+                    backgroundColor: bgColor,
+                    pointRadius: 0,
+                    pointHoverRadius: 3,
+                    borderWidth: 1.5,
+                    tension: 0.3,
+                    fill: false,
+                    order: sspOrder++
+                });
+            });
+            
+            // Create chart
+            window.comparisonChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    aspectRatio: window.innerWidth < 768 ? 1.2 : 2,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            min: 1950,
+                            max: 2100,
+                            title: {
+                                display: true,
+                                text: 'Year',
+                                color: getTextColor()
+                            },
+                            ticks: {
+                                stepSize: 10,
+                                color: getTextColor()
+                            },
+                            grid: {
+                                color: getGridColor()
+                            }
+                        },
+                        y: {
+                            type: 'linear',
+                            min: 0,
+                            max: 6,
+                            title: {
+                                display: true,
+                                text: 'Temperature Anomaly (°C)',
+                                color: getTextColor()
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return '+' + value.toFixed(1) + '°C';
+                                },
+                                color: getTextColor()
+                            },
+                            grid: {
+                                color: getGridColor()
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': +' + context.parsed.y.toFixed(2) + '°C';
+                                }
+                            }
+                        },
+                        annotation: {
+                            annotations: {
+                                connectLine: {
+                                    type: 'line',
+                                    xMin: historicalData[historicalData.length - 1].year,
+                                    xMax: userPrediction.find(p => p.year > historicalData[historicalData.length - 1].year).year,
+                                    yMin: historicalData[historicalData.length - 1].temp,
+                                    yMax: userPrediction.find(p => p.year > historicalData[historicalData.length - 1].year).temp,
+                                    borderColor: '#EF4444',
+                                    borderWidth: 2,
+                                    borderDash: [5, 5]
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Adjust chart on window resize
+            window.addEventListener('resize', function() {
+                if (window.comparisonChart) {
+                    window.comparisonChart.options.aspectRatio = window.innerWidth < 768 ? 1.2 : 2;
+                    window.comparisonChart.update();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
