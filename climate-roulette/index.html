@@ -1,0 +1,2111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Climate Roulette — Tipping Point Monte Carlo</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #0a0a0a;
+            --surface: #111;
+            --surface2: #1a1a1a;
+            --border: #1e1e1e;
+            --border2: #2a2a2a;
+            --text: #e0e0e0;
+            --text-dim: #888;
+            --text-dimmer: #555;
+            --cyan: #00d4ff;
+            --cyan-bg: rgba(0,212,255,0.08);
+            --red: #ef4444;
+            --orange: #f59e0b;
+            --green: #22c55e;
+            --yellow: #fbbf24;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            transition: background 1s;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* ── Header ── */
+        header {
+            text-align: center;
+            padding: 2.5rem 1.5rem 1rem;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.02em;
+        }
+
+        header .subtitle {
+            margin-top: 0.4rem;
+            font-size: 1rem;
+            color: var(--text-dim);
+        }
+
+        header .explainer {
+            margin-top: 0.8rem;
+            font-size: 0.85rem;
+            color: var(--text-dimmer);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        /* ── Panel base ── */
+        .panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .panel h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ccc;
+            margin-bottom: 1rem;
+        }
+
+        /* ── Temperature + Roll Section ── */
+        .roll-section {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .temp-dial {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 3px solid var(--border2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--surface2);
+            position: relative;
+            transition: border-color 0.5s, box-shadow 0.5s;
+        }
+
+        .temp-dial.warming {
+            border-color: var(--orange);
+            box-shadow: 0 0 30px rgba(245,158,11,0.15);
+        }
+
+        .temp-dial.hot {
+            border-color: var(--red);
+            box-shadow: 0 0 30px rgba(239,68,68,0.2);
+        }
+
+        .temp-dial .temp-value {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1;
+            transition: color 0.5s;
+        }
+
+        .temp-dial .temp-label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-top: 0.3rem;
+        }
+
+        .temp-dial .temp-delta {
+            font-size: 0.8rem;
+            color: var(--cyan);
+            margin-top: 0.2rem;
+        }
+
+        .roll-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .roll-btn {
+            padding: 1rem 2.5rem;
+            border: 2px solid var(--cyan);
+            border-radius: 12px;
+            background: rgba(0,212,255,0.1);
+            color: var(--cyan);
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .roll-btn:hover:not(:disabled) {
+            background: rgba(0,212,255,0.2);
+            box-shadow: 0 0 20px rgba(0,212,255,0.15);
+        }
+
+        .roll-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        .roll-btn.rolling {
+            animation: pulse 0.4s ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .auto-run-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.82rem;
+            color: var(--text-dim);
+        }
+
+        .auto-run-row input[type="range"] {
+            width: 120px;
+            accent-color: var(--cyan);
+        }
+
+        .auto-run-row .target-label {
+            color: var(--cyan);
+            font-weight: 600;
+            min-width: 3rem;
+        }
+
+        .secondary-btn {
+            padding: 0.5rem 1.2rem;
+            border: 1px solid #333;
+            border-radius: 8px;
+            background: #222;
+            color: #ccc;
+            font-size: 0.82rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .secondary-btn:hover:not(:disabled) {
+            background: #2a2a2a;
+            border-color: #555;
+            color: #fff;
+        }
+
+        .secondary-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+        .btn-row {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* ── Roll Log ── */
+        .roll-log {
+            margin-top: 1rem;
+            max-height: 120px;
+            overflow-y: auto;
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            line-height: 1.7;
+            padding: 0.5rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+
+        .roll-log .tip-event {
+            color: var(--red);
+            font-weight: 600;
+        }
+
+        .roll-log .safe-event {
+            color: var(--text-dimmer);
+        }
+
+        .roll-log .cascade-event {
+            color: var(--orange);
+            font-weight: 500;
+        }
+
+        /* ── Tipping Point Grid ── */
+        .tp-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.6rem;
+        }
+
+        .tp-card {
+            background: var(--surface2);
+            border: 1px solid var(--border2);
+            border-radius: 8px;
+            padding: 0.7rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tp-card .tp-name {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: #ccc;
+            line-height: 1.3;
+            margin-bottom: 0.3rem;
+        }
+
+        .tp-card .tp-abbrev {
+            font-size: 0.6rem;
+            color: var(--text-dimmer);
+            font-weight: 500;
+            letter-spacing: 0.05em;
+        }
+
+        .tp-card .tp-range {
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            margin-top: 0.25rem;
+        }
+
+        .tp-card .tp-prob-bar {
+            height: 3px;
+            background: var(--border2);
+            border-radius: 2px;
+            margin-top: 0.4rem;
+            overflow: hidden;
+        }
+
+        .tp-card .tp-prob-fill {
+            height: 100%;
+            border-radius: 2px;
+            background: var(--green);
+            width: 0%;
+            transition: width 0.3s, background 0.3s;
+        }
+
+        .tp-card .tp-status {
+            font-size: 0.62rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-top: 0.3rem;
+        }
+
+        .tp-card.safe .tp-status { color: var(--green); }
+        .tp-card.at-risk .tp-status { color: var(--orange); }
+        .tp-card.at-risk { border-color: rgba(245,158,11,0.3); }
+        .tp-card.at-risk .tp-prob-fill { background: var(--orange); }
+
+        .tp-card.tipped {
+            border-color: rgba(239,68,68,0.5);
+            background: rgba(239,68,68,0.08);
+        }
+        .tp-card.tipped .tp-status { color: var(--red); }
+        .tp-card.tipped .tp-prob-fill { background: var(--red); width: 100% !important; }
+
+        .tp-card.cascade-flash {
+            animation: cascadeFlash 0.6s ease-out;
+        }
+
+        @keyframes cascadeFlash {
+            0% { box-shadow: 0 0 0 0 rgba(245,158,11,0.6); }
+            100% { box-shadow: 0 0 0 0 rgba(245,158,11,0); }
+        }
+
+        /* ── Damage Summary ── */
+        .damage-summary {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .damage-card {
+            flex: 1;
+            min-width: 140px;
+            background: var(--surface2);
+            border: 1px solid var(--border2);
+            border-radius: 8px;
+            padding: 0.8rem;
+            text-align: center;
+        }
+
+        .damage-card .damage-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .damage-card .damage-label {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            margin-top: 0.3rem;
+        }
+
+        .damage-card .damage-pct {
+            font-size: 0.72rem;
+            color: var(--text-dimmer);
+            margin-top: 0.15rem;
+        }
+
+        .dmg-low { color: var(--green); }
+        .dmg-med { color: var(--yellow); }
+        .dmg-high { color: var(--orange); }
+        .dmg-extreme { color: var(--red); }
+
+        /* ── Damage function selector ── */
+        .dmg-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-top: 0.75rem;
+        }
+
+        .dmg-selector select {
+            background: var(--surface2);
+            border: 1px solid var(--border2);
+            border-radius: 6px;
+            color: var(--text);
+            padding: 0.35rem 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        /* ── Monte Carlo Section ── */
+        #mc-section { display: none; }
+
+        .mc-controls {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            margin-top: 1rem;
+        }
+
+        /* ── Ergodicity Panel ── */
+        .ergo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .ergo-card {
+            background: var(--surface2);
+            border: 1px solid var(--border2);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .ergo-card h3 {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .ergo-card .ergo-value {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .ergo-card .ergo-sub {
+            font-size: 0.72rem;
+            color: var(--text-dimmer);
+            margin-top: 0.3rem;
+        }
+
+        .ergo-card.mean { border-color: rgba(0,212,255,0.3); }
+        .ergo-card.mean .ergo-value { color: var(--cyan); }
+
+        .ergo-card.yours { border-color: rgba(251,191,36,0.3); }
+        .ergo-card.yours .ergo-value { color: var(--yellow); }
+
+        .ergo-card.worst { border-color: rgba(239,68,68,0.3); }
+        .ergo-card.worst .ergo-value { color: var(--red); }
+
+        /* ── Histogram ── */
+        .histogram-container {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            margin-top: 1rem;
+        }
+
+        /* ── Explainer ── */
+        .explainer-box {
+            background: rgba(0,212,255,0.04);
+            border: 1px solid rgba(0,212,255,0.12);
+            border-radius: 10px;
+            padding: 1.25rem;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            line-height: 1.7;
+        }
+
+        .explainer-box strong { color: #ccc; }
+        .explainer-box .insight-stat {
+            display: inline-block;
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.2);
+            border-radius: 6px;
+            padding: 0.2em 0.5em;
+            color: var(--red);
+            font-weight: 600;
+            font-size: 0.82rem;
+        }
+
+        /* ── World Map ── */
+        .world-map-wrap {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 8px;
+            background: #0d1117;
+            border: 1px solid var(--border2);
+        }
+
+        .world-map-svg {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .world-map-svg .land {
+            fill: #1a2332;
+            stroke: #2a3a4a;
+            stroke-width: 0.5;
+        }
+
+        .world-map-svg .graticule {
+            stroke: rgba(255,255,255,0.04);
+            stroke-width: 0.3;
+            fill: none;
+        }
+
+        .world-map-svg .tp-marker {
+            cursor: pointer;
+            transition: r 0.3s, fill 0.3s, opacity 0.3s;
+        }
+
+        .world-map-svg .tp-marker-ring {
+            fill: none;
+            stroke-width: 1.5;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .world-map-svg .tp-marker-ring.visible {
+            opacity: 1;
+        }
+
+        .world-map-svg .tp-marker-ring.pulsing {
+            animation: mapPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes mapPulse {
+            0%, 100% { r: 8; opacity: 0.6; }
+            50% { r: 14; opacity: 0; }
+        }
+
+        .world-map-svg .cascade-line {
+            fill: none;
+            stroke: var(--orange);
+            stroke-width: 1.5;
+            stroke-dasharray: 6 4;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .world-map-svg .cascade-line.active {
+            opacity: 0.7;
+            animation: dashFlow 1s linear infinite;
+        }
+
+        @keyframes dashFlow {
+            to { stroke-dashoffset: -10; }
+        }
+
+        .world-map-svg .tp-label {
+            font-size: 6px;
+            fill: #aaa;
+            text-anchor: middle;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .map-tooltip {
+            position: absolute;
+            background: rgba(0,0,0,0.9);
+            border: 1px solid var(--border2);
+            border-radius: 6px;
+            padding: 0.5rem 0.7rem;
+            font-size: 0.75rem;
+            color: var(--text);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s;
+            z-index: 10;
+            max-width: 220px;
+            line-height: 1.5;
+        }
+
+        .map-tooltip.visible { opacity: 1; }
+
+        .map-tooltip .tt-name { font-weight: 600; color: #fff; }
+        .map-tooltip .tt-range { color: var(--text-dim); }
+        .map-tooltip .tt-prob { font-weight: 600; }
+        .map-tooltip .tt-status-safe { color: var(--green); }
+        .map-tooltip .tt-status-risk { color: var(--orange); }
+        .map-tooltip .tt-status-tipped { color: var(--red); }
+
+        .map-legend {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 0.6rem;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+        }
+
+        .map-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .map-legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        /* ── Sound Toggle ── */
+        .sound-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 100;
+            background: var(--surface2);
+            border: 1px solid var(--border2);
+            border-radius: 8px;
+            padding: 0.4rem 0.7rem;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .sound-toggle:hover { border-color: #555; color: #fff; }
+        .sound-toggle.muted { opacity: 0.5; }
+
+        /* ── Policy Lever ── */
+        .policy-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .policy-card {
+            background: var(--surface2);
+            border: 1px solid var(--border2);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+
+        .policy-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .policy-card .policy-survive {
+            font-size: 1.8rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .policy-card .policy-label {
+            font-size: 0.68rem;
+            color: var(--text-dim);
+            margin-top: 0.25rem;
+        }
+
+        .policy-card .policy-detail {
+            font-size: 0.7rem;
+            color: var(--text-dimmer);
+            margin-top: 0.4rem;
+            line-height: 1.4;
+        }
+
+        .policy-card .policy-year {
+            font-size: 0.72rem;
+            color: var(--cyan);
+            font-weight: 600;
+            margin-top: 0.3rem;
+        }
+
+        /* ── Lottery Ticket ── */
+        #ticket-section { display: none; }
+
+        .ticket-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .ticket-canvas-wrap {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+        }
+
+        .ticket-canvas-wrap canvas {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .ticket-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        @media (max-width: 800px) {
+            .policy-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 600px) {
+            .policy-grid { grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+            .policy-card { padding: 0.7rem; }
+            .policy-card .policy-survive { font-size: 1.4rem; }
+        }
+
+        /* ── Footer ── */
+        footer {
+            text-align: center;
+            padding: 2rem 1.5rem 3rem;
+            font-size: 0.75rem;
+            color: var(--text-dimmer);
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        footer a { color: #777; text-decoration: none; }
+        footer a:hover { color: #aaa; text-decoration: underline; }
+
+        /* ── Responsive ── */
+        @media (max-width: 800px) {
+            .tp-grid { grid-template-columns: repeat(2, 1fr); }
+            .ergo-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.5rem; }
+            .container { padding: 0 1rem; }
+            .roll-section { gap: 1rem; }
+            .temp-dial { width: 140px; height: 140px; }
+            .temp-dial .temp-value { font-size: 2.2rem; }
+            .tp-grid { grid-template-columns: repeat(2, 1fr); gap: 0.4rem; }
+            .tp-card { padding: 0.5rem; }
+            .tp-card .tp-name { font-size: 0.65rem; }
+            .chart-container { height: 280px; }
+            .damage-summary { gap: 0.5rem; }
+            .damage-card { min-width: 110px; padding: 0.6rem; }
+            .damage-card .damage-value { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Climate Roulette</h1>
+        <p class="subtitle">A Monte Carlo simulation of climate tipping points</p>
+        <p class="explainer">Each 0.1&deg;C of warming rolls the dice on 16 climate tipping points identified by Armstrong McKay et al. (2022). Sometimes you reach 3&deg;C and nothing tips. Sometimes permafrost collapses at 1.6&deg;C and cascades everything. Click Roll to find out which Earth you're on.</p>
+    </header>
+
+    <button class="sound-toggle" id="soundToggle" title="Toggle sound">&#x1f50a; Sound On</button>
+
+    <div class="container">
+
+        <!-- ── Roll Section ── -->
+        <div class="panel">
+            <h2>Temperature &amp; Dice Roll</h2>
+            <div class="roll-section">
+                <div class="temp-dial" id="tempDial">
+                    <div class="temp-value" id="tempValue">1.2</div>
+                    <div class="temp-label">degrees above pre-industrial</div>
+                    <div class="temp-delta" id="tempDelta"></div>
+                </div>
+                <div class="roll-controls">
+                    <button class="roll-btn" id="rollBtn">Roll the Dice</button>
+                    <div class="auto-run-row">
+                        <span>Auto-run to</span>
+                        <input type="range" id="autoTarget" min="1.5" max="5.0" step="0.1" value="3.0">
+                        <span class="target-label" id="autoTargetLabel">3.0&deg;C</span>
+                    </div>
+                    <div class="btn-row">
+                        <button class="secondary-btn" id="autoRunBtn">Auto-Run</button>
+                        <button class="secondary-btn" id="resetBtn">Reset</button>
+                    </div>
+                </div>
+            </div>
+            <div class="roll-log" id="rollLog"></div>
+        </div>
+
+        <!-- ── World Map ── -->
+        <div class="panel">
+            <h2>Global Tipping Point Map</h2>
+            <div class="world-map-wrap" id="mapWrap">
+                <svg class="world-map-svg" id="worldMap" viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Graticule lines -->
+                    <g class="graticule-group">
+                        <line class="graticule" x1="0" y1="75" x2="800" y2="75"/>
+                        <line class="graticule" x1="0" y1="125" x2="800" y2="125"/>
+                        <line class="graticule" x1="0" y1="175" x2="800" y2="175"/>
+                        <line class="graticule" x1="0" y1="225" x2="800" y2="225"/>
+                        <line class="graticule" x1="0" y1="275" x2="800" y2="275"/>
+                        <line class="graticule" x1="0" y1="325" x2="800" y2="325"/>
+                        <line class="graticule" x1="0" y1="375" x2="800" y2="375"/>
+                        <line class="graticule" x1="133" y1="0" x2="133" y2="450"/>
+                        <line class="graticule" x1="267" y1="0" x2="267" y2="450"/>
+                        <line class="graticule" x1="400" y1="0" x2="400" y2="450"/>
+                        <line class="graticule" x1="533" y1="0" x2="533" y2="450"/>
+                        <line class="graticule" x1="667" y1="0" x2="667" y2="450"/>
+                    </g>
+                    <!-- Simplified continent outlines -->
+                    <g class="continents">
+                        <!-- North America -->
+                        <path class="land" d="M 105,55 L 120,50 140,48 160,52 175,58 185,65 190,78 195,90 200,100 210,108 218,115 225,120 230,128 235,140 232,150 228,158 220,165 212,170 200,172 190,168 178,170 168,175 155,178 148,185 140,190 132,188 125,182 118,178 110,172 105,165 108,155 112,148 110,140 105,130 100,120 95,110 92,100 90,92 95,82 100,70 Z"/>
+                        <!-- Central America + Caribbean -->
+                        <path class="land" d="M 155,178 L 160,185 168,190 175,195 180,202 178,208 172,212 165,215 158,210 152,205 148,198 148,192 150,185 Z"/>
+                        <!-- South America -->
+                        <path class="land" d="M 178,208 L 185,215 192,225 198,238 202,252 205,268 208,280 210,295 208,310 205,325 200,340 195,350 188,358 180,362 172,358 165,350 160,340 158,328 155,315 152,300 150,285 148,270 148,255 150,242 152,230 158,220 165,215 172,212 Z"/>
+                        <!-- Europe -->
+                        <path class="land" d="M 378,60 L 385,58 395,62 405,68 412,75 418,82 422,90 420,98 415,105 408,110 400,112 392,115 385,118 378,120 370,118 365,112 360,105 358,98 362,90 368,82 372,72 Z"/>
+                        <!-- UK + Iceland -->
+                        <path class="land" d="M 365,78 L 370,75 375,78 375,85 372,90 368,88 365,82 Z"/>
+                        <path class="land" d="M 340,52 L 348,50 355,53 352,58 345,58 340,55 Z"/>
+                        <!-- Scandinavia -->
+                        <path class="land" d="M 395,38 L 402,35 410,38 415,45 418,55 415,65 410,72 405,68 400,60 395,50 Z"/>
+                        <!-- Africa -->
+                        <path class="land" d="M 378,120 L 385,118 392,115 400,118 408,122 415,128 420,138 425,150 428,165 430,180 428,195 425,210 422,228 418,245 415,260 418,275 422,288 425,300 425,315 420,328 412,338 402,342 392,340 382,335 375,328 370,318 368,305 365,290 362,275 360,260 358,245 358,230 360,215 365,200 370,185 372,170 375,158 378,145 380,132 Z"/>
+                        <!-- Asia (mainland) -->
+                        <path class="land" d="M 418,82 L 430,78 445,72 460,68 478,65 495,62 515,60 535,58 555,60 575,62 595,65 612,70 628,78 640,85 648,95 652,108 648,120 640,130 632,138 625,145 618,150 610,152 600,150 590,148 580,150 572,155 565,162 558,170 548,175 540,178 530,175 520,170 510,165 500,160 490,158 480,155 470,152 460,148 450,145 442,140 435,135 430,128 425,120 422,110 420,100 418,92 Z"/>
+                        <!-- Indian subcontinent -->
+                        <path class="land" d="M 530,175 L 535,182 540,192 545,205 548,218 545,230 540,240 535,248 528,252 520,248 515,240 512,230 510,218 512,205 518,192 525,182 Z"/>
+                        <!-- Southeast Asia -->
+                        <path class="land" d="M 580,150 L 588,158 595,168 600,178 605,190 608,200 605,208 598,212 590,208 585,200 582,190 580,180 578,168 578,158 Z"/>
+                        <!-- Japan -->
+                        <path class="land" d="M 655,90 L 660,85 665,88 668,95 665,105 660,112 655,108 652,100 Z"/>
+                        <!-- Indonesia / Malay -->
+                        <path class="land" d="M 598,212 L 608,215 618,218 630,222 642,225 652,228 660,225 668,228 672,232 668,238 660,240 648,238 635,235 622,232 610,228 602,225 598,218 Z"/>
+                        <!-- Australia -->
+                        <path class="land" d="M 632,275 L 648,268 665,265 682,268 698,275 708,285 712,298 710,312 705,325 698,335 688,342 675,345 662,342 650,338 640,330 635,318 632,305 630,292 Z"/>
+                        <!-- New Zealand -->
+                        <path class="land" d="M 728,328 L 732,325 735,330 738,340 735,348 730,345 728,338 Z"/>
+                        <!-- Russia/Siberia extension -->
+                        <path class="land" d="M 418,82 L 425,75 435,68 448,62 462,58 478,55 495,52 515,48 535,45 555,42 575,40 595,42 615,45 635,50 652,58 665,65 672,72 678,62 688,55 698,50 710,52 718,58 722,65 718,72 710,78 698,80 688,78 678,75 672,72 668,78 660,82 655,90 648,95 640,85 628,78 612,70 595,65 575,62 555,60 535,58 515,60 495,62 478,65 460,68 445,72 430,78 Z"/>
+                    </g>
+                    <!-- Cascade lines (drawn by JS) -->
+                    <g id="cascadeLines"></g>
+                    <!-- Tipping point markers (drawn by JS) -->
+                    <g id="mapMarkers"></g>
+                </svg>
+                <div class="map-tooltip" id="mapTooltip"></div>
+            </div>
+            <div class="map-legend">
+                <div class="map-legend-item"><div class="map-legend-dot" style="background:var(--green)"></div> Safe</div>
+                <div class="map-legend-item"><div class="map-legend-dot" style="background:var(--orange)"></div> At Risk</div>
+                <div class="map-legend-item"><div class="map-legend-dot" style="background:var(--red)"></div> Tipped</div>
+                <div class="map-legend-item"><div style="width:20px;height:2px;border-top:2px dashed var(--orange);"></div> Cascade</div>
+            </div>
+        </div>
+
+        <!-- ── Tipping Point Grid ── -->
+        <div class="panel">
+            <h2>Tipping Points <span style="font-weight:400;color:var(--text-dimmer);font-size:0.8rem">&mdash; Armstrong McKay et al. 2022</span></h2>
+            <div class="tp-grid" id="tpGrid"></div>
+        </div>
+
+        <!-- ── Current Damage ── -->
+        <div class="panel">
+            <h2>Economic Damage at Current Temperature</h2>
+            <div class="dmg-selector">
+                <label for="dmgSelect">Damage function:</label>
+                <select id="dmgSelect">
+                    <option value="nordhaus">Nordhaus DICE (conservative)</option>
+                    <option value="howard" selected>Howard &amp; Sterner (meta-analysis)</option>
+                    <option value="dietz">Dietz &amp; Stern (catastrophic)</option>
+                    <option value="weitzman">Weitzman Fat-Tail</option>
+                </select>
+            </div>
+            <div class="damage-summary" id="damageSummary"></div>
+        </div>
+
+        <!-- ── Monte Carlo Section ── -->
+        <div class="panel" id="mc-section">
+            <h2>Monte Carlo: 100 Parallel Earths</h2>
+            <div class="mc-controls">
+                <button class="roll-btn" id="mcRunBtn" style="font-size:0.9rem; padding:0.7rem 1.5rem;">Run 100 Simulations</button>
+                <span id="mcStatus" style="font-size:0.8rem; color:var(--text-dim);"></span>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="survivalChart"></canvas>
+            </div>
+
+            <!-- Ergodicity panel -->
+            <h2 style="margin-top:1.5rem;">The Ergodicity Problem</h2>
+            <div class="ergo-grid" id="ergoGrid">
+                <div class="ergo-card mean">
+                    <h3>Ensemble Mean</h3>
+                    <div class="ergo-value" id="ergoMean">--</div>
+                    <div class="ergo-sub">Average across 100 Earths</div>
+                </div>
+                <div class="ergo-card yours">
+                    <h3>Your Trajectory</h3>
+                    <div class="ergo-value" id="ergoYours">--</div>
+                    <div class="ergo-sub">This Earth's outcome</div>
+                </div>
+                <div class="ergo-card worst">
+                    <h3>Worst 5%</h3>
+                    <div class="ergo-value" id="ergoWorst">--</div>
+                    <div class="ergo-sub">95th percentile damage</div>
+                </div>
+            </div>
+
+            <!-- Histogram -->
+            <h2 style="margin-top:1.5rem;">Damage Distribution at Peak Temperature</h2>
+            <div class="histogram-container">
+                <canvas id="histogramChart"></canvas>
+            </div>
+
+            <div class="explainer-box" id="ergoExplainer">
+                <strong>Why does the mean mislead?</strong> Standard cost-benefit analysis averages across many hypothetical Earths &mdash; but we only live on one. Climate damages are multiplicative: once a tipping point fires, it compounds. The ensemble mean smooths over catastrophic trajectories, but if <em>your</em> Earth hits the tail, the damage is permanent. This is the ergodicity problem: the average across parallel worlds is not the average over time for a single world.
+            </div>
+        </div>
+
+        <!-- ── Policy Lever ── -->
+        <div class="panel" id="policy-section" style="display:none;">
+            <h2>The Paris Agreement Gamble <span style="font-weight:400;color:var(--text-dimmer);font-size:0.8rem">&mdash; What does each target buy you?</span></h2>
+            <div class="policy-grid" id="policyGrid"></div>
+        </div>
+
+        <!-- ── Lottery Ticket ── -->
+        <div class="panel" id="ticket-section" style="display:none;">
+            <h2>Your Climate Lottery Ticket</h2>
+            <div class="ticket-wrap">
+                <div class="ticket-canvas-wrap">
+                    <canvas id="ticketCanvas" width="600" height="380"></canvas>
+                </div>
+                <div class="ticket-actions">
+                    <button class="secondary-btn" id="downloadTicket">Download Image</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Tipping point data: Armstrong McKay et al. (2022), <em>Science</em>. Cascade interactions: Wunderling et al. (2024).<br>
+        Damage functions: Nordhaus DICE-2016R, Howard &amp; Sterner 2017, Dietz &amp; Stern 2015, Weitzman 2012.<br>
+        World GDP baseline: ~$105 trillion (2024 nominal).<br>
+        <a href="/">&larr; Back to Home</a>
+    </footer>
+
+    <script>
+    'use strict';
+
+    // =========================================================================
+    // 1. TIPPING POINT DATA
+    // =========================================================================
+    const TIPPING_POINTS = [
+        // Core elements
+        { id: 'GrIS', name: 'Greenland Ice Sheet', cat: 'core', min: 0.8, central: 1.5, max: 3.0, warming: 0.13, lat: 72, lon: -40, cascades: [{ target: 'AMOC', thresholdShift: -0.5 }] },
+        { id: 'WAIS', name: 'West Antarctic Ice Sheet', cat: 'core', min: 1.0, central: 1.5, max: 3.0, warming: 0.05, lat: -79, lon: -100, cascades: [] },
+        { id: 'EASB', name: 'East Antarctic Basins', cat: 'core', min: 2.0, central: 3.0, max: 6.0, warming: 0.02, lat: -75, lon: 110, cascades: [] },
+        { id: 'AMOC', name: 'AMOC Collapse', cat: 'core', min: 1.4, central: 4.0, max: 8.0, warming: -0.5, lat: 45, lon: -30, cascades: [{ target: 'WAIS', thresholdShift: -0.3 }, { target: 'AMAZ', thresholdShift: -0.5 }] },
+        { id: 'LABC', name: 'Labrador Sea Convection', cat: 'core', min: 1.1, central: 1.8, max: 3.8, warming: 0.0, lat: 58, lon: -55, cascades: [{ target: 'AMOC', thresholdShift: -0.2 }] },
+        { id: 'BARI', name: 'Barents Sea Ice Loss', cat: 'core', min: 1.0, central: 1.6, max: 2.5, warming: 0.04, lat: 76, lon: 40, cascades: [{ target: 'GrIS', thresholdShift: -0.2 }, { target: 'PFAT', thresholdShift: -0.2 }] },
+        { id: 'REEF', name: 'Coral Reef Die-off', cat: 'core', min: 1.0, central: 1.5, max: 2.0, warming: 0.0, lat: -15, lon: 150, cascades: [] },
+        { id: 'PFAT', name: 'Abrupt Permafrost Thaw', cat: 'core', min: 1.0, central: 1.5, max: 2.3, warming: 0.15, lat: 68, lon: 100, cascades: [] },
+        { id: 'PFTP', name: 'Permafrost Collapse (Yedoma)', cat: 'core', min: 1.0, central: 3.0, max: 6.0, warming: 0.3, lat: 65, lon: 135, cascades: [] },
+        // Regional elements
+        { id: 'AMAZ', name: 'Amazon Dieback', cat: 'regional', min: 2.0, central: 3.5, max: 6.0, warming: 0.2, lat: -5, lon: -60, cascades: [] },
+        { id: 'BORF', name: 'Boreal Forest Dieback', cat: 'regional', min: 1.4, central: 4.0, max: 5.0, warming: 0.1, lat: 58, lon: 30, cascades: [] },
+        { id: 'TUND', name: 'Boreal Northern Shift', cat: 'regional', min: 1.5, central: 4.0, max: 7.2, warming: 0.0, lat: 65, lon: -100, cascades: [] },
+        { id: 'GLCR', name: 'Mountain Glacier Loss', cat: 'regional', min: 1.5, central: 2.0, max: 3.0, warming: 0.0, lat: 35, lon: 80, cascades: [] },
+        { id: 'SAHL', name: 'Sahel/W. African Monsoon', cat: 'regional', min: 2.0, central: 2.8, max: 3.5, warming: 0.0, lat: 14, lon: 0, cascades: [] },
+        { id: 'NSPG', name: 'N. Atlantic Subpolar Gyre', cat: 'regional', min: 1.1, central: 1.8, max: 3.8, warming: 0.0, lat: 55, lon: -35, cascades: [{ target: 'AMOC', thresholdShift: -0.2 }] },
+        { id: 'AWSI', name: 'Arctic Winter Sea Ice', cat: 'regional', min: 4.5, central: 6.3, max: 8.7, warming: 0.05, lat: 85, lon: 0, cascades: [] }
+    ];
+
+    // =========================================================================
+    // 2. DAMAGE FUNCTIONS
+    // =========================================================================
+    const WORLD_GDP = 105; // trillion USD
+
+    const DAMAGE_FNS = {
+        nordhaus: {
+            name: 'Nordhaus DICE',
+            fn: T => 0.00236 * T * T,
+            desc: 'Conservative quadratic'
+        },
+        howard: {
+            name: 'Howard & Sterner',
+            fn: T => 0.01145 * T * T,
+            desc: 'Meta-analysis, ~5x DICE'
+        },
+        dietz: {
+            name: 'Dietz & Stern',
+            fn: T => 1 - 1 / (1 + 0.05314 * T * T + 4 * Math.pow(T, 6.754)),
+            desc: 'Catastrophic at high T'
+        },
+        weitzman: {
+            name: 'Weitzman Fat-Tail',
+            fn: T => 0.00236 * T * T + 5.07e-6 * Math.pow(T, 6.754),
+            desc: 'DICE + fat tail term'
+        }
+    };
+
+    function getDamage(temp, fnKey) {
+        const frac = DAMAGE_FNS[fnKey].fn(temp);
+        return { fraction: Math.min(frac, 1), trillions: Math.min(frac, 1) * WORLD_GDP };
+    }
+
+    function dmgColorClass(trillions) {
+        if (trillions < 5) return 'dmg-low';
+        if (trillions < 20) return 'dmg-med';
+        if (trillions < 50) return 'dmg-high';
+        return 'dmg-extreme';
+    }
+
+    // =========================================================================
+    // 3. PROBABILITY MODEL
+    // =========================================================================
+    // Logistic CDF: P(tip at T) such that P≈0.05 at min, P≈0.95 at max
+    // center = (min+max)/2 if central not used, but we use central as the 50% point
+    // k chosen so P(min)≈0.05 → k = ln(19) / (central - min)
+    function tipCumulativeProb(T, element) {
+        if (T < element.min) return 0;
+        if (T > element.max) return 1;
+        const k = Math.log(19) / Math.max(element.central - element.min, 0.1);
+        return 1 / (1 + Math.exp(-k * (T - element.central)));
+    }
+
+    // Incremental probability per 0.1°C step:
+    // P(tip in this step) = P(cum at T) - P(cum at T-0.1), normalized for untipped
+    function tipStepProb(T, element) {
+        const p1 = tipCumulativeProb(T, element);
+        const p0 = tipCumulativeProb(T - 0.1, element);
+        // Conditional probability given not yet tipped
+        const pNot = 1 - p0;
+        if (pNot <= 0) return 1;
+        return Math.max(0, Math.min(1, (p1 - p0) / pNot));
+    }
+
+    // =========================================================================
+    // 4. SIMULATION ENGINE
+    // =========================================================================
+    class Simulation {
+        constructor(startTemp = 1.2) {
+            this.startTemp = startTemp;
+            this.currentTemp = startTemp;
+            this.effectiveWarming = 0; // accumulated from tipping feedbacks
+            this.tippedSet = new Set();
+            // Deep-copy threshold adjustments
+            this.thresholdAdj = {};
+            for (const tp of TIPPING_POINTS) {
+                this.thresholdAdj[tp.id] = 0;
+            }
+            this.log = [];
+            this.tippedAtTemp = {}; // id → temp when tipped
+        }
+
+        getAdjustedElement(tp) {
+            return {
+                ...tp,
+                min: tp.min + this.thresholdAdj[tp.id],
+                central: tp.central + this.thresholdAdj[tp.id],
+                max: tp.max + this.thresholdAdj[tp.id]
+            };
+        }
+
+        step() {
+            this.currentTemp = Math.round((this.currentTemp + 0.1) * 100) / 100;
+            const effectiveTemp = this.currentTemp + this.effectiveWarming;
+            const result = { temp: this.currentTemp, effectiveTemp, tipped: [], cascades: [] };
+
+            for (const tp of TIPPING_POINTS) {
+                if (this.tippedSet.has(tp.id)) continue;
+                const adj = this.getAdjustedElement(tp);
+                const prob = tipStepProb(effectiveTemp, adj);
+                if (Math.random() < prob) {
+                    this.tippedSet.add(tp.id);
+                    this.tippedAtTemp[tp.id] = this.currentTemp;
+                    result.tipped.push(tp);
+                    // Apply warming feedback
+                    this.effectiveWarming += tp.warming;
+                    // Apply cascades
+                    for (const casc of tp.cascades) {
+                        this.thresholdAdj[casc.target] += casc.thresholdShift;
+                        result.cascades.push({ from: tp.id, to: casc.target, shift: casc.thresholdShift });
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        runTo(endTemp) {
+            const results = [];
+            while (this.currentTemp < endTemp - 0.001) {
+                results.push(this.step());
+            }
+            return results;
+        }
+    }
+
+    function runMonteCarlo(n, endTemp, startTemp = 1.2) {
+        const runs = [];
+        for (let i = 0; i < n; i++) {
+            const sim = new Simulation(startTemp);
+            const steps = sim.runTo(endTemp);
+            runs.push({
+                steps,
+                tippedSet: new Set(sim.tippedSet),
+                tippedAtTemp: { ...sim.tippedAtTemp },
+                effectiveWarming: sim.effectiveWarming,
+                finalEffectiveTemp: endTemp + sim.effectiveWarming
+            });
+        }
+        return runs;
+    }
+
+    // =========================================================================
+    // 5. UI STATE
+    // =========================================================================
+    let sim = new Simulation(1.2);
+    let currentDmgFn = 'howard';
+    let userRunResults = []; // steps from user's roll
+    let mcRuns = null; // Monte Carlo results
+    let survivalChart = null;
+    let histogramChart = null;
+
+    // =========================================================================
+    // 6. RENDER TIPPING POINT GRID
+    // =========================================================================
+    const tpGrid = document.getElementById('tpGrid');
+
+    function renderTPGrid() {
+        tpGrid.innerHTML = '';
+        const effectiveTemp = sim.currentTemp + sim.effectiveWarming;
+
+        for (const tp of TIPPING_POINTS) {
+            const card = document.createElement('div');
+            card.className = 'tp-card';
+            card.id = 'tp-' + tp.id;
+
+            const isTipped = sim.tippedSet.has(tp.id);
+            const adj = sim.getAdjustedElement(tp);
+            const cumProb = isTipped ? 1 : tipCumulativeProb(effectiveTemp, adj);
+
+            if (isTipped) {
+                card.classList.add('tipped');
+            } else if (cumProb > 0.1) {
+                card.classList.add('at-risk');
+            } else {
+                card.classList.add('safe');
+            }
+
+            const statusText = isTipped
+                ? 'TIPPED at ' + sim.tippedAtTemp[tp.id].toFixed(1) + '\u00B0C'
+                : cumProb < 0.01 ? 'Safe' : (cumProb * 100).toFixed(0) + '% cumulative risk';
+
+            card.innerHTML = `
+                <div class="tp-abbrev">${tp.cat.toUpperCase()} &middot; ${tp.id}</div>
+                <div class="tp-name">${tp.name}</div>
+                <div class="tp-range">${adj.min.toFixed(1)}&ndash;${adj.max.toFixed(1)}&deg;C (central: ${adj.central.toFixed(1)}&deg;C)</div>
+                <div class="tp-prob-bar"><div class="tp-prob-fill" style="width:${Math.min(cumProb * 100, 100)}%"></div></div>
+                <div class="tp-status">${statusText}</div>
+            `;
+            tpGrid.appendChild(card);
+        }
+    }
+
+    // =========================================================================
+    // 6b. RENDER WORLD MAP
+    // =========================================================================
+    const MAP_W = 800, MAP_H = 450;
+    const mapMarkers = document.getElementById('mapMarkers');
+    const cascadeLines = document.getElementById('cascadeLines');
+    const mapTooltip = document.getElementById('mapTooltip');
+    const mapWrap = document.getElementById('mapWrap');
+
+    function lonToX(lon) { return (lon + 180) / 360 * MAP_W; }
+    function latToY(lat) { return (90 - lat) / 180 * MAP_H; }
+
+    function renderWorldMap() {
+        mapMarkers.innerHTML = '';
+        cascadeLines.innerHTML = '';
+        const effectiveTemp = sim.currentTemp + sim.effectiveWarming;
+
+        // Build coordinate lookup
+        const coords = {};
+        for (const tp of TIPPING_POINTS) {
+            coords[tp.id] = { x: lonToX(tp.lon), y: latToY(tp.lat) };
+        }
+
+        // Draw cascade lines for tipped elements
+        for (const tp of TIPPING_POINTS) {
+            if (!sim.tippedSet.has(tp.id)) continue;
+            for (const casc of tp.cascades) {
+                const from = coords[tp.id];
+                const to = coords[casc.target];
+                if (!from || !to) continue;
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('class', 'cascade-line active');
+                line.setAttribute('x1', from.x);
+                line.setAttribute('y1', from.y);
+                line.setAttribute('x2', to.x);
+                line.setAttribute('y2', to.y);
+                // Arrowhead via marker
+                cascadeLines.appendChild(line);
+            }
+        }
+
+        // Draw markers
+        for (const tp of TIPPING_POINTS) {
+            const isTipped = sim.tippedSet.has(tp.id);
+            const adj = sim.getAdjustedElement(tp);
+            const cumProb = isTipped ? 1 : tipCumulativeProb(effectiveTemp, adj);
+
+            const cx = coords[tp.id].x;
+            const cy = coords[tp.id].y;
+
+            let color, status;
+            if (isTipped) {
+                color = '#ef4444';
+                status = 'tipped';
+            } else if (cumProb > 0.1) {
+                color = '#f59e0b';
+                status = 'at-risk';
+            } else {
+                color = '#22c55e';
+                status = 'safe';
+            }
+
+            const radius = isTipped ? 7 : (4 + cumProb * 4);
+
+            // Pulse ring for at-risk or tipped
+            if (cumProb > 0.3 || isTipped) {
+                const ring = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                ring.setAttribute('cx', cx);
+                ring.setAttribute('cy', cy);
+                ring.setAttribute('r', radius + 4);
+                ring.setAttribute('class', 'tp-marker-ring visible' + (cumProb > 0.3 && !isTipped ? ' pulsing' : ''));
+                ring.setAttribute('stroke', color);
+                mapMarkers.appendChild(ring);
+            }
+
+            // Main marker
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', cx);
+            circle.setAttribute('cy', cy);
+            circle.setAttribute('r', radius);
+            circle.setAttribute('class', 'tp-marker');
+            circle.setAttribute('fill', color);
+            circle.setAttribute('data-tp', tp.id);
+            circle.setAttribute('opacity', isTipped ? '1' : (0.6 + cumProb * 0.4).toFixed(2));
+            mapMarkers.appendChild(circle);
+
+            // Label
+            const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            label.setAttribute('x', cx);
+            label.setAttribute('y', cy - radius - 3);
+            label.setAttribute('class', 'tp-label');
+            label.textContent = tp.id;
+            mapMarkers.appendChild(label);
+
+            // Tooltip events
+            circle.addEventListener('mouseenter', (e) => {
+                const rect = mapWrap.getBoundingClientRect();
+                const svgRect = document.getElementById('worldMap').getBoundingClientRect();
+                const scaleX = svgRect.width / MAP_W;
+                const scaleY = svgRect.height / MAP_H;
+                const px = cx * scaleX + svgRect.left - rect.left;
+                const py = cy * scaleY + svgRect.top - rect.top;
+
+                const statusLabel = isTipped
+                    ? `<span class="tt-status-tipped">TIPPED at ${sim.tippedAtTemp[tp.id].toFixed(1)}\u00B0C</span>`
+                    : cumProb < 0.01
+                    ? `<span class="tt-status-safe">Safe</span>`
+                    : `<span class="tt-status-risk">${(cumProb * 100).toFixed(0)}% cumulative risk</span>`;
+
+                mapTooltip.innerHTML = `
+                    <div class="tt-name">${tp.name}</div>
+                    <div class="tt-range">${adj.min.toFixed(1)}\u2013${adj.max.toFixed(1)}\u00B0C (central: ${adj.central.toFixed(1)}\u00B0C)</div>
+                    <div class="tt-prob">${statusLabel}</div>
+                `;
+                mapTooltip.style.left = (px + 12) + 'px';
+                mapTooltip.style.top = (py - 10) + 'px';
+                mapTooltip.classList.add('visible');
+            });
+
+            circle.addEventListener('mouseleave', () => {
+                mapTooltip.classList.remove('visible');
+            });
+        }
+    }
+
+    // =========================================================================
+    // 7. RENDER DAMAGE SUMMARY
+    // =========================================================================
+    const damageSummary = document.getElementById('damageSummary');
+
+    function renderDamage() {
+        const effectiveTemp = sim.currentTemp + sim.effectiveWarming;
+        const tippedCount = sim.tippedSet.size;
+
+        // Show all 4 damage functions
+        let html = '';
+        for (const [key, df] of Object.entries(DAMAGE_FNS)) {
+            const d = getDamage(effectiveTemp, key);
+            const isSelected = key === currentDmgFn;
+            const borderStyle = isSelected ? 'border-color: var(--cyan);' : '';
+            html += `
+                <div class="damage-card" style="${borderStyle}">
+                    <div class="damage-value ${dmgColorClass(d.trillions)}">$${d.trillions < 100 ? d.trillions.toFixed(1) : d.trillions.toFixed(0)}T</div>
+                    <div class="damage-label">${df.name}</div>
+                    <div class="damage-pct">${(d.fraction * 100).toFixed(1)}% of world GDP</div>
+                </div>
+            `;
+        }
+
+        // Add tipping point count + effective temp card
+        html += `
+            <div class="damage-card">
+                <div class="damage-value" style="color:${tippedCount > 0 ? 'var(--red)' : 'var(--green)'}">${tippedCount}</div>
+                <div class="damage-label">Tipping Points Triggered</div>
+                <div class="damage-pct">Effective temp: ${effectiveTemp.toFixed(2)}&deg;C</div>
+            </div>
+        `;
+
+        damageSummary.innerHTML = html;
+    }
+
+    // =========================================================================
+    // 8. ROLL LOG
+    // =========================================================================
+    const rollLog = document.getElementById('rollLog');
+
+    function addLogEntry(result) {
+        let line = `<span class="safe-event">${result.temp.toFixed(1)}&deg;C (eff: ${result.effectiveTemp.toFixed(2)}&deg;C)</span>`;
+        if (result.tipped.length > 0) {
+            for (const tp of result.tipped) {
+                line += ` <span class="tip-event">&mdash; ${tp.name} TIPPED!</span>`;
+            }
+        }
+        if (result.cascades.length > 0) {
+            for (const c of result.cascades) {
+                line += ` <span class="cascade-event">[cascade: ${c.from}&rarr;${c.to} ${c.shift > 0 ? '+' : ''}${c.shift.toFixed(1)}&deg;C]</span>`;
+            }
+        }
+        rollLog.innerHTML += line + '<br>';
+        rollLog.scrollTop = rollLog.scrollHeight;
+    }
+
+    // =========================================================================
+    // 9. UPDATE TEMPERATURE DISPLAY
+    // =========================================================================
+    function updateTempDial() {
+        const dial = document.getElementById('tempDial');
+        const valEl = document.getElementById('tempValue');
+        const deltaEl = document.getElementById('tempDelta');
+        const effectiveTemp = sim.currentTemp + sim.effectiveWarming;
+
+        valEl.textContent = sim.currentTemp.toFixed(1);
+
+        if (sim.effectiveWarming !== 0) {
+            const sign = sim.effectiveWarming > 0 ? '+' : '';
+            deltaEl.textContent = `Effective: ${effectiveTemp.toFixed(2)}\u00B0C (${sign}${sim.effectiveWarming.toFixed(2)} from feedbacks)`;
+        } else {
+            deltaEl.textContent = '';
+        }
+
+        // SSP year estimates under the dial
+        let yearEl = document.getElementById('tempYearEst');
+        if (!yearEl) {
+            yearEl = document.createElement('div');
+            yearEl.id = 'tempYearEst';
+            yearEl.style.cssText = 'font-size:0.72rem;color:#666;margin-top:0.3rem;text-align:center;';
+            dial.appendChild(yearEl);
+        }
+        if (sim.currentTemp > 1.2) {
+            const yr2 = tempToYear(sim.currentTemp, 'SSP2-4.5');
+            const yr5 = tempToYear(sim.currentTemp, 'SSP5-8.5');
+            yearEl.innerHTML = `\u2248${yr2} <span style="color:#5078be">SSP2-4.5</span> &middot; \u2248${yr5} <span style="color:#be5050">SSP5-8.5</span>`;
+        } else {
+            yearEl.textContent = '';
+        }
+
+        // Color the dial
+        dial.classList.remove('warming', 'hot');
+        if (sim.currentTemp >= 3.0) dial.classList.add('hot');
+        else if (sim.currentTemp >= 2.0) dial.classList.add('warming');
+
+        // Shift body background
+        const t = Math.min(1, Math.max(0, (sim.currentTemp - 1.2) / 3.8));
+        const r = Math.round(10 + t * 25);
+        const g = Math.round(10 - t * 5);
+        const b = Math.round(10 - t * 5);
+        document.body.style.background = `rgb(${r},${Math.max(g,5)},${Math.max(b,5)})`;
+    }
+
+    // =========================================================================
+    // 10. BUTTON HANDLERS
+    // =========================================================================
+    const rollBtn = document.getElementById('rollBtn');
+    const autoRunBtn = document.getElementById('autoRunBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const autoTarget = document.getElementById('autoTarget');
+    const autoTargetLabel = document.getElementById('autoTargetLabel');
+    const dmgSelect = document.getElementById('dmgSelect');
+
+    autoTarget.addEventListener('input', () => {
+        autoTargetLabel.textContent = parseFloat(autoTarget.value).toFixed(1) + '\u00B0C';
+    });
+
+    dmgSelect.addEventListener('change', () => {
+        currentDmgFn = dmgSelect.value;
+        renderDamage();
+        if (mcRuns) renderErgoPanel();
+    });
+
+    function doSingleRoll() {
+        if (sim.currentTemp >= 5.0) return;
+        rollBtn.classList.add('rolling');
+        setTimeout(() => rollBtn.classList.remove('rolling'), 400);
+
+        soundDiceRoll();
+
+        const result = sim.step();
+        userRunResults.push(result);
+        addLogEntry(result);
+        updateTempDial();
+        renderTPGrid();
+        renderWorldMap();
+        renderDamage();
+
+        // Sound effects for tipping and cascades
+        if (result.tipped.length > 0) soundTip();
+        if (result.cascades.length > 0) setTimeout(() => soundCascade(), 200);
+
+        // Rumble when any element crosses 50% cumulative probability
+        for (const tp of TIPPING_POINTS) {
+            const prob = tipCumulativeProb(sim.currentTemp + sim.effectiveWarming, tp);
+            const prevProb = tipCumulativeProb(sim.currentTemp + sim.effectiveWarming - 0.1, tp);
+            if (prob >= 0.5 && prevProb < 0.5) {
+                soundRumble();
+                break;
+            }
+        }
+
+        // Flash cascade targets
+        for (const c of result.cascades) {
+            const card = document.getElementById('tp-' + c.to);
+            if (card) {
+                card.classList.add('cascade-flash');
+                setTimeout(() => card.classList.remove('cascade-flash'), 600);
+            }
+        }
+
+        // Show MC section after reaching 2.0°C
+        if (sim.currentTemp >= 2.0) {
+            document.getElementById('mc-section').style.display = 'block';
+        }
+
+        if (sim.currentTemp >= 5.0) {
+            rollBtn.disabled = true;
+            autoRunBtn.disabled = true;
+        }
+    }
+
+    rollBtn.addEventListener('click', doSingleRoll);
+
+    autoRunBtn.addEventListener('click', () => {
+        const target = parseFloat(autoTarget.value);
+        if (sim.currentTemp >= target) return;
+
+        rollBtn.disabled = true;
+        autoRunBtn.disabled = true;
+
+        let stepCount = 0;
+        const interval = setInterval(() => {
+            if (sim.currentTemp >= target - 0.001 || sim.currentTemp >= 5.0) {
+                clearInterval(interval);
+                rollBtn.disabled = sim.currentTemp >= 5.0;
+                autoRunBtn.disabled = sim.currentTemp >= 5.0;
+                // Show MC section
+                if (sim.currentTemp >= 2.0) {
+                    document.getElementById('mc-section').style.display = 'block';
+                }
+                // Show lottery ticket after auto-run completes
+                renderLotteryTicket();
+                return;
+            }
+            doSingleRoll();
+            stepCount++;
+        }, 80);
+    });
+
+    resetBtn.addEventListener('click', () => {
+        sim = new Simulation(1.2);
+        userRunResults = [];
+        mcRuns = null;
+        rollLog.innerHTML = '';
+        rollBtn.disabled = false;
+        autoRunBtn.disabled = false;
+        document.body.style.background = 'var(--bg)';
+        updateTempDial();
+        renderTPGrid();
+        renderWorldMap();
+        renderDamage();
+        document.getElementById('mc-section').style.display = 'none';
+        document.getElementById('ergoMean').textContent = '--';
+        document.getElementById('ergoYours').textContent = '--';
+        document.getElementById('ergoWorst').textContent = '--';
+        if (survivalChart) { survivalChart.destroy(); survivalChart = null; }
+        if (histogramChart) { histogramChart.destroy(); histogramChart = null; }
+        // Hide new panels
+        document.getElementById('policy-section').style.display = 'none';
+        document.getElementById('ticket-section').style.display = 'none';
+        if (policyChart) { policyChart.destroy(); policyChart = null; }
+    });
+
+    // =========================================================================
+    // 11. MONTE CARLO
+    // =========================================================================
+    const mcRunBtn = document.getElementById('mcRunBtn');
+    const mcStatus = document.getElementById('mcStatus');
+
+    mcRunBtn.addEventListener('click', () => {
+        mcRunBtn.disabled = true;
+        mcStatus.textContent = 'Simulating...';
+
+        // Use setTimeout to let UI update
+        setTimeout(() => {
+            const endTemp = Math.max(sim.currentTemp, parseFloat(autoTarget.value));
+            mcRuns = runMonteCarlo(100, endTemp);
+            mcStatus.textContent = `100 simulations complete (1.2\u2013${endTemp.toFixed(1)}\u00B0C)`;
+            mcRunBtn.disabled = false;
+
+            renderSurvivalChart(endTemp);
+            renderErgoPanel();
+            renderHistogram(endTemp);
+            updateErgoExplainer(endTemp);
+            runPolicyComparison();
+            renderLotteryTicket();
+        }, 50);
+    });
+
+    // =========================================================================
+    // 12. SURVIVAL CHART
+    // =========================================================================
+    function renderSurvivalChart(endTemp) {
+        const tempSteps = [];
+        for (let t = 1.2; t <= endTemp + 0.001; t = Math.round((t + 0.1) * 100) / 100) {
+            tempSteps.push(t);
+        }
+
+        // For each temp step, count how many runs have 0 tipping points at or below that temp
+        const survivalData = tempSteps.map(t => {
+            let survived = 0;
+            for (const run of mcRuns) {
+                const tippedBeforeT = Object.values(run.tippedAtTemp).filter(tt => tt <= t).length;
+                if (tippedBeforeT === 0) survived++;
+            }
+            return { x: t, y: survived };
+        });
+
+        // Average tipping points triggered at each temp
+        const avgTipped = tempSteps.map(t => {
+            let total = 0;
+            for (const run of mcRuns) {
+                total += Object.values(run.tippedAtTemp).filter(tt => tt <= t).length;
+            }
+            return { x: t, y: total / mcRuns.length };
+        });
+
+        if (survivalChart) survivalChart.destroy();
+        const ctx = document.getElementById('survivalChart').getContext('2d');
+        survivalChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [
+                    {
+                        label: 'Runs with zero tipping points',
+                        data: survivalData,
+                        borderColor: 'rgba(34,197,94,0.8)',
+                        backgroundColor: 'rgba(34,197,94,0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        pointRadius: 0,
+                        tension: 0.2,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'Avg tipping points triggered',
+                        data: avgTipped,
+                        borderColor: 'rgba(239,68,68,0.7)',
+                        borderWidth: 2,
+                        borderDash: [4, 3],
+                        pointRadius: 0,
+                        tension: 0.2,
+                        yAxisID: 'y2'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                scales: {
+                    x: {
+                        type: 'linear',
+                        title: { display: true, text: 'Temperature (\u00B0C) — hover for SSP year estimates', color: '#777', font: { size: 11 } },
+                        ticks: {
+                            color: '#666', font: { size: 10 },
+                            callback: function(v) {
+                                const yr = tempToYear(v, 'SSP2-4.5');
+                                return v.toFixed(1) + '\u00B0 (\u2248' + yr + ')';
+                            }
+                        },
+                        grid: { color: 'rgba(255,255,255,0.05)' }
+                    },
+                    y: {
+                        position: 'left',
+                        min: 0, max: 100,
+                        title: { display: true, text: 'Runs surviving (no tips)', color: '#22c55e', font: { size: 11 } },
+                        ticks: { color: '#22c55e', font: { size: 10 } },
+                        grid: { color: 'rgba(255,255,255,0.05)' }
+                    },
+                    y2: {
+                        position: 'right',
+                        min: 0,
+                        title: { display: true, text: 'Avg tipping points', color: '#ef4444', font: { size: 11 } },
+                        ticks: { color: '#ef4444', font: { size: 10 } },
+                        grid: { drawOnChartArea: false }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: { color: '#999', font: { size: 11 }, usePointStyle: true, padding: 16 }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: items => {
+                                if (items.length === 0) return '';
+                                const t = items[0].parsed.x;
+                                const yr2 = tempToYear(t, 'SSP2-4.5');
+                                const yr5 = tempToYear(t, 'SSP5-8.5');
+                                return t.toFixed(1) + '\u00B0C (\u2248' + yr2 + ' SSP2-4.5 / \u2248' + yr5 + ' SSP5-8.5)';
+                            },
+                            label: item => {
+                                if (item.datasetIndex === 0) return item.parsed.y + ' / 100 survive';
+                                return item.parsed.y.toFixed(1) + ' avg tips';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // =========================================================================
+    // 13. ERGODICITY PANEL
+    // =========================================================================
+    function renderErgoPanel() {
+        if (!mcRuns || mcRuns.length === 0) return;
+        const fnKey = currentDmgFn;
+
+        // Compute damages for each run
+        const damages = mcRuns.map(run => {
+            const finalT = run.finalEffectiveTemp;
+            return getDamage(finalT, fnKey).trillions;
+        });
+
+        damages.sort((a, b) => a - b);
+
+        const mean = damages.reduce((s, d) => s + d, 0) / damages.length;
+        const p95 = damages[Math.floor(damages.length * 0.95)];
+
+        // User's trajectory damage
+        const userEffTemp = sim.currentTemp + sim.effectiveWarming;
+        const userDmg = getDamage(userEffTemp, fnKey).trillions;
+
+        document.getElementById('ergoMean').textContent = '$' + mean.toFixed(1) + 'T';
+        document.getElementById('ergoMean').className = 'ergo-value ' + dmgColorClass(mean);
+
+        document.getElementById('ergoYours').textContent = '$' + userDmg.toFixed(1) + 'T';
+        document.getElementById('ergoYours').className = 'ergo-value ' + dmgColorClass(userDmg);
+
+        document.getElementById('ergoWorst').textContent = '$' + p95.toFixed(1) + 'T';
+        document.getElementById('ergoWorst').className = 'ergo-value ' + dmgColorClass(p95);
+    }
+
+    // =========================================================================
+    // 14. HISTOGRAM
+    // =========================================================================
+    function renderHistogram(endTemp) {
+        if (!mcRuns || mcRuns.length === 0) return;
+        const fnKey = currentDmgFn;
+
+        const damages = mcRuns.map(run => getDamage(run.finalEffectiveTemp, fnKey).trillions);
+
+        // Create bins
+        const maxD = Math.max(...damages, 10);
+        const binWidth = Math.max(1, Math.ceil(maxD / 20));
+        const nBins = Math.ceil(maxD / binWidth) + 1;
+        const bins = new Array(nBins).fill(0);
+        const binLabels = [];
+
+        for (let i = 0; i < nBins; i++) {
+            binLabels.push('$' + (i * binWidth) + '-' + ((i + 1) * binWidth) + 'T');
+        }
+
+        for (const d of damages) {
+            const idx = Math.min(nBins - 1, Math.floor(d / binWidth));
+            bins[idx]++;
+        }
+
+        // Color bins
+        const binColors = bins.map((_, i) => {
+            const midVal = (i + 0.5) * binWidth;
+            if (midVal < 5) return 'rgba(34,197,94,0.6)';
+            if (midVal < 20) return 'rgba(251,191,36,0.6)';
+            if (midVal < 50) return 'rgba(245,158,11,0.6)';
+            return 'rgba(239,68,68,0.6)';
+        });
+
+        if (histogramChart) histogramChart.destroy();
+        const ctx = document.getElementById('histogramChart').getContext('2d');
+        histogramChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: binLabels,
+                datasets: [{
+                    label: 'Number of simulations',
+                    data: bins,
+                    backgroundColor: binColors,
+                    borderColor: binColors.map(c => c.replace('0.6', '0.9')),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Economic damage ($ trillions)', color: '#777', font: { size: 11 } },
+                        ticks: { color: '#666', font: { size: 9 }, maxRotation: 45 },
+                        grid: { color: 'rgba(255,255,255,0.03)' }
+                    },
+                    y: {
+                        title: { display: true, text: 'Number of simulations', color: '#777', font: { size: 11 } },
+                        ticks: { color: '#666', font: { size: 10 }, stepSize: 5 },
+                        grid: { color: 'rgba(255,255,255,0.05)' }
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: item => item.parsed.y + ' simulations'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // =========================================================================
+    // 15. ERGODICITY EXPLAINER UPDATE
+    // =========================================================================
+    function updateErgoExplainer(endTemp) {
+        if (!mcRuns || mcRuns.length === 0) return;
+        const fnKey = currentDmgFn;
+        const damages = mcRuns.map(run => getDamage(run.finalEffectiveTemp, fnKey).trillions);
+        const catastrophic = damages.filter(d => d > 50).length;
+        const mean = damages.reduce((s, d) => s + d, 0) / damages.length;
+        const cascadeRuns = mcRuns.filter(r => r.tippedSet.size >= 3).length;
+
+        const el = document.getElementById('ergoExplainer');
+        el.innerHTML = `
+            <strong>Why does the mean mislead?</strong> Standard cost-benefit analysis averages across many hypothetical Earths &mdash; but we only live on one. Climate damages are multiplicative: once a tipping point fires, it compounds. The ensemble mean smooths over catastrophic trajectories, but if <em>your</em> Earth hits the tail, the damage is permanent.<br><br>
+            Across 100 simulations to ${endTemp.toFixed(1)}&deg;C: the mean damage is <strong>$${mean.toFixed(1)}T</strong> using ${DAMAGE_FNS[fnKey].name}, but
+            <span class="insight-stat">${catastrophic}% of runs exceeded $50T in damages</span> and
+            <span class="insight-stat">${cascadeRuns}% triggered 3+ tipping cascades</span>.
+            The mean hides the tail. This is the ergodicity problem: the average across parallel worlds is not the average over time for a single world.
+        `;
+    }
+
+    // =========================================================================
+    // 16. SOUND ENGINE (Web Audio API)
+    // =========================================================================
+    let audioCtx = null;
+    let soundEnabled = true;
+    const soundToggle = document.getElementById('soundToggle');
+
+    function getAudioCtx() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        return audioCtx;
+    }
+
+    function playTone(freq, duration, type = 'sine', volume = 0.15) {
+        if (!soundEnabled) return;
+        try {
+            const ctx = getAudioCtx();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, ctx.currentTime);
+            gain.gain.setValueAtTime(volume, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + duration);
+        } catch(e) {}
+    }
+
+    function playNoise(duration, volume = 0.08) {
+        if (!soundEnabled) return;
+        try {
+            const ctx = getAudioCtx();
+            const bufferSize = ctx.sampleRate * duration;
+            const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+            const source = ctx.createBufferSource();
+            source.buffer = buffer;
+            const gain = ctx.createGain();
+            gain.gain.setValueAtTime(volume, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'bandpass';
+            filter.frequency.value = 800;
+            filter.Q.value = 0.5;
+            source.connect(filter);
+            filter.connect(gain);
+            gain.connect(ctx.destination);
+            source.start();
+        } catch(e) {}
+    }
+
+    function soundDiceRoll() {
+        playNoise(0.15, 0.06);
+        setTimeout(() => playTone(600, 0.08, 'triangle', 0.1), 100);
+    }
+
+    function soundTip() {
+        playTone(200, 0.6, 'sawtooth', 0.12);
+        setTimeout(() => playTone(150, 0.8, 'sawtooth', 0.1), 150);
+    }
+
+    function soundCascade() {
+        [0, 80, 160, 240].forEach((delay, i) => {
+            setTimeout(() => playTone(800 - i * 100, 0.2, 'sine', 0.08), delay);
+        });
+    }
+
+    function soundRumble() {
+        playTone(60, 0.5, 'sawtooth', 0.06);
+    }
+
+    soundToggle.addEventListener('click', () => {
+        soundEnabled = !soundEnabled;
+        soundToggle.textContent = soundEnabled ? '\u{1F50A} Sound On' : '\u{1F507} Sound Off';
+        soundToggle.classList.toggle('muted', !soundEnabled);
+        // Init context on first interaction
+        if (soundEnabled) getAudioCtx();
+    });
+
+    // =========================================================================
+    // 17. SSP YEAR MAPPING (Temperature → Year)
+    // =========================================================================
+    const SSP_SCENARIOS = {
+        'SSP1-2.6': { label: 'SSP1-2.6 (strong mitigation)', color: '#4c994c',
+            points: [[2026,1.45],[2030,1.50],[2040,1.60],[2050,1.70],[2060,1.70],[2070,1.75],[2080,1.80],[2090,1.80],[2100,1.80]] },
+        'SSP2-4.5': { label: 'SSP2-4.5 (moderate)', color: '#5078be',
+            points: [[2026,1.45],[2030,1.50],[2040,1.65],[2050,1.90],[2060,2.10],[2070,2.30],[2080,2.50],[2090,2.65],[2100,2.70]] },
+        'SSP3-7.0': { label: 'SSP3-7.0 (high emissions)', color: '#aa648c',
+            points: [[2026,1.45],[2030,1.50],[2040,1.70],[2050,2.00],[2060,2.30],[2070,2.70],[2080,3.10],[2090,3.40],[2100,3.60]] },
+        'SSP5-8.5': { label: 'SSP5-8.5 (very high)', color: '#be5050',
+            points: [[2026,1.50],[2030,1.60],[2040,1.85],[2050,2.20],[2060,2.65],[2070,3.15],[2080,3.70],[2090,4.10],[2100,4.40]] }
+    };
+
+    // Interpolate: given temp, return approximate year under a given SSP
+    function tempToYear(temp, sspKey) {
+        const pts = SSP_SCENARIOS[sspKey].points;
+        if (temp <= pts[0][1]) return pts[0][0];
+        if (temp >= pts[pts.length - 1][1]) return pts[pts.length - 1][0];
+        for (let i = 0; i < pts.length - 1; i++) {
+            if (temp >= pts[i][1] && temp <= pts[i + 1][1]) {
+                const frac = (temp - pts[i][1]) / (pts[i + 1][1] - pts[i][1]);
+                return Math.round(pts[i][0] + frac * (pts[i + 1][0] - pts[i][0]));
+            }
+        }
+        return 2100;
+    }
+
+    // =========================================================================
+    // 18. POLICY LEVER COMPARISON
+    // =========================================================================
+    let policyChart = null;
+
+    function runPolicyComparison() {
+        const targets = [1.5, 2.0, 2.5, 3.0];
+        const nRuns = 200;
+        const grid = document.getElementById('policyGrid');
+        grid.innerHTML = '';
+
+        for (const target of targets) {
+            const runs = runMonteCarlo(nRuns, target);
+            const zeroTips = runs.filter(r => r.tippedSet.size === 0).length;
+            const survivalPct = Math.round(zeroTips / nRuns * 100);
+            const avgTips = (runs.reduce((s, r) => s + r.tippedSet.size, 0) / nRuns).toFixed(1);
+            const damages = runs.map(r => getDamage(r.finalEffectiveTemp, currentDmgFn).trillions);
+            const meanDmg = damages.reduce((s, d) => s + d, 0) / damages.length;
+            const maxDmg = Math.max(...damages);
+
+            const yearSSP2 = tempToYear(target, 'SSP2-4.5');
+            const yearSSP5 = tempToYear(target, 'SSP5-8.5');
+
+            let survColor;
+            if (survivalPct >= 70) survColor = 'var(--green)';
+            else if (survivalPct >= 40) survColor = 'var(--yellow)';
+            else if (survivalPct >= 15) survColor = 'var(--orange)';
+            else survColor = 'var(--red)';
+
+            const card = document.createElement('div');
+            card.className = 'policy-card';
+            card.innerHTML = `
+                <h3>${target.toFixed(1)}&deg;C</h3>
+                <div class="policy-survive" style="color:${survColor}">${survivalPct}%</div>
+                <div class="policy-label">chance of zero tipping points</div>
+                <div class="policy-detail">
+                    Avg ${avgTips} tips &middot; Mean $${meanDmg.toFixed(0)}T damage<br>
+                    Worst case: $${maxDmg.toFixed(0)}T
+                </div>
+                <div class="policy-year">
+                    ~${yearSSP2} (SSP2-4.5) &middot; ~${yearSSP5} (SSP5-8.5)
+                </div>
+            `;
+            grid.appendChild(card);
+        }
+
+        document.getElementById('policy-section').style.display = 'block';
+    }
+
+    // =========================================================================
+    // 19. LOTTERY TICKET (Canvas)
+    // =========================================================================
+    function renderLotteryTicket() {
+        const canvas = document.getElementById('ticketCanvas');
+        const ctx = canvas.getContext('2d');
+        const W = 600, H = 380;
+        canvas.width = W;
+        canvas.height = H;
+
+        // Background
+        const grad = ctx.createLinearGradient(0, 0, W, H);
+        grad.addColorStop(0, '#0f1923');
+        grad.addColorStop(1, '#1a0a0a');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, W, H);
+
+        // Border
+        ctx.strokeStyle = '#333';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(4, 4, W - 8, H - 8);
+
+        // Dashed ticket edge
+        ctx.setLineDash([8, 5]);
+        ctx.strokeStyle = '#444';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(12, 12, W - 24, H - 24);
+        ctx.setLineDash([]);
+
+        // Title
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 22px -apple-system, BlinkMacSystemFont, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('CLIMATE LOTTERY TICKET', W / 2, 45);
+
+        ctx.fillStyle = '#666';
+        ctx.font = '11px -apple-system, sans-serif';
+        ctx.fillText('climateroulette.earth \u2022 Your trajectory on this Earth', W / 2, 63);
+
+        // Divider
+        ctx.strokeStyle = '#333';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(30, 75);
+        ctx.lineTo(W - 30, 75);
+        ctx.stroke();
+
+        const effectiveTemp = sim.currentTemp + sim.effectiveWarming;
+        const tippedList = Array.from(sim.tippedSet);
+        const dmg = getDamage(effectiveTemp, currentDmgFn);
+
+        // Temperature
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#aaa';
+        ctx.font = '12px -apple-system, sans-serif';
+        ctx.fillText('FINAL TEMPERATURE', 30, 100);
+
+        ctx.fillStyle = effectiveTemp >= 3 ? '#ef4444' : effectiveTemp >= 2 ? '#f59e0b' : '#22c55e';
+        ctx.font = 'bold 36px -apple-system, sans-serif';
+        ctx.fillText(sim.currentTemp.toFixed(1) + '\u00B0C', 30, 138);
+
+        if (sim.effectiveWarming !== 0) {
+            ctx.fillStyle = '#00d4ff';
+            ctx.font = '13px -apple-system, sans-serif';
+            ctx.fillText('(effective: ' + effectiveTemp.toFixed(2) + '\u00B0C with feedbacks)', 180, 130);
+        }
+
+        // Year estimates
+        ctx.fillStyle = '#666';
+        ctx.font = '11px -apple-system, sans-serif';
+        const yr2 = tempToYear(sim.currentTemp, 'SSP2-4.5');
+        const yr5 = tempToYear(sim.currentTemp, 'SSP5-8.5');
+        ctx.fillText('Reached by ~' + yr2 + ' (SSP2-4.5) or ~' + yr5 + ' (SSP5-8.5)', 30, 158);
+
+        // Damage
+        ctx.fillStyle = '#aaa';
+        ctx.font = '12px -apple-system, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText('ECONOMIC DAMAGE (' + DAMAGE_FNS[currentDmgFn].name + ')', W - 30, 100);
+
+        ctx.fillStyle = dmg.trillions >= 50 ? '#ef4444' : dmg.trillions >= 20 ? '#f59e0b' : dmg.trillions >= 5 ? '#fbbf24' : '#22c55e';
+        ctx.font = 'bold 32px -apple-system, sans-serif';
+        ctx.fillText('$' + (dmg.trillions < 100 ? dmg.trillions.toFixed(1) : dmg.trillions.toFixed(0)) + 'T', W - 30, 135);
+
+        ctx.fillStyle = '#666';
+        ctx.font = '11px -apple-system, sans-serif';
+        ctx.fillText((dmg.fraction * 100).toFixed(1) + '% of world GDP', W - 30, 155);
+
+        // Divider
+        ctx.strokeStyle = '#2a2a2a';
+        ctx.beginPath();
+        ctx.moveTo(30, 175);
+        ctx.lineTo(W - 30, 175);
+        ctx.stroke();
+
+        // Tipping points
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#aaa';
+        ctx.font = '12px -apple-system, sans-serif';
+        ctx.fillText('TIPPING POINTS TRIGGERED: ' + tippedList.length + ' / 16', 30, 198);
+
+        const cols = 3;
+        const colW = (W - 60) / cols;
+        tippedList.forEach((id, i) => {
+            const tp = TIPPING_POINTS.find(t => t.id === id);
+            const col = i % cols;
+            const row = Math.floor(i / cols);
+            const x = 30 + col * colW;
+            const y = 218 + row * 22;
+
+            ctx.fillStyle = '#ef4444';
+            ctx.beginPath();
+            ctx.arc(x + 5, y - 3, 3, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#ccc';
+            ctx.font = '11px -apple-system, sans-serif';
+            ctx.fillText(tp ? tp.name : id, x + 14, y);
+
+            ctx.fillStyle = '#666';
+            ctx.font = '10px -apple-system, sans-serif';
+            const tTemp = sim.tippedAtTemp[id];
+            if (tTemp) ctx.fillText('@ ' + tTemp.toFixed(1) + '\u00B0', x + 14 + (tp ? ctx.measureText(tp.name).width + 4 : 30), y);
+        });
+
+        if (tippedList.length === 0) {
+            ctx.fillStyle = '#22c55e';
+            ctx.font = 'bold 14px -apple-system, sans-serif';
+            ctx.fillText('None! You survived.', 30, 222);
+        }
+
+        // Bottom bar
+        const bottomY = H - 35;
+        ctx.fillStyle = '#1a1a1a';
+        ctx.fillRect(12, bottomY - 5, W - 24, 30);
+
+        ctx.fillStyle = '#555';
+        ctx.font = '10px -apple-system, sans-serif';
+        ctx.textAlign = 'center';
+        const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+        ctx.fillText('Generated ' + dateStr + ' \u2022 Armstrong McKay et al. 2022 \u2022 Climate Roulette', W / 2, bottomY + 12);
+
+        document.getElementById('ticket-section').style.display = 'block';
+    }
+
+    document.getElementById('downloadTicket').addEventListener('click', () => {
+        const canvas = document.getElementById('ticketCanvas');
+        const link = document.createElement('a');
+        link.download = 'climate-lottery-ticket.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    });
+
+    // =========================================================================
+    // 20. INIT
+    // =========================================================================
+    renderTPGrid();
+    renderWorldMap();
+    renderDamage();
+    updateTempDial();
+
+    </script>
+</body>
+</html>
