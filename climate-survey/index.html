@@ -280,6 +280,7 @@
             <div class="controls">
                 <button id="clearBtn" disabled>Clear Drawing</button>
                 <button id="submitBtn" class="primary" disabled>Submit Prediction</button>
+                <span id="statusMsg" style="font-size:0.78rem; color:#666; align-self:center; margin-left:auto;"></span>
             </div>
         </div>
     </div>
@@ -732,11 +733,14 @@
         // =====================================================================
         const fb = window._fb;
         const submissionsRef = fb.collection('submissions');
+        const statusMsg = document.getElementById('statusMsg');
 
         // In-memory cache of all submissions (loaded once on init)
         let allSubmissions = [];
 
         async function loadSubmissions() {
+            statusMsg.textContent = 'Loading community data\u2026';
+            statusMsg.style.color = '#666';
             try {
                 const q = fb.query(submissionsRef, fb.orderBy('timestamp', 'asc'));
                 const snapshot = await fb.getDocs(q);
@@ -749,8 +753,13 @@
                         points: data.points
                     });
                 });
+                statusMsg.textContent = allSubmissions.length > 0
+                    ? allSubmissions.length + ' prediction' + (allSubmissions.length !== 1 ? 's' : '') + ' loaded'
+                    : 'No predictions yet \u2014 be the first!';
             } catch (e) {
-                console.warn('Firestore load failed, using empty:', e);
+                console.warn('Firestore load failed:', e);
+                statusMsg.textContent = 'Could not load community data';
+                statusMsg.style.color = '#aa5555';
                 allSubmissions = [];
             }
             return allSubmissions;
@@ -765,9 +774,12 @@
                 const docRef = await fb.addDoc(submissionsRef, submission);
                 submission.id = docRef.id;
                 allSubmissions.push(submission);
+                statusMsg.textContent = 'Saved! ' + allSubmissions.length + ' total prediction' + (allSubmissions.length !== 1 ? 's' : '');
+                statusMsg.style.color = '#6abf6a';
             } catch (e) {
                 console.error('Firestore save failed:', e);
-                alert('Could not save your prediction. Please check your connection and try again.');
+                statusMsg.textContent = 'Save failed \u2014 check connection';
+                statusMsg.style.color = '#aa5555';
             }
             return allSubmissions;
         }
