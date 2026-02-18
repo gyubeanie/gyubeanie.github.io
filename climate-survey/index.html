@@ -6,6 +6,34 @@
     <title>Climate Warming Trajectory Survey</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.1.0"></script>
+    <script type="module">
+        // Firebase init — loaded as module, exposes db globally
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCd7tEUn_ch4C4EKVWg5IKBlc3GaPiw_Vs",
+            authDomain: "climatesurvey-ba124.firebaseapp.com",
+            projectId: "climatesurvey-ba124",
+            storageBucket: "climatesurvey-ba124.firebasestorage.app",
+            messagingSenderId: "744828348481",
+            appId: "1:744828348481:web:d3ea90bb25142699f17ec0"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Expose Firestore helpers globally for the main script
+        window._fb = {
+            db,
+            collection: (name) => collection(db, name),
+            addDoc,
+            getDocs,
+            query,
+            orderBy
+        };
+        window.dispatchEvent(new Event('firebase-ready'));
+    </script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -275,7 +303,8 @@
     </footer>
 
     <script>
-    (function() {
+    // Wait for Firebase to be ready, then init the app
+    async function initApp() {
         'use strict';
 
         // =====================================================================
@@ -699,24 +728,48 @@
         }
 
         // =====================================================================
-        // 6. LOCALSTORAGE
+        // 6. FIREBASE FIRESTORE PERSISTENCE
         // =====================================================================
-        const STORAGE_KEY = 'climate-survey-submissions';
+        const fb = window._fb;
+        const submissionsRef = fb.collection('submissions');
 
-        function loadSubmissions() {
-            try { const r = localStorage.getItem(STORAGE_KEY); return r ? JSON.parse(r) : []; }
-            catch { return []; }
+        // In-memory cache of all submissions (loaded once on init)
+        let allSubmissions = [];
+
+        async function loadSubmissions() {
+            try {
+                const q = fb.query(submissionsRef, fb.orderBy('timestamp', 'asc'));
+                const snapshot = await fb.getDocs(q);
+                allSubmissions = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    allSubmissions.push({
+                        id: doc.id,
+                        timestamp: data.timestamp,
+                        points: data.points
+                    });
+                });
+            } catch (e) {
+                console.warn('Firestore load failed, using empty:', e);
+                allSubmissions = [];
+            }
+            return allSubmissions;
         }
 
-        function saveSubmission(points) {
-            const subs = loadSubmissions();
-            subs.push({
-                id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+        async function saveSubmission(points) {
+            const submission = {
                 timestamp: new Date().toISOString(),
                 points: points
-            });
-            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(subs)); } catch {}
-            return subs;
+            };
+            try {
+                const docRef = await fb.addDoc(submissionsRef, submission);
+                submission.id = docRef.id;
+                allSubmissions.push(submission);
+            } catch (e) {
+                console.error('Firestore save failed:', e);
+                alert('Could not save your prediction. Please check your connection and try again.');
+            }
+            return allSubmissions;
         }
 
         // =====================================================================
@@ -1093,19 +1146,22 @@
             updateButtons();
         });
 
-        submitBtn.addEventListener('click', () => {
+        submitBtn.addEventListener('click', async () => {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting\u2026';
+
             // Auto-smooth if the drawn input is not injective (has backwards x)
             if (!isInjective(drawnPoints) || smoothedPoints.length === 0) {
                 smoothDrawing();
             }
 
             const pts = smoothedPoints.length > 0 ? smoothedPoints : drawnPoints;
-            if (pts.length === 0) return;
+            if (pts.length === 0) { submitBtn.textContent = 'Submit Prediction'; updateButtons(); return; }
 
             const normalized = normalizePoints(pts);
-            if (!normalized || normalized.length < 10) return;
+            if (!normalized || normalized.length < 10) { submitBtn.textContent = 'Submit Prediction'; updateButtons(); return; }
 
-            const allSubs = saveSubmission(normalized);
+            const allSubs = await saveSubmission(normalized);
             renderResults(allSubs, normalized);
 
             // Reset drawing
@@ -1113,21 +1169,28 @@
             smoothedPoints = [];
             mainChart.data.datasets[2].data = [];
             mainChart.update('none');
+            submitBtn.textContent = 'Submit Prediction';
             updateButtons();
 
             document.getElementById('results-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
 
         // =====================================================================
-        // 11. LOAD EXISTING ON PAGE LOAD
+        // 11. LOAD COMMUNITY DATA FROM FIRESTORE ON PAGE LOAD
         // =====================================================================
-        const existing = loadSubmissions();
+        const existing = await loadSubmissions();
         if (existing.length > 0) {
-            const last = existing[existing.length - 1];
-            renderResults(existing, last.points);
+            renderResults(existing, null);
         }
 
-    })();
+    }
+
+    // Boot the app once Firebase module is ready
+    if (window._fb) {
+        initApp();
+    } else {
+        window.addEventListener('firebase-ready', () => initApp());
+    }
     </script>
 </body>
 </html>
