@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>gyubeanie's Web Apps</title>
+    <title>gyubeanie</title>
     <style>
         * {
             margin: 0;
@@ -13,105 +13,145 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0f0f0f;
+            background: #0a0a0a;
             color: #e0e0e0;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+        }
+
+        .page {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
+            padding: 3rem 1.5rem;
         }
 
         header {
             text-align: center;
-            padding: 4rem 2rem 2rem;
+            margin-bottom: 3rem;
         }
 
         header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
+            font-size: 2.2rem;
+            font-weight: 300;
             color: #fff;
+            letter-spacing: 0.08em;
+        }
+
+        header .divider {
+            width: 40px;
+            height: 1px;
+            background: #333;
+            margin: 1rem auto;
         }
 
         header p {
-            margin-top: 0.5rem;
-            font-size: 1.1rem;
-            color: #888;
+            font-size: 0.9rem;
+            color: #555;
+            font-weight: 400;
+            letter-spacing: 0.04em;
         }
 
         .apps-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-            padding: 2rem;
-            max-width: 960px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.25rem;
+            max-width: 720px;
             width: 100%;
         }
 
         .app-card {
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: border-color 0.2s, transform 0.2s;
+            background: #111;
+            border: 1px solid #1e1e1e;
+            border-radius: 10px;
+            padding: 1.5rem 1.75rem;
             text-decoration: none;
             color: inherit;
             display: block;
+            transition: border-color 0.25s, background 0.25s;
         }
 
         .app-card:hover {
-            border-color: #555;
-            transform: translateY(-2px);
+            border-color: #333;
+            background: #151515;
+        }
+
+        .app-card .tag {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #00b8d4;
+            background: rgba(0, 184, 212, 0.08);
+            padding: 0.2em 0.6em;
+            border-radius: 4px;
+            margin-bottom: 0.75rem;
         }
 
         .app-card h2 {
-            font-size: 1.25rem;
-            color: #fff;
-            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #eee;
+            margin-bottom: 0.4rem;
         }
 
         .app-card p {
-            font-size: 0.9rem;
+            font-size: 0.82rem;
+            color: #666;
+            line-height: 1.55;
+        }
+
+        .app-card .arrow {
+            display: block;
+            margin-top: 1rem;
+            font-size: 0.78rem;
+            color: #444;
+            transition: color 0.2s;
+        }
+
+        .app-card:hover .arrow {
             color: #888;
-            line-height: 1.5;
         }
 
-        .empty-state {
+        footer {
             text-align: center;
-            padding: 4rem 2rem;
-            color: #555;
+            padding: 2rem;
+            font-size: 0.72rem;
+            color: #333;
+            letter-spacing: 0.03em;
         }
 
-        .empty-state p {
-            font-size: 1rem;
-            line-height: 1.8;
-        }
-
-        .empty-state code {
-            background: #1a1a1a;
-            padding: 0.2em 0.5em;
-            border-radius: 4px;
-            font-size: 0.9rem;
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.7rem; }
+            .apps-grid { grid-template-columns: 1fr; }
+            .page { padding: 2rem 1rem; justify-content: flex-start; padding-top: 4rem; }
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Web Apps</h1>
-        <p>A collection of web apps hosted on GitHub Pages</p>
-    </header>
+    <div class="page">
+        <header>
+            <h1>gyubeanie</h1>
+            <div class="divider"></div>
+            <p>web experiments</p>
+        </header>
 
-    <main class="apps-grid">
-        <!-- Add app cards here as you build them. Example: -->
-        <!--
-        <a class="app-card" href="/my-app/">
-            <h2>My App</h2>
-            <p>A short description of what this app does.</p>
-        </a>
-        -->
-    </main>
-
-    <div class="empty-state">
-        <p>No apps yet. Add a folder with an <code>index.html</code> to get started.</p>
+        <main class="apps-grid">
+            <a class="app-card" href="/climate-survey/">
+                <span class="tag">Interactive</span>
+                <h2>Climate Warming Survey</h2>
+                <p>Draw your prediction for global temperature through 2100, based on historical ERA5 data. See how your outlook compares to others.</p>
+                <span class="arrow">View &rarr;</span>
+            </a>
+        </main>
     </div>
+
+    <footer>
+        &copy; 2026
+    </footer>
 </body>
 </html>
