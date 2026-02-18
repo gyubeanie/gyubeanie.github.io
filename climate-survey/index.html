@@ -61,7 +61,7 @@
         .chart-container {
             position: relative;
             width: 100%;
-            height: 420px;
+            height: 440px;
         }
 
         .chart-container canvas {
@@ -81,10 +81,7 @@
             color: #8ecfdf;
         }
 
-        .instructions-bar .icon {
-            font-size: 1.1rem;
-            flex-shrink: 0;
-        }
+        .instructions-bar .icon { font-size: 1.1rem; flex-shrink: 0; }
 
         .controls {
             display: flex;
@@ -111,10 +108,7 @@
             color: #fff;
         }
 
-        button:disabled {
-            opacity: 0.35;
-            cursor: not-allowed;
-        }
+        button:disabled { opacity: 0.35; cursor: not-allowed; }
 
         button.primary {
             background: #00a8cc;
@@ -127,25 +121,48 @@
             border-color: #00bde0;
         }
 
-        button.danger {
-            border-color: #552222;
-            color: #cc6666;
-        }
-
-        button.danger:hover:not(:disabled) {
-            background: #2a1515;
-            border-color: #883333;
-        }
-
         #results-section {
             display: none;
             margin-top: 2rem;
-            padding-bottom: 2rem;
+            padding-bottom: 1rem;
+        }
+
+        .verdict-box {
+            margin-top: 1.25rem;
+            padding: 1.1rem 1.25rem;
+            border-radius: 10px;
+            border: 1px solid #2a2a2a;
+            background: #141414;
+        }
+
+        .verdict-box h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .verdict-box .verdict-text {
+            font-size: 0.88rem;
+            line-height: 1.6;
+            color: #aaa;
+        }
+
+        .verdict-box .verdict-text strong {
+            color: #00d4ff;
+        }
+
+        .verdict-box .scenario-tag {
+            display: inline-block;
+            padding: 0.15em 0.5em;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 0.75rem;
             margin-top: 1rem;
         }
@@ -159,21 +176,37 @@
         }
 
         .stat-card .value {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: #00d4ff;
         }
 
         .stat-card .label {
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             color: #777;
             margin-top: 0.25rem;
         }
 
-        .results-controls {
-            margin-top: 1rem;
+        .legend-row {
             display: flex;
-            gap: 0.75rem;
+            flex-wrap: wrap;
+            gap: 0.6rem 1.2rem;
+            margin-top: 0.75rem;
+            font-size: 0.75rem;
+            color: #888;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .legend-swatch {
+            width: 18px;
+            height: 10px;
+            border-radius: 2px;
+            flex-shrink: 0;
         }
 
         footer {
@@ -186,15 +219,8 @@
             line-height: 1.6;
         }
 
-        footer a {
-            color: #777;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            color: #aaa;
-            text-decoration: underline;
-        }
+        footer a { color: #777; text-decoration: none; }
+        footer a:hover { color: #aaa; text-decoration: underline; }
 
         @media (max-width: 600px) {
             header { padding: 1.5rem 1rem 0.5rem; }
@@ -203,6 +229,7 @@
             .chart-container { height: 320px; }
             .controls { gap: 0.5rem; }
             button { padding: 0.5rem 0.9rem; font-size: 0.8rem; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
@@ -224,7 +251,6 @@
             </div>
             <div class="controls">
                 <button id="clearBtn" disabled>Clear Drawing</button>
-                <button id="smoothBtn" disabled>Smooth Curve</button>
                 <button id="submitBtn" class="primary" disabled>Submit Prediction</button>
             </div>
         </div>
@@ -232,20 +258,19 @@
 
     <div class="section" id="results-section">
         <div class="chart-panel">
-            <h2>Community Predictions</h2>
+            <h2>Your Prediction vs. Climate Scenarios</h2>
             <div class="chart-container">
                 <canvas id="resultsChart"></canvas>
             </div>
+            <div class="legend-row" id="scenarioLegend"></div>
         </div>
+        <div class="verdict-box" id="verdictBox"></div>
         <div class="stats-grid" id="statsGrid"></div>
-        <div class="results-controls">
-            <button id="clearDataBtn" class="danger">Clear All My Data</button>
-        </div>
     </div>
 
     <footer>
         Historical data: ERA5, Berkeley Earth, GISTEMP, HadCRUT5, JRA-3Q, NOAAGlobalTemp v6.<br>
-        Anomalies relative to the 1850&ndash;1900 pre-industrial baseline.<br>
+        Scenario projections: IPCC AR6 WG1 SSP assessed ranges (CMIP6).<br>
         <a href="/">&#8592; Back to Home</a>
     </footer>
 
@@ -254,10 +279,8 @@
         'use strict';
 
         // =====================================================================
-        // 1. HISTORICAL DATA (from ERA5 + multi-dataset CSV)
+        // 1. HISTORICAL DATA
         // =====================================================================
-        // ERA5 column (1940-2024), null before 1940
-        // Multi-dataset mean: average of all non-null values per year
         const RAW = [
             [1850,null,-0.0364],[1851,null,0.0673],[1852,null,0.0897],[1853,null,0.0561],[1854,null,0.0603],
             [1855,null,0.0549],[1856,null,-0.0193],[1857,null,-0.1295],[1858,null,-0.0312],[1859,null,0.0863],
@@ -317,24 +340,86 @@
         const PREDICT_END = 2100;
 
         // =====================================================================
-        // 2. CHART SETUP
+        // 2. SSP SCENARIO DATA (IPCC AR6 WG1, CMIP6 multi-model)
+        //    Best-estimate (mean) and likely range (5-95th percentile)
+        //    Anomaly relative to 1850-1900 baseline
+        // =====================================================================
+        const SSP_YEARS = [2026, 2030, 2040, 2050, 2060, 2070, 2080, 2090, 2100];
+
+        const SSP = {
+            'SSP1-2.6': {
+                mean: [1.45, 1.50, 1.60, 1.70, 1.70, 1.75, 1.80, 1.80, 1.80],
+                lo:   [1.20, 1.20, 1.25, 1.30, 1.25, 1.25, 1.25, 1.20, 1.20],
+                hi:   [1.70, 1.80, 2.00, 2.15, 2.20, 2.25, 2.30, 2.35, 2.40],
+                color: 'rgba(76,153,76,1)',
+                fill:  'rgba(76,153,76,0.15)',
+                label: 'SSP1-2.6 (strong mitigation)'
+            },
+            'SSP2-4.5': {
+                mean: [1.45, 1.50, 1.65, 1.90, 2.10, 2.30, 2.50, 2.65, 2.70],
+                lo:   [1.20, 1.20, 1.30, 1.45, 1.55, 1.65, 1.80, 1.85, 1.90],
+                hi:   [1.70, 1.85, 2.10, 2.50, 2.80, 3.10, 3.40, 3.60, 3.70],
+                color: 'rgba(80,120,190,1)',
+                fill:  'rgba(80,120,190,0.15)',
+                label: 'SSP2-4.5 (moderate)'
+            },
+            'SSP3-7.0': {
+                mean: [1.45, 1.50, 1.70, 2.00, 2.30, 2.70, 3.10, 3.40, 3.60],
+                lo:   [1.20, 1.20, 1.35, 1.55, 1.75, 2.00, 2.25, 2.45, 2.55],
+                hi:   [1.75, 1.85, 2.15, 2.60, 3.10, 3.60, 4.15, 4.55, 4.85],
+                color: 'rgba(170,100,140,1)',
+                fill:  'rgba(170,100,140,0.15)',
+                label: 'SSP3-7.0 (high emissions)'
+            },
+            'SSP5-8.5': {
+                mean: [1.50, 1.60, 1.85, 2.20, 2.65, 3.15, 3.70, 4.10, 4.40],
+                lo:   [1.25, 1.30, 1.45, 1.70, 2.00, 2.30, 2.70, 2.95, 3.10],
+                hi:   [1.80, 1.95, 2.35, 2.90, 3.55, 4.25, 5.00, 5.55, 5.90],
+                color: 'rgba(190,80,80,1)',
+                fill:  'rgba(190,80,80,0.15)',
+                label: 'SSP5-8.5 (very high emissions)'
+            }
+        };
+
+        // Interpolate SSP data to every integer year
+        function interpSSP(arr) {
+            const out = {};
+            for (let i = 0; i < SSP_YEARS.length - 1; i++) {
+                const y0 = SSP_YEARS[i], y1 = SSP_YEARS[i + 1];
+                const v0 = arr[i], v1 = arr[i + 1];
+                for (let y = y0; y < y1; y++) {
+                    out[y] = v0 + (v1 - v0) * (y - y0) / (y1 - y0);
+                }
+            }
+            out[SSP_YEARS[SSP_YEARS.length - 1]] = arr[arr.length - 1];
+            return out;
+        }
+
+        const SSP_INTERP = {};
+        for (const [key, val] of Object.entries(SSP)) {
+            SSP_INTERP[key] = {
+                mean: interpSSP(val.mean),
+                lo: interpSSP(val.lo),
+                hi: interpSSP(val.hi)
+            };
+        }
+
+        // =====================================================================
+        // 3. MAIN CHART
         // =====================================================================
         const mainCtx = document.getElementById('mainChart').getContext('2d');
 
-        // Build historical datasets
         const era5Data = [], multiData = [];
         for (let i = 0; i < HIST_YEARS.length; i++) {
             if (ERA5[i] !== null) era5Data.push({ x: HIST_YEARS[i], y: ERA5[i] });
             multiData.push({ x: HIST_YEARS[i], y: MULTI_MEAN[i] });
         }
 
-        // Prediction zone plugin
         const predictionZonePlugin = {
             id: 'predictionZone',
             beforeDatasetsDraw(chart) {
                 const ctx = chart.ctx;
                 const xScale = chart.scales.x;
-                const yScale = chart.scales.y;
                 const left = xScale.getPixelForValue(PREDICT_START);
                 const right = xScale.getPixelForValue(PREDICT_END);
                 const top = chart.chartArea.top;
@@ -342,8 +427,6 @@
                 ctx.save();
                 ctx.fillStyle = 'rgba(255,255,255,0.03)';
                 ctx.fillRect(left, top, right - left, bottom - top);
-
-                // Dashed vertical line at prediction start
                 ctx.strokeStyle = 'rgba(255,255,255,0.12)';
                 ctx.lineWidth = 1;
                 ctx.setLineDash([4, 4]);
@@ -368,30 +451,24 @@
                         data: multiData,
                         borderColor: 'rgba(150,150,150,0.35)',
                         borderWidth: 1.2,
-                        pointRadius: 0,
-                        pointHitRadius: 0,
-                        tension: 0.3,
-                        order: 3
+                        pointRadius: 0, pointHitRadius: 0,
+                        tension: 0.3, order: 3
                     },
                     {
                         label: 'ERA5',
                         data: era5Data,
                         borderColor: '#ff6b35',
                         borderWidth: 2,
-                        pointRadius: 0,
-                        pointHitRadius: 0,
-                        tension: 0.1,
-                        order: 2
+                        pointRadius: 0, pointHitRadius: 0,
+                        tension: 0.1, order: 2
                     },
                     {
                         label: 'Your Prediction',
                         data: [],
                         borderColor: '#00d4ff',
                         borderWidth: 2.5,
-                        pointRadius: 0,
-                        pointHitRadius: 0,
-                        tension: 0,
-                        order: 1
+                        pointRadius: 0, pointHitRadius: 0,
+                        tension: 0, order: 1
                     }
                 ]
             },
@@ -403,23 +480,20 @@
                 scales: {
                     x: {
                         type: 'linear',
-                        min: 1850,
-                        max: 2100,
+                        min: 1850, max: 2100,
                         ticks: {
                             stepSize: 25,
                             color: '#666',
-                            font: { size: 11 }
+                            font: { size: 11 },
+                            callback: v => String(Math.round(v))
                         },
                         grid: { color: 'rgba(255,255,255,0.05)' },
                         title: { display: true, text: 'Year', color: '#777', font: { size: 12 } }
                     },
                     y: {
-                        min: -0.5,
-                        max: 5.0,
+                        min: -0.5, max: 5.0,
                         ticks: {
-                            stepSize: 0.5,
-                            color: '#666',
-                            font: { size: 11 },
+                            stepSize: 0.5, color: '#666', font: { size: 11 },
                             callback: v => v.toFixed(1) + '\u00B0C'
                         },
                         grid: { color: 'rgba(255,255,255,0.05)' },
@@ -429,48 +503,21 @@
                 plugins: {
                     legend: {
                         labels: {
-                            color: '#999',
-                            font: { size: 11 },
-                            usePointStyle: true,
-                            pointStyle: 'line',
-                            padding: 16
+                            color: '#999', font: { size: 11 },
+                            usePointStyle: true, pointStyle: 'line', padding: 16
                         }
                     },
                     annotation: {
                         annotations: {
                             line15: {
-                                type: 'line',
-                                yMin: 1.5,
-                                yMax: 1.5,
-                                borderColor: 'rgba(251, 191, 36, 0.5)',
-                                borderWidth: 1.5,
-                                borderDash: [6, 4],
-                                label: {
-                                    display: true,
-                                    content: '1.5\u00B0C',
-                                    position: 'start',
-                                    backgroundColor: 'rgba(251,191,36,0.15)',
-                                    color: '#fbbf24',
-                                    font: { size: 10 },
-                                    padding: 3
-                                }
+                                type: 'line', yMin: 1.5, yMax: 1.5,
+                                borderColor: 'rgba(251,191,36,0.5)', borderWidth: 1.5, borderDash: [6, 4],
+                                label: { display: true, content: '1.5\u00B0C', position: 'start', backgroundColor: 'rgba(251,191,36,0.15)', color: '#fbbf24', font: { size: 10 }, padding: 3 }
                             },
                             line20: {
-                                type: 'line',
-                                yMin: 2.0,
-                                yMax: 2.0,
-                                borderColor: 'rgba(239, 68, 68, 0.5)',
-                                borderWidth: 1.5,
-                                borderDash: [6, 4],
-                                label: {
-                                    display: true,
-                                    content: '2.0\u00B0C',
-                                    position: 'start',
-                                    backgroundColor: 'rgba(239,68,68,0.15)',
-                                    color: '#ef4444',
-                                    font: { size: 10 },
-                                    padding: 3
-                                }
+                                type: 'line', yMin: 2.0, yMax: 2.0,
+                                borderColor: 'rgba(239,68,68,0.5)', borderWidth: 1.5, borderDash: [6, 4],
+                                label: { display: true, content: '2.0\u00B0C', position: 'start', backgroundColor: 'rgba(239,68,68,0.15)', color: '#ef4444', font: { size: 10 }, padding: 3 }
                             }
                         }
                     },
@@ -481,35 +528,30 @@
         });
 
         // =====================================================================
-        // 3. DRAWING INTERACTION
+        // 4. DRAWING INTERACTION
         // =====================================================================
         const canvas = mainChart.canvas;
         const clearBtn = document.getElementById('clearBtn');
-        const smoothBtn = document.getElementById('smoothBtn');
         const submitBtn = document.getElementById('submitBtn');
 
         function getCanvasPos(e) {
             const rect = canvas.getBoundingClientRect();
-            if (e.touches && e.touches.length > 0) {
+            if (e.touches && e.touches.length > 0)
                 return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
-            }
             return { x: e.clientX - rect.left, y: e.clientY - rect.top };
         }
 
         function pixelToData(px, py) {
-            const xScale = mainChart.scales.x;
-            const yScale = mainChart.scales.y;
             return {
-                year: xScale.getValueForPixel(px),
-                temp: yScale.getValueForPixel(py)
+                year: mainChart.scales.x.getValueForPixel(px),
+                temp: mainChart.scales.y.getValueForPixel(py)
             };
         }
 
         function isInPredictZone(px) {
-            const xScale = mainChart.scales.x;
-            const leftPx = xScale.getPixelForValue(PREDICT_START);
-            const rightPx = xScale.getPixelForValue(PREDICT_END);
-            return px >= leftPx - 5 && px <= rightPx + 5;
+            const left = mainChart.scales.x.getPixelForValue(PREDICT_START);
+            const right = mainChart.scales.x.getPixelForValue(PREDICT_END);
+            return px >= left - 5 && px <= right + 5;
         }
 
         function clampData(year, temp) {
@@ -520,22 +562,17 @@
         }
 
         function updatePredictionDataset(pts) {
-            // Prepend anchor point to connect to historical data
             const anchor = { x: LAST_HIST_YEAR, y: LAST_ERA5_TEMP };
-            const data = [anchor, ...pts.map(p => ({ x: p.year, y: p.temp }))];
-            mainChart.data.datasets[2].data = data;
+            mainChart.data.datasets[2].data = [anchor, ...pts.map(p => ({ x: p.year, y: p.temp }))];
             mainChart.update('none');
         }
 
         function updateButtons() {
             const hasDrawn = drawnPoints.length > 5;
             clearBtn.disabled = !hasDrawn;
-            smoothBtn.disabled = !hasDrawn;
-
-            // Check coverage: need to span most of the range
             if (hasDrawn) {
                 const maxYear = Math.max(...drawnPoints.map(p => p.year));
-                submitBtn.disabled = maxYear < 2090;
+                submitBtn.disabled = maxYear < 2085;
             } else {
                 submitBtn.disabled = true;
             }
@@ -563,7 +600,7 @@
             updateButtons();
         }
 
-        function onDrawEnd(e) {
+        function onDrawEnd() {
             if (!isDrawing) return;
             isDrawing = false;
             updateButtons();
@@ -579,72 +616,46 @@
         canvas.addEventListener('touchcancel', onDrawEnd);
 
         // =====================================================================
-        // 4. CUBIC SPLINE SMOOTHING
+        // 5. SMOOTHING (cubic spline)
         // =====================================================================
         function downsampleByYear(points, numBuckets) {
             if (points.length === 0) return [];
-            const minYear = PREDICT_START;
-            const maxYear = PREDICT_END;
-            const bucketWidth = (maxYear - minYear) / numBuckets;
-            const buckets = [];
-            for (let i = 0; i < numBuckets; i++) {
-                buckets.push([]);
-            }
+            const minY = PREDICT_START, maxY = PREDICT_END;
+            const bw = (maxY - minY) / numBuckets;
+            const buckets = Array.from({ length: numBuckets }, () => []);
             for (const p of points) {
-                const idx = Math.min(numBuckets - 1, Math.floor((p.year - minYear) / bucketWidth));
-                if (idx >= 0 && idx < numBuckets) buckets[idx].push(p.temp);
+                const idx = Math.min(numBuckets - 1, Math.max(0, Math.floor((p.year - minY) / bw)));
+                buckets[idx].push(p.temp);
             }
-
-            const controlPoints = [];
+            const cps = [];
             for (let i = 0; i < numBuckets; i++) {
                 if (buckets[i].length > 0) {
                     const sorted = buckets[i].slice().sort((a, b) => a - b);
-                    const median = sorted[Math.floor(sorted.length / 2)];
-                    const yearCenter = minYear + (i + 0.5) * bucketWidth;
-                    controlPoints.push({ year: yearCenter, temp: median });
+                    cps.push({ year: minY + (i + 0.5) * bw, temp: sorted[Math.floor(sorted.length / 2)] });
                 }
             }
-            return controlPoints;
+            return cps;
         }
 
         function naturalCubicSpline(pts) {
-            // pts = [{year, temp}, ...] sorted by year, at least 2 points
             const n = pts.length - 1;
-            if (n < 1) return pts;
-
-            const x = pts.map(p => p.year);
-            const y = pts.map(p => p.temp);
+            if (n < 1) return () => pts[0] ? pts[0].temp : 0;
+            const x = pts.map(p => p.year), y = pts.map(p => p.temp);
             const h = [];
             for (let i = 0; i < n; i++) h.push(x[i + 1] - x[i]);
+            if (n === 1) return t => { const f = (t - x[0]) / (x[1] - x[0]); return y[0] + f * (y[1] - y[0]); };
 
-            if (n === 1) {
-                // Linear interpolation for 2 points
-                return function(t) {
-                    const frac = (t - x[0]) / (x[1] - x[0]);
-                    return y[0] + frac * (y[1] - y[0]);
-                };
-            }
-
-            // Solve tridiagonal system for second derivatives M
             const alpha = [];
-            for (let i = 1; i < n; i++) {
-                alpha.push(3 / h[i] * (y[i + 1] - y[i]) - 3 / h[i - 1] * (y[i] - y[i - 1]));
-            }
+            for (let i = 1; i < n; i++) alpha.push(3 / h[i] * (y[i + 1] - y[i]) - 3 / h[i - 1] * (y[i] - y[i - 1]));
 
-            const l = new Array(n + 1).fill(1);
-            const mu = new Array(n + 1).fill(0);
-            const z = new Array(n + 1).fill(0);
-
+            const l = new Array(n + 1).fill(1), mu = new Array(n + 1).fill(0), z = new Array(n + 1).fill(0);
             for (let i = 1; i < n; i++) {
                 l[i] = 2 * (x[i + 1] - x[i - 1]) - h[i - 1] * mu[i - 1];
                 mu[i] = h[i] / l[i];
                 z[i] = (alpha[i - 1] - h[i - 1] * z[i - 1]) / l[i];
             }
 
-            const c = new Array(n + 1).fill(0);
-            const b = new Array(n).fill(0);
-            const d = new Array(n).fill(0);
-
+            const c = new Array(n + 1).fill(0), b = new Array(n).fill(0), d = new Array(n).fill(0);
             for (let j = n - 1; j >= 0; j--) {
                 c[j] = z[j] - mu[j] * c[j + 1];
                 b[j] = (y[j + 1] - y[j]) / h[j] - h[j] * (c[j + 1] + 2 * c[j]) / 3;
@@ -652,94 +663,151 @@
             }
 
             return function(t) {
-                // Find interval
                 let i = 0;
-                for (i = 0; i < n - 1; i++) {
-                    if (t < x[i + 1]) break;
-                }
+                for (i = 0; i < n - 1; i++) { if (t < x[i + 1]) break; }
                 const dx = t - x[i];
                 return y[i] + b[i] * dx + c[i] * dx * dx + d[i] * dx * dx * dx;
             };
         }
 
-        function smoothDrawing() {
-            if (drawnPoints.length < 3) return;
-
-            // Downsample to control points
-            let cps = downsampleByYear(drawnPoints, 30);
-            if (cps.length < 2) return;
-
-            // Sort by year
-            cps.sort((a, b) => a.year - b.year);
-
-            // Ensure we start at PREDICT_START anchored to last historical temp
-            if (cps[0].year > PREDICT_START + 1) {
-                cps.unshift({ year: PREDICT_START, temp: LAST_ERA5_TEMP });
+        function isInjective(pts) {
+            // Check if x-values (years) are strictly increasing
+            for (let i = 1; i < pts.length; i++) {
+                if (pts[i].year <= pts[i - 1].year) return false;
             }
+            return true;
+        }
 
-            // Build spline
-            const splineFn = naturalCubicSpline(cps);
-            if (typeof splineFn !== 'function') return;
-
-            // Evaluate at integer years
+        function smoothDrawing() {
+            if (drawnPoints.length < 3) return false;
+            let cps = downsampleByYear(drawnPoints, 30);
+            if (cps.length < 2) return false;
+            cps.sort((a, b) => a.year - b.year);
+            if (cps[0].year > PREDICT_START + 2) cps.unshift({ year: PREDICT_START, temp: LAST_ERA5_TEMP });
+            const fn = naturalCubicSpline(cps);
+            if (typeof fn !== 'function') return false;
             smoothedPoints = [];
             for (let yr = PREDICT_START; yr <= PREDICT_END; yr++) {
-                let temp = splineFn(yr);
-                temp = Math.max(-0.5, Math.min(5.0, temp));
-                smoothedPoints.push({ year: yr, temp: Math.round(temp * 100) / 100 });
+                let t = fn(yr);
+                t = Math.max(-0.5, Math.min(5.0, t));
+                smoothedPoints.push({ year: yr, temp: Math.round(t * 100) / 100 });
             }
-
             updatePredictionDataset(smoothedPoints);
-            // Update drawn points to be the smoothed ones for submission
             drawnPoints = smoothedPoints.slice();
             updateButtons();
+            return true;
         }
 
         // =====================================================================
-        // 5. LOCALSTORAGE PERSISTENCE
+        // 6. LOCALSTORAGE
         // =====================================================================
         const STORAGE_KEY = 'climate-survey-submissions';
 
         function loadSubmissions() {
-            try {
-                const raw = localStorage.getItem(STORAGE_KEY);
-                return raw ? JSON.parse(raw) : [];
-            } catch { return []; }
+            try { const r = localStorage.getItem(STORAGE_KEY); return r ? JSON.parse(r) : []; }
+            catch { return []; }
         }
 
         function saveSubmission(points) {
-            const submissions = loadSubmissions();
-            submissions.push({
+            const subs = loadSubmissions();
+            subs.push({
                 id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
                 timestamp: new Date().toISOString(),
                 points: points
             });
-            try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(submissions));
-            } catch (e) {
-                alert('Could not save — storage may be full.');
-            }
-            return submissions;
-        }
-
-        function clearAllSubmissions() {
-            localStorage.removeItem(STORAGE_KEY);
+            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(subs)); } catch {}
+            return subs;
         }
 
         // =====================================================================
-        // 6. RESULTS VISUALIZATION
+        // 7. NORMALIZE + SUBMIT
+        // =====================================================================
+        function normalizePoints(pts) {
+            const yearMap = {};
+            for (const p of pts) {
+                const yr = Math.round(p.year);
+                if (yr >= PREDICT_START && yr <= PREDICT_END) yearMap[yr] = p.temp;
+            }
+            const years = Object.keys(yearMap).map(Number).sort((a, b) => a - b);
+            if (years.length < 2) return null;
+
+            const result = [];
+            for (let yr = PREDICT_START; yr <= PREDICT_END; yr++) {
+                if (yearMap[yr] !== undefined) {
+                    result.push({ year: yr, temp: Math.round(yearMap[yr] * 100) / 100 });
+                } else {
+                    let lo = null, hi = null;
+                    for (const fy of years) { if (fy <= yr) lo = fy; if (fy >= yr && hi === null) hi = fy; }
+                    if (lo !== null && hi !== null && lo !== hi) {
+                        const frac = (yr - lo) / (hi - lo);
+                        result.push({ year: yr, temp: Math.round((yearMap[lo] + frac * (yearMap[hi] - yearMap[lo])) * 100) / 100 });
+                    } else if (lo !== null) {
+                        result.push({ year: yr, temp: Math.round(yearMap[lo] * 100) / 100 });
+                    } else if (hi !== null) {
+                        result.push({ year: yr, temp: Math.round(yearMap[hi] * 100) / 100 });
+                    }
+                }
+            }
+            return result;
+        }
+
+        // =====================================================================
+        // 8. SSP COMPARISON & PERCENTILE
+        // =====================================================================
+        function computeSSPPercentile(userPoints) {
+            // For each year, figure out where the user sits in the SSP range
+            // We'll use the 2100 value primarily, but also compute an average position
+            const user2100 = userPoints.find(p => p.year === 2100);
+            if (!user2100) return null;
+
+            const uTemp = user2100.temp;
+
+            // SSP best estimates at 2100: 1.8, 2.7, 3.6, 4.4
+            // Full range lo to hi at 2100: 1.2 to 5.9
+            const scenarios = [
+                { name: 'SSP1-2.6', mean: 1.80, lo: 1.20, hi: 2.40 },
+                { name: 'SSP2-4.5', mean: 2.70, lo: 1.90, hi: 3.70 },
+                { name: 'SSP3-7.0', mean: 3.60, lo: 2.55, hi: 4.85 },
+                { name: 'SSP5-8.5', mean: 4.40, lo: 3.10, hi: 5.90 }
+            ];
+
+            // Find closest scenario
+            let closestScenario = scenarios[0];
+            let closestDist = Math.abs(uTemp - scenarios[0].mean);
+            for (const s of scenarios) {
+                const dist = Math.abs(uTemp - s.mean);
+                if (dist < closestDist) { closestDist = dist; closestScenario = s; }
+            }
+
+            // Compute a percentile across the full SSP range
+            // Below SSP1-2.6 lo = very optimistic (0%), above SSP5-8.5 hi = very pessimistic (100%)
+            const absLo = 1.20; // SSP1-2.6 5th percentile at 2100
+            const absHi = 5.90; // SSP5-8.5 95th percentile at 2100
+            let percentile = (uTemp - absLo) / (absHi - absLo) * 100;
+            percentile = Math.max(0, Math.min(100, Math.round(percentile)));
+
+            // Determine label
+            let outlook;
+            if (percentile <= 15) outlook = 'very optimistic';
+            else if (percentile <= 35) outlook = 'optimistic';
+            else if (percentile <= 65) outlook = 'moderate';
+            else if (percentile <= 85) outlook = 'pessimistic';
+            else outlook = 'very pessimistic';
+
+            return { percentile, outlook, closestScenario, temp2100: uTemp };
+        }
+
+        // =====================================================================
+        // 9. RESULTS CHART
         // =====================================================================
         let resultsChart = null;
 
         function renderResults(submissions, latestPoints) {
             const section = document.getElementById('results-section');
-            if (submissions.length === 0) {
-                section.style.display = 'none';
-                return;
-            }
+            if (!latestPoints && submissions.length === 0) { section.style.display = 'none'; return; }
             section.style.display = 'block';
 
-            // Compute envelope and mean
+            // Compute community envelope and mean
             const envelopeMin = [], envelopeMax = [], meanLine = [];
             for (let yr = PREDICT_START; yr <= PREDICT_END; yr++) {
                 const temps = [];
@@ -754,70 +822,108 @@
                 }
             }
 
-            // Latest submission data
             const latestData = latestPoints
                 ? [{ x: LAST_HIST_YEAR, y: LAST_ERA5_TEMP }, ...latestPoints.map(p => ({ x: p.year, y: p.temp }))]
                 : [];
 
+            // Build SSP band datasets
+            const sspDatasets = [];
+            const sspOrder = ['SSP1-2.6', 'SSP2-4.5', 'SSP3-7.0', 'SSP5-8.5'];
+
+            for (const key of sspOrder) {
+                const s = SSP[key];
+                const interp = SSP_INTERP[key];
+                const hiData = [], loData = [], meanData = [];
+                for (let yr = PREDICT_START; yr <= PREDICT_END; yr++) {
+                    hiData.push({ x: yr, y: interp.hi[yr] });
+                    loData.push({ x: yr, y: interp.lo[yr] });
+                    meanData.push({ x: yr, y: interp.mean[yr] });
+                }
+
+                // Shaded band (hi fills down to lo)
+                sspDatasets.push({
+                    label: key + ' range (hi)',
+                    data: hiData,
+                    borderColor: 'transparent',
+                    backgroundColor: s.fill,
+                    borderWidth: 0, pointRadius: 0,
+                    fill: '+1',
+                    order: 10
+                });
+                sspDatasets.push({
+                    label: key + ' range (lo)',
+                    data: loData,
+                    borderColor: 'transparent',
+                    borderWidth: 0, pointRadius: 0,
+                    fill: false,
+                    order: 10
+                });
+                // Mean line
+                sspDatasets.push({
+                    label: key,
+                    data: meanData,
+                    borderColor: s.color.replace(',1)', ',0.6)'),
+                    borderWidth: 1.5,
+                    borderDash: [3, 3],
+                    pointRadius: 0,
+                    tension: 0.3,
+                    order: 8
+                });
+            }
+
+            // Full dataset list
             const datasets = [
+                // Historical
                 {
                     label: 'Multi-dataset Mean',
                     data: multiData,
                     borderColor: 'rgba(150,150,150,0.3)',
-                    borderWidth: 1,
-                    pointRadius: 0,
-                    tension: 0.3,
-                    order: 5
+                    borderWidth: 1, pointRadius: 0, tension: 0.3, order: 12
                 },
                 {
-                    label: 'ERA5',
+                    label: 'ERA5 (Historical)',
                     data: era5Data,
-                    borderColor: '#ff6b35',
-                    borderWidth: 2,
-                    pointRadius: 0,
-                    tension: 0.1,
-                    order: 4
+                    borderColor: 'rgba(60,60,60,0.9)',
+                    borderWidth: 2, pointRadius: 0, tension: 0.1, order: 6
                 },
-                {
-                    label: 'Prediction Range (max)',
-                    data: envelopeMax,
-                    borderColor: 'transparent',
-                    backgroundColor: 'rgba(0, 212, 255, 0.12)',
-                    borderWidth: 0,
-                    pointRadius: 0,
-                    fill: '+1',
-                    order: 3
-                },
-                {
-                    label: 'Prediction Range (min)',
-                    data: envelopeMin,
-                    borderColor: 'transparent',
-                    borderWidth: 0,
-                    pointRadius: 0,
-                    fill: false,
-                    order: 3
-                },
-                {
-                    label: 'Community Mean',
-                    data: meanLine,
-                    borderColor: 'rgba(0, 212, 255, 0.6)',
-                    borderWidth: 2,
-                    borderDash: [4, 3],
-                    pointRadius: 0,
-                    tension: 0.2,
-                    order: 2
-                }
+                // SSP bands
+                ...sspDatasets,
             ];
 
+            // Community envelope (only if multiple submissions)
+            if (submissions.length > 1) {
+                datasets.push({
+                    label: 'Community Range (max)',
+                    data: envelopeMax,
+                    borderColor: 'transparent',
+                    backgroundColor: 'rgba(0, 212, 255, 0.08)',
+                    borderWidth: 0, pointRadius: 0,
+                    fill: '+1', order: 5
+                });
+                datasets.push({
+                    label: 'Community Range (min)',
+                    data: envelopeMin,
+                    borderColor: 'transparent',
+                    borderWidth: 0, pointRadius: 0,
+                    fill: false, order: 5
+                });
+                datasets.push({
+                    label: 'Community Mean',
+                    data: meanLine,
+                    borderColor: 'rgba(0, 212, 255, 0.5)',
+                    borderWidth: 1.5, borderDash: [4, 3],
+                    pointRadius: 0, tension: 0.2, order: 3
+                });
+            }
+
+            // User's latest
             if (latestData.length > 0) {
                 datasets.push({
-                    label: 'Your Latest',
+                    label: 'Your Prediction',
                     data: latestData,
                     borderColor: '#00d4ff',
-                    borderWidth: 2.5,
-                    pointRadius: 0,
-                    tension: 0.1,
-                    order: 1
+                    borderWidth: 3, pointRadius: 0,
+                    tension: 0.1, order: 1
                 });
             }
 
@@ -833,20 +939,18 @@
                     interaction: { mode: 'index', intersect: false },
                     scales: {
                         x: {
-                            type: 'linear',
-                            min: 1850,
-                            max: 2100,
-                            ticks: { stepSize: 25, color: '#666', font: { size: 11 } },
+                            type: 'linear', min: 1850, max: 2100,
+                            ticks: {
+                                stepSize: 25, color: '#666', font: { size: 11 },
+                                callback: v => String(Math.round(v))
+                            },
                             grid: { color: 'rgba(255,255,255,0.05)' },
                             title: { display: true, text: 'Year', color: '#777', font: { size: 12 } }
                         },
                         y: {
-                            min: -0.5,
-                            max: 5.0,
+                            min: -0.5, max: 6.0,
                             ticks: {
-                                stepSize: 0.5,
-                                color: '#666',
-                                font: { size: 11 },
+                                stepSize: 0.5, color: '#666', font: { size: 11 },
                                 callback: v => v.toFixed(1) + '\u00B0C'
                             },
                             grid: { color: 'rgba(255,255,255,0.05)' },
@@ -854,32 +958,25 @@
                         }
                     },
                     plugins: {
-                        legend: {
-                            labels: {
-                                color: '#999',
-                                font: { size: 11 },
-                                usePointStyle: true,
-                                pointStyle: 'line',
-                                padding: 16,
-                                filter: item => !item.text.includes('(min)')
-                            }
-                        },
+                        legend: { display: false },
                         annotation: {
                             annotations: {
                                 line15: {
                                     type: 'line', yMin: 1.5, yMax: 1.5,
-                                    borderColor: 'rgba(251,191,36,0.5)', borderWidth: 1.5, borderDash: [6, 4],
-                                    label: { display: true, content: '1.5\u00B0C', position: 'start', backgroundColor: 'rgba(251,191,36,0.15)', color: '#fbbf24', font: { size: 10 }, padding: 3 }
+                                    borderColor: 'rgba(251,191,36,0.35)', borderWidth: 1, borderDash: [6, 4],
+                                    label: { display: true, content: '1.5\u00B0C', position: 'start', backgroundColor: 'rgba(251,191,36,0.1)', color: 'rgba(251,191,36,0.6)', font: { size: 9 }, padding: 2 }
                                 },
                                 line20: {
                                     type: 'line', yMin: 2.0, yMax: 2.0,
-                                    borderColor: 'rgba(239,68,68,0.5)', borderWidth: 1.5, borderDash: [6, 4],
-                                    label: { display: true, content: '2.0\u00B0C', position: 'start', backgroundColor: 'rgba(239,68,68,0.15)', color: '#ef4444', font: { size: 10 }, padding: 3 }
+                                    borderColor: 'rgba(239,68,68,0.35)', borderWidth: 1, borderDash: [6, 4],
+                                    label: { display: true, content: '2.0\u00B0C', position: 'start', backgroundColor: 'rgba(239,68,68,0.1)', color: 'rgba(239,68,68,0.6)', font: { size: 9 }, padding: 2 }
                                 }
                             }
                         },
                         tooltip: {
+                            filter: item => !item.dataset.label.includes('range') && !item.dataset.label.includes('(min)') && !item.dataset.label.includes('(max)') && !item.dataset.label.includes('Multi-dataset'),
                             callbacks: {
+                                title: items => items.length > 0 ? String(Math.round(items[0].parsed.x)) : '',
                                 label: item => item.dataset.label + ': ' + item.parsed.y.toFixed(2) + '\u00B0C'
                             }
                         }
@@ -888,22 +985,82 @@
                 plugins: [predictionZonePlugin]
             });
 
+            // Custom legend
+            renderScenarioLegend();
+
+            // Verdict
+            if (latestPoints) {
+                renderVerdict(latestPoints, submissions);
+            }
+
             // Stats
-            renderStats(submissions, meanLine);
+            renderStats(submissions, meanLine, latestPoints);
         }
 
-        function renderStats(submissions, meanLine) {
-            const grid = document.getElementById('statsGrid');
+        function renderScenarioLegend() {
+            const el = document.getElementById('scenarioLegend');
+            const items = [
+                { label: 'Historical', color: 'rgba(60,60,60,0.9)', type: 'line' },
+                { label: 'SSP1-2.6', color: SSP['SSP1-2.6'].color, bg: SSP['SSP1-2.6'].fill },
+                { label: 'SSP2-4.5', color: SSP['SSP2-4.5'].color, bg: SSP['SSP2-4.5'].fill },
+                { label: 'SSP3-7.0', color: SSP['SSP3-7.0'].color, bg: SSP['SSP3-7.0'].fill },
+                { label: 'SSP5-8.5', color: SSP['SSP5-8.5'].color, bg: SSP['SSP5-8.5'].fill },
+                { label: 'Your Prediction', color: '#00d4ff', type: 'line' }
+            ];
+            el.innerHTML = items.map(it => {
+                const style = it.bg
+                    ? `background:${it.bg}; border: 1.5px solid ${it.color.replace(',1)', ',0.6)')};`
+                    : `background:${it.color};`;
+                return `<div class="legend-item"><span class="legend-swatch" style="${style}"></span>${it.label}</div>`;
+            }).join('');
+        }
 
+        function renderVerdict(latestPoints, submissions) {
+            const box = document.getElementById('verdictBox');
+            const result = computeSSPPercentile(latestPoints);
+            if (!result) { box.innerHTML = ''; return; }
+
+            const { percentile, outlook, closestScenario, temp2100 } = result;
+            const scenarioColors = {
+                'SSP1-2.6': { bg: 'rgba(76,153,76,0.15)', border: 'rgba(76,153,76,0.5)', text: '#6abf6a' },
+                'SSP2-4.5': { bg: 'rgba(80,120,190,0.15)', border: 'rgba(80,120,190,0.5)', text: '#7099cc' },
+                'SSP3-7.0': { bg: 'rgba(170,100,140,0.15)', border: 'rgba(170,100,140,0.5)', text: '#c088a8' },
+                'SSP5-8.5': { bg: 'rgba(190,80,80,0.15)', border: 'rgba(190,80,80,0.5)', text: '#d07070' }
+            };
+            const sc = scenarioColors[closestScenario.name] || scenarioColors['SSP2-4.5'];
+
+            box.innerHTML = `
+                <h3>Your Outlook</h3>
+                <div class="verdict-text">
+                    You predict <strong>${temp2100.toFixed(2)}\u00B0C</strong> of warming by 2100, which is closest to
+                    <span class="scenario-tag" style="background:${sc.bg}; border:1px solid ${sc.border}; color:${sc.text}">${closestScenario.name}</span>
+                    (best estimate: ${closestScenario.mean.toFixed(1)}\u00B0C).<br><br>
+                    Your prediction falls in the <strong>${percentile}th percentile</strong> across the full range of IPCC scenarios &mdash;
+                    placing you in the <strong>${outlook}</strong> camp.
+                    ${percentile <= 30
+                        ? 'You expect strong global mitigation efforts to succeed in limiting warming.'
+                        : percentile <= 60
+                        ? 'You expect moderate policy action with continued warming through mid-century.'
+                        : 'You expect emissions to remain high with substantial warming by end of century.'}
+                    ${submissions.length > 1
+                        ? `<br><br>Out of <strong>${submissions.length}</strong> predictions recorded, the community average at 2100 is <strong>${(submissions.reduce((s, sub) => { const p = sub.points.find(p => p.year === 2100); return s + (p ? p.temp : 0); }, 0) / submissions.length).toFixed(2)}\u00B0C</strong>.`
+                        : ''}
+                </div>
+            `;
+        }
+
+        function renderStats(submissions, meanLine, latestPoints) {
+            const grid = document.getElementById('statsGrid');
             const count = submissions.length;
             const lastMean = meanLine.length > 0 ? meanLine[meanLine.length - 1].y : null;
 
-            // Find crossing years from mean
             let cross15 = null, cross20 = null;
             for (const pt of meanLine) {
                 if (cross15 === null && pt.y >= 1.5) cross15 = Math.round(pt.x);
                 if (cross20 === null && pt.y >= 2.0) cross20 = Math.round(pt.x);
             }
+
+            const userTemp = latestPoints ? latestPoints.find(p => p.year === 2100) : null;
 
             grid.innerHTML = `
                 <div class="stat-card">
@@ -911,22 +1068,22 @@
                     <div class="label">Total Predictions</div>
                 </div>
                 <div class="stat-card">
-                    <div class="value">${lastMean !== null ? lastMean.toFixed(2) + '\u00B0C' : '—'}</div>
-                    <div class="label">Mean at 2100</div>
+                    <div class="value">${userTemp ? userTemp.temp.toFixed(2) + '\u00B0C' : '\u2014'}</div>
+                    <div class="label">Your 2100 Prediction</div>
                 </div>
                 <div class="stat-card">
-                    <div class="value">${cross15 ? cross15 : 'Never'}</div>
-                    <div class="label">Mean Crosses 1.5\u00B0C</div>
+                    <div class="value">${lastMean !== null && count > 1 ? lastMean.toFixed(2) + '\u00B0C' : '\u2014'}</div>
+                    <div class="label">Community Mean at 2100</div>
                 </div>
                 <div class="stat-card">
-                    <div class="value">${cross20 ? cross20 : 'Never'}</div>
+                    <div class="value">${cross20 && count > 1 ? cross20 : '\u2014'}</div>
                     <div class="label">Mean Crosses 2.0\u00B0C</div>
                 </div>
             `;
         }
 
         // =====================================================================
-        // 7. BUTTON HANDLERS
+        // 10. BUTTON HANDLERS
         // =====================================================================
         clearBtn.addEventListener('click', () => {
             drawnPoints = [];
@@ -936,88 +1093,38 @@
             updateButtons();
         });
 
-        smoothBtn.addEventListener('click', () => {
-            smoothDrawing();
-        });
-
         submitBtn.addEventListener('click', () => {
-            // Auto-smooth if not already
-            if (smoothedPoints.length === 0) {
+            // Auto-smooth if the drawn input is not injective (has backwards x)
+            if (!isInjective(drawnPoints) || smoothedPoints.length === 0) {
                 smoothDrawing();
             }
 
             const pts = smoothedPoints.length > 0 ? smoothedPoints : drawnPoints;
             if (pts.length === 0) return;
 
-            // Normalize to integer years
-            const normalized = [];
-            const yearMap = {};
-            for (const p of pts) {
-                const yr = Math.round(p.year);
-                if (yr >= PREDICT_START && yr <= PREDICT_END) {
-                    yearMap[yr] = p.temp;
-                }
-            }
-
-            // Fill in any gaps with linear interpolation
-            const filledYears = Object.keys(yearMap).map(Number).sort((a, b) => a - b);
-            if (filledYears.length < 2) return;
-
-            for (let yr = PREDICT_START; yr <= PREDICT_END; yr++) {
-                if (yearMap[yr] !== undefined) {
-                    normalized.push({ year: yr, temp: Math.round(yearMap[yr] * 100) / 100 });
-                } else {
-                    // Find bracketing known years
-                    let lo = null, hi = null;
-                    for (const fy of filledYears) {
-                        if (fy <= yr) lo = fy;
-                        if (fy >= yr && hi === null) hi = fy;
-                    }
-                    if (lo !== null && hi !== null && lo !== hi) {
-                        const frac = (yr - lo) / (hi - lo);
-                        const t = yearMap[lo] + frac * (yearMap[hi] - yearMap[lo]);
-                        normalized.push({ year: yr, temp: Math.round(t * 100) / 100 });
-                    } else if (lo !== null) {
-                        normalized.push({ year: yr, temp: Math.round(yearMap[lo] * 100) / 100 });
-                    } else if (hi !== null) {
-                        normalized.push({ year: yr, temp: Math.round(yearMap[hi] * 100) / 100 });
-                    }
-                }
-            }
+            const normalized = normalizePoints(pts);
+            if (!normalized || normalized.length < 10) return;
 
             const allSubs = saveSubmission(normalized);
             renderResults(allSubs, normalized);
 
-            // Reset drawing state
+            // Reset drawing
             drawnPoints = [];
             smoothedPoints = [];
             mainChart.data.datasets[2].data = [];
             mainChart.update('none');
             updateButtons();
 
-            // Scroll to results
             document.getElementById('results-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
 
-        document.getElementById('clearDataBtn').addEventListener('click', () => {
-            if (confirm('Clear all saved predictions? This cannot be undone.')) {
-                clearAllSubmissions();
-                document.getElementById('results-section').style.display = 'none';
-                document.getElementById('statsGrid').innerHTML = '';
-                if (resultsChart) {
-                    resultsChart.destroy();
-                    resultsChart = null;
-                }
-            }
-        });
-
         // =====================================================================
-        // 8. LOAD EXISTING SUBMISSIONS ON PAGE LOAD
+        // 11. LOAD EXISTING ON PAGE LOAD
         // =====================================================================
         const existing = loadSubmissions();
         if (existing.length > 0) {
-            const lastSub = existing[existing.length - 1];
-            renderResults(existing, lastSub.points);
+            const last = existing[existing.length - 1];
+            renderResults(existing, last.points);
         }
 
     })();
