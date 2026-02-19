@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -37,218 +37,125 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
+        :root {
+            --bg: #0f0f0f;
+            --surface: #1a1a1a;
+            --surface2: #141414;
+            --border: #2a2a2a;
+            --text: #e0e0e0;
+            --text-heading: #ccc;
+            --text-white: #fff;
+            --text-dim: #888;
+            --text-dimmer: #555;
+            --text-sub: #aaa;
+            --text-label: #777;
+            --cyan: #00d4ff;
+            --cyan-accent: #00a8cc;
+            --cyan-hover: #00bde0;
+            --btn-bg: #222;
+            --btn-border: #333;
+            --btn-hover-bg: #2a2a2a;
+            --info-bg: rgba(0, 212, 255, 0.06);
+            --info-border: rgba(0, 212, 255, 0.15);
+            --info-text: #8ecfdf;
+            --footer-link: #777;
+            --footer-link-hover: #aaa;
+        }
+
+        [data-theme="light"] {
+            --bg: #f5f5f5;
+            --surface: #fff;
+            --surface2: #f8f8f8;
+            --border: #ddd;
+            --text: #333;
+            --text-heading: #444;
+            --text-white: #111;
+            --text-dim: #666;
+            --text-dimmer: #999;
+            --text-sub: #555;
+            --text-label: #888;
+            --cyan: #0088a3;
+            --cyan-accent: #007a94;
+            --cyan-hover: #009ab8;
+            --btn-bg: #f0f0f0;
+            --btn-border: #ccc;
+            --btn-hover-bg: #e8e8e8;
+            --info-bg: rgba(0, 136, 163, 0.06);
+            --info-border: rgba(0, 136, 163, 0.2);
+            --info-text: #006880;
+            --footer-link: #888;
+            --footer-link-hover: #555;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0f0f0f;
-            color: #e0e0e0;
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
         }
 
-        header {
-            text-align: center;
-            padding: 2.5rem 1.5rem 1rem;
-            max-width: 800px;
-            margin: 0 auto;
-        }
+        header { text-align: center; padding: 2.5rem 1.5rem 1rem; max-width: 800px; margin: 0 auto; }
+        header h1 { font-size: 1.8rem; font-weight: 700; color: var(--text-white); letter-spacing: -0.02em; }
+        header p { margin-top: 0.6rem; font-size: 0.95rem; color: var(--text-dim); line-height: 1.5; }
 
-        header h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #fff;
-            letter-spacing: -0.02em;
-        }
+        .section { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
 
-        header p {
-            margin-top: 0.6rem;
-            font-size: 0.95rem;
-            color: #888;
-            line-height: 1.5;
-        }
+        .chart-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; margin-top: 1.5rem; }
+        .chart-panel h2 { font-size: 1rem; font-weight: 600; color: var(--text-heading); margin-bottom: 0.75rem; }
 
-        .section {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
-
-        .chart-panel {
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            border-radius: 12px;
-            padding: 1.25rem;
-            margin-top: 1.5rem;
-        }
-
-        .chart-panel h2 {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #ccc;
-            margin-bottom: 0.75rem;
-        }
-
-        .chart-container {
-            position: relative;
-            width: 100%;
-            height: 440px;
-        }
-
-        .chart-container canvas {
-            touch-action: none;
-        }
+        .chart-container { position: relative; width: 100%; height: 440px; }
+        .chart-container canvas { touch-action: none; }
 
         .instructions-bar {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-top: 0.75rem;
-            padding: 0.6rem 0.75rem;
-            background: rgba(0, 212, 255, 0.06);
-            border: 1px solid rgba(0, 212, 255, 0.15);
-            border-radius: 8px;
-            font-size: 0.82rem;
-            color: #8ecfdf;
+            display: flex; align-items: center; gap: 0.5rem; margin-top: 0.75rem;
+            padding: 0.6rem 0.75rem; background: var(--info-bg); border: 1px solid var(--info-border);
+            border-radius: 8px; font-size: 0.82rem; color: var(--info-text);
         }
-
         .instructions-bar .icon { font-size: 1.1rem; flex-shrink: 0; }
 
-        .controls {
-            display: flex;
-            gap: 0.75rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-        }
+        .controls { display: flex; gap: 0.75rem; margin-top: 1rem; flex-wrap: wrap; }
 
         button {
-            padding: 0.6rem 1.25rem;
-            border: 1px solid #333;
-            border-radius: 8px;
-            background: #222;
-            color: #ccc;
-            font-size: 0.85rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.15s;
+            padding: 0.6rem 1.25rem; border: 1px solid var(--btn-border); border-radius: 8px;
+            background: var(--btn-bg); color: var(--text-heading); font-size: 0.85rem;
+            font-weight: 500; cursor: pointer; transition: all 0.15s;
         }
-
-        button:hover:not(:disabled) {
-            background: #2a2a2a;
-            border-color: #555;
-            color: #fff;
-        }
-
+        button:hover:not(:disabled) { background: var(--btn-hover-bg); border-color: var(--text-dimmer); color: var(--text-white); }
         button:disabled { opacity: 0.35; cursor: not-allowed; }
+        button.primary { background: var(--cyan-accent); border-color: var(--cyan-accent); color: #fff; }
+        button.primary:hover:not(:disabled) { background: var(--cyan-hover); border-color: var(--cyan-hover); }
 
-        button.primary {
-            background: #00a8cc;
-            border-color: #00a8cc;
-            color: #fff;
+        #results-section { display: none; margin-top: 2rem; padding-bottom: 1rem; }
+
+        .verdict-box { margin-top: 1.25rem; padding: 1.1rem 1.25rem; border-radius: 10px; border: 1px solid var(--border); background: var(--surface2); }
+        .verdict-box h3 { font-size: 0.95rem; font-weight: 600; color: var(--text-white); margin-bottom: 0.5rem; }
+        .verdict-box .verdict-text { font-size: 0.88rem; line-height: 1.6; color: var(--text-sub); }
+        .verdict-box .verdict-text strong { color: var(--cyan); }
+        .verdict-box .scenario-tag { display: inline-block; padding: 0.15em 0.5em; border-radius: 4px; font-size: 0.8rem; font-weight: 600; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; margin-top: 1rem; }
+        .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem; text-align: center; }
+        .stat-card .value { font-size: 1.3rem; font-weight: 700; color: var(--cyan); }
+        .stat-card .label { font-size: 0.72rem; color: var(--text-label); margin-top: 0.25rem; }
+
+        .legend-row { display: flex; flex-wrap: wrap; gap: 0.6rem 1.2rem; margin-top: 0.75rem; font-size: 0.75rem; color: var(--text-dim); }
+        .legend-item { display: flex; align-items: center; gap: 0.35rem; }
+        .legend-swatch { width: 18px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+        footer { text-align: center; padding: 2rem 1.5rem 3rem; font-size: 0.78rem; color: var(--text-dimmer); max-width: 700px; margin: 0 auto; line-height: 1.6; }
+        footer a { color: var(--footer-link); text-decoration: none; }
+        footer a:hover { color: var(--footer-link-hover); text-decoration: underline; }
+
+        /* Theme toggle */
+        .theme-toggle {
+            position: fixed; top: 1rem; right: 1rem; z-index: 100;
+            width: 40px; height: 40px; border-radius: 50%;
+            border: 1px solid var(--border); background: var(--surface);
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; transition: all 0.3s; color: var(--text);
         }
-
-        button.primary:hover:not(:disabled) {
-            background: #00bde0;
-            border-color: #00bde0;
-        }
-
-        #results-section {
-            display: none;
-            margin-top: 2rem;
-            padding-bottom: 1rem;
-        }
-
-        .verdict-box {
-            margin-top: 1.25rem;
-            padding: 1.1rem 1.25rem;
-            border-radius: 10px;
-            border: 1px solid #2a2a2a;
-            background: #141414;
-        }
-
-        .verdict-box h3 {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 0.5rem;
-        }
-
-        .verdict-box .verdict-text {
-            font-size: 0.88rem;
-            line-height: 1.6;
-            color: #aaa;
-        }
-
-        .verdict-box .verdict-text strong {
-            color: #00d4ff;
-        }
-
-        .verdict-box .scenario-tag {
-            display: inline-block;
-            padding: 0.15em 0.5em;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 0.75rem;
-            margin-top: 1rem;
-        }
-
-        .stat-card {
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            border-radius: 8px;
-            padding: 0.85rem;
-            text-align: center;
-        }
-
-        .stat-card .value {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #00d4ff;
-        }
-
-        .stat-card .label {
-            font-size: 0.72rem;
-            color: #777;
-            margin-top: 0.25rem;
-        }
-
-        .legend-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.6rem 1.2rem;
-            margin-top: 0.75rem;
-            font-size: 0.75rem;
-            color: #888;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 0.35rem;
-        }
-
-        .legend-swatch {
-            width: 18px;
-            height: 10px;
-            border-radius: 2px;
-            flex-shrink: 0;
-        }
-
-        footer {
-            text-align: center;
-            padding: 2rem 1.5rem 3rem;
-            font-size: 0.78rem;
-            color: #555;
-            max-width: 700px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-
-        footer a { color: #777; text-decoration: none; }
-        footer a:hover { color: #aaa; text-decoration: underline; }
+        .theme-toggle:hover { border-color: var(--text-dimmer); transform: scale(1.1); }
 
         @media (max-width: 600px) {
             header { padding: 1.5rem 1rem 0.5rem; }
@@ -262,6 +169,7 @@
     </style>
 </head>
 <body>
+    <button class="theme-toggle" id="themeToggle" title="Toggle light/dark mode" aria-label="Toggle theme">&#x1f319;</button>
     <header>
         <h1>Climate Warming Trajectory Survey</h1>
         <p>How warm do you think the planet will get? Draw your prediction for global temperature anomaly from 2026 to 2100, based on historical observations.</p>
@@ -1203,6 +1111,30 @@
     } else {
         window.addEventListener('firebase-ready', () => initApp());
     }
+    </script>
+
+    <script>
+    // Theme toggle
+    (function() {
+        const toggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+
+        function setTheme(theme) {
+            html.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            toggle.textContent = theme === 'dark' ? '\u{1F319}' : '\u2600\uFE0F';
+            toggle.title = theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+        }
+
+        const saved = localStorage.getItem('theme');
+        if (saved) setTheme(saved);
+        else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) setTheme('light');
+
+        toggle.addEventListener('click', () => {
+            const current = html.getAttribute('data-theme') || 'dark';
+            setTheme(current === 'dark' ? 'light' : 'dark');
+        });
+    })();
     </script>
 </body>
 </html>
