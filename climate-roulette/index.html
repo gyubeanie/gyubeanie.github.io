@@ -110,6 +110,8 @@
 
         .btn-row { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; }
 
+        .trajectory-container { position: relative; width: 100%; height: 220px; margin-top: 1rem; }
+
         .roll-log {
             margin-top: 1rem; max-height: 120px; overflow-y: auto; font-size: 0.78rem;
             color: var(--text-dim); line-height: 1.7; padding: 0.5rem; background: var(--log-bg); border-radius: 8px;
@@ -230,6 +232,7 @@
             .tp-card { padding: 0.5rem; }
             .tp-card .tp-name { font-size: 0.65rem; }
             .chart-container { height: 280px; }
+            .trajectory-container { height: 180px; }
             .damage-summary { gap: 0.5rem; }
             .damage-card { min-width: 110px; padding: 0.6rem; }
             .damage-card .damage-value { font-size: 1.2rem; }
@@ -283,6 +286,7 @@
                     </div>
                 </div>
             </div>
+            <div class="trajectory-container"><canvas id="trajectoryChart"></canvas></div>
             <div class="roll-log" id="rollLog"></div>
         </div>
 
@@ -586,6 +590,7 @@
     let lastMCEndYear = null;
     let survivalChart = null;
     let histogramChart = null;
+    let trajectoryChart = null;
     let globe = null;
 
     // =========================================================================
@@ -837,6 +842,152 @@
     }
 
     // =========================================================================
+    // 11b. WARMING TRAJECTORY CHART
+    // =========================================================================
+    function initTrajectoryChart() {
+        // Build full SSP reference curve
+        const sspData = SSP_SCENARIOS[selectedSSP].points.map(p => ({ x: p[0], y: p[1] }));
+        const sspColor = SSP_SCENARIOS[selectedSSP].color;
+
+        // Build user trajectory: start with baseline point
+        const userTrajectory = [{ x: 2025, y: sim.currentTemp }];
+        for (const r of userRunResults) {
+            userTrajectory.push({ x: r.year, y: r.effectiveTemp });
+        }
+
+        // Tipping point markers (red dots on the trajectory where tips occurred)
+        const tipMarkers = [];
+        for (const r of userRunResults) {
+            if (r.tipped.length > 0) {
+                tipMarkers.push({ x: r.year, y: r.effectiveTemp, tips: r.tipped.map(t => t.id).join(', ') });
+            }
+        }
+
+        if (trajectoryChart) trajectoryChart.destroy();
+        const ctx = document.getElementById('trajectoryChart').getContext('2d');
+        trajectoryChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [
+                    {
+                        label: selectedSSP + ' pathway',
+                        data: sspData,
+                        borderColor: sspColor,
+                        borderWidth: 1.5,
+                        borderDash: [6, 3],
+                        pointRadius: 0,
+                        tension: 0.3,
+                        fill: false
+                    },
+                    {
+                        label: 'Your trajectory (effective)',
+                        data: userTrajectory,
+                        borderColor: '#00d4ff',
+                        backgroundColor: 'rgba(0,212,255,0.08)',
+                        borderWidth: 2.5,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#00d4ff',
+                        tension: 0.2,
+                        fill: true
+                    },
+                    {
+                        label: 'Tipping events',
+                        data: tipMarkers,
+                        borderColor: 'transparent',
+                        backgroundColor: '#ef4444',
+                        pointRadius: 7,
+                        pointStyle: 'crossRot',
+                        pointBorderColor: '#ef4444',
+                        pointBorderWidth: 2,
+                        showLine: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                animation: { duration: 300 },
+                interaction: { mode: 'index', intersect: false },
+                scales: {
+                    x: {
+                        type: 'linear', min: 2025, max: 2100,
+                        title: { display: false },
+                        ticks: { color: '#666', font: { size: 10 }, stepSize: 10, callback: v => v.toString() },
+                        grid: { color: 'rgba(255,255,255,0.05)' }
+                    },
+                    y: {
+                        title: { display: true, text: '\u00B0C above pre-industrial', color: '#777', font: { size: 10 } },
+                        ticks: { color: '#666', font: { size: 10 }, callback: v => v.toFixed(1) },
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        suggestedMin: 1.0, suggestedMax: 3.0
+                    }
+                },
+                plugins: {
+                    legend: { labels: { color: '#999', font: { size: 10 }, usePointStyle: true, padding: 12 } },
+                    tooltip: {
+                        callbacks: {
+                            title: items => {
+                                if (items.length === 0) return '';
+                                return items[0].parsed.x.toString();
+                            },
+                            label: item => {
+                                if (item.datasetIndex === 0) return selectedSSP + ': ' + item.parsed.y.toFixed(2) + '\u00B0C';
+                                if (item.datasetIndex === 1) return 'Your Earth: ' + item.parsed.y.toFixed(2) + '\u00B0C';
+                                if (item.datasetIndex === 2) {
+                                    const d = item.raw;
+                                    return '\u26A0 TIPPED: ' + d.tips;
+                                }
+                                return '';
+                            }
+                        }
+                    },
+                    annotation: {
+                        annotations: {
+                            paris15: {
+                                type: 'line', yMin: 1.5, yMax: 1.5,
+                                borderColor: 'rgba(34,197,94,0.35)', borderWidth: 1, borderDash: [4, 4],
+                                label: { display: true, content: '1.5\u00B0C', position: 'start', backgroundColor: 'transparent', color: 'rgba(34,197,94,0.6)', font: { size: 9 }, padding: 2 }
+                            },
+                            paris20: {
+                                type: 'line', yMin: 2.0, yMax: 2.0,
+                                borderColor: 'rgba(245,158,11,0.35)', borderWidth: 1, borderDash: [4, 4],
+                                label: { display: true, content: '2.0\u00B0C', position: 'start', backgroundColor: 'transparent', color: 'rgba(245,158,11,0.6)', font: { size: 9 }, padding: 2 }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function updateTrajectoryChart() {
+        if (!trajectoryChart) { initTrajectoryChart(); return; }
+
+        // Update SSP reference data (in case SSP changed)
+        const sspData = SSP_SCENARIOS[selectedSSP].points.map(p => ({ x: p[0], y: p[1] }));
+        trajectoryChart.data.datasets[0].data = sspData;
+        trajectoryChart.data.datasets[0].borderColor = SSP_SCENARIOS[selectedSSP].color;
+        trajectoryChart.data.datasets[0].label = selectedSSP + ' pathway';
+
+        // Rebuild user trajectory
+        const userTrajectory = [{ x: 2025, y: yearToTemp(2025, selectedSSP) }];
+        for (const r of userRunResults) {
+            userTrajectory.push({ x: r.year, y: r.effectiveTemp });
+        }
+        trajectoryChart.data.datasets[1].data = userTrajectory;
+
+        // Rebuild tip markers
+        const tipMarkers = [];
+        for (const r of userRunResults) {
+            if (r.tipped.length > 0) {
+                tipMarkers.push({ x: r.year, y: r.effectiveTemp, tips: r.tipped.map(t => t.id).join(', ') });
+            }
+        }
+        trajectoryChart.data.datasets[2].data = tipMarkers;
+
+        trajectoryChart.update();
+    }
+
+    // =========================================================================
     // 12. BUTTON HANDLERS
     // =========================================================================
     const rollBtn = document.getElementById('rollBtn');
@@ -848,7 +999,7 @@
     const sspSelect = document.getElementById('sspSelect');
 
     autoTarget.addEventListener('input', () => { autoTargetLabel.textContent = autoTarget.value; });
-    sspSelect.addEventListener('change', () => { selectedSSP = sspSelect.value; });
+    sspSelect.addEventListener('change', () => { selectedSSP = sspSelect.value; updateTrajectoryChart(); });
     dmgSelect.addEventListener('change', () => {
         currentDmgFn = dmgSelect.value;
         renderDamage();
@@ -870,6 +1021,7 @@
         userRunResults.push(result);
         addLogEntry(result);
         updateTempDial();
+        updateTrajectoryChart();
         renderTPGrid();
         renderWorldMap();
         renderDamage();
@@ -932,6 +1084,8 @@
         document.getElementById('ergoWorst').textContent = '--';
         if (survivalChart) { survivalChart.destroy(); survivalChart = null; }
         if (histogramChart) { histogramChart.destroy(); histogramChart = null; }
+        if (trajectoryChart) { trajectoryChart.destroy(); trajectoryChart = null; }
+        initTrajectoryChart();
         document.getElementById('policy-section').style.display = 'none';
         document.getElementById('ticket-section').style.display = 'none';
     });
@@ -1387,6 +1541,7 @@
     // 23. INIT
     // =========================================================================
     initGlobe();
+    initTrajectoryChart();
     renderTPGrid();
     renderDamage();
     updateTempDial();
