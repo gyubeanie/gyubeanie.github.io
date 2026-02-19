@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Climate Roulette — Tipping Point Monte Carlo</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.1.0"></script>
     <script src="//cdn.jsdelivr.net/npm/globe.gl"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -138,12 +139,15 @@
         .tp-card.cascade-flash { animation: cascadeFlash 0.6s ease-out; }
         @keyframes cascadeFlash { 0% { box-shadow: 0 0 0 0 rgba(245,158,11,0.6); } 100% { box-shadow: 0 0 0 0 rgba(245,158,11,0); } }
 
-        .damage-summary { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem; }
-        .damage-card { flex: 1; min-width: 140px; background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px; padding: 0.8rem; text-align: center; }
+        .damage-primary { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem; }
+        .damage-card { flex: 1; min-width: 130px; background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px; padding: 0.8rem; text-align: center; }
         .damage-card .damage-value { font-size: 1.5rem; font-weight: 700; line-height: 1.2; }
         .damage-card .damage-label { font-size: 0.7rem; color: var(--text-dim); margin-top: 0.3rem; }
         .damage-card .damage-pct { font-size: 0.72rem; color: var(--text-dimmer); margin-top: 0.15rem; }
         .dmg-low { color: var(--green); } .dmg-med { color: var(--yellow); } .dmg-high { color: var(--orange); } .dmg-extreme { color: var(--red); }
+        .damage-compare { margin-top: 0.75rem; font-size: 0.78rem; color: var(--text-dim); line-height: 1.8; }
+        .damage-compare span { display: inline-block; padding: 0.15em 0.5em; background: var(--surface2); border: 1px solid var(--border2); border-radius: 6px; margin: 0.15em 0.2em; font-size: 0.75rem; }
+        .damage-desc { margin-top: 0.6rem; font-size: 0.78rem; color: var(--text-dimmer); line-height: 1.5; padding: 0.6rem 0.75rem; background: var(--explainer-bg); border: 1px solid var(--explainer-border); border-radius: 8px; }
 
         .dmg-selector { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--text-dim); margin-top: 0.75rem; }
         .dmg-selector select { background: var(--surface2); border: 1px solid var(--border2); border-radius: 6px; color: var(--text); padding: 0.35rem 0.5rem; font-size: 0.8rem; }
@@ -318,13 +322,17 @@
         <!-- Monte Carlo Section -->
         <div class="panel" id="mc-section">
             <h2>Monte Carlo: 100 Parallel Earths</h2>
+            <p style="font-size:0.82rem; color:var(--text-dim); margin-bottom:1rem; line-height:1.5;">What happens if we rerun Earth's climate 100 times with the same emissions pathway? Each simulation rolls the dice independently on every tipping point. Some Earths get lucky. Most don't.</p>
             <div class="mc-controls">
                 <button class="roll-btn" id="mcRunBtn" style="font-size:0.9rem; padding:0.7rem 1.5rem;">Run 100 Simulations</button>
                 <span id="mcStatus" style="font-size:0.8rem; color:var(--text-dim);"></span>
             </div>
+
+            <h3 style="margin-top:1.5rem; font-size:0.88rem; color:var(--text-heading); font-weight:600;">How many Earths avoid all tipping points?</h3>
             <div class="chart-container"><canvas id="survivalChart"></canvas></div>
 
-            <h2 style="margin-top:1.5rem;">The Ergodicity Problem</h2>
+            <h3 style="margin-top:1.5rem; font-size:0.88rem; color:var(--text-heading); font-weight:600;">The Mean Is a Lie</h3>
+            <p style="font-size:0.78rem; color:var(--text-dimmer); margin-bottom:0.5rem; line-height:1.5;">The ensemble average hides catastrophic tail risk. What matters is not the average across 100 Earths &mdash; it's what happens on the one Earth you actually live on.</p>
             <div class="ergo-grid" id="ergoGrid">
                 <div class="ergo-card mean">
                     <h3>Ensemble Mean</h3>
@@ -337,13 +345,14 @@
                     <div class="ergo-sub">This Earth's outcome</div>
                 </div>
                 <div class="ergo-card worst">
-                    <h3>Worst 5%</h3>
+                    <h3>Worst 5% (CVaR)</h3>
                     <div class="ergo-value" id="ergoWorst">--</div>
-                    <div class="ergo-sub">95th percentile damage</div>
+                    <div class="ergo-sub">Expected Shortfall &mdash; avg of worst 5%</div>
                 </div>
             </div>
 
-            <h2 style="margin-top:1.5rem;">Damage Distribution</h2>
+            <h3 style="margin-top:1.5rem; font-size:0.88rem; color:var(--text-heading); font-weight:600;">Damage Distribution</h3>
+            <p style="font-size:0.78rem; color:var(--text-dimmer); margin-bottom:0.5rem; line-height:1.5;">Where does your Earth sit in the distribution? The line marks your trajectory.</p>
             <div class="histogram-container"><canvas id="histogramChart"></canvas></div>
 
             <div class="explainer-box" id="ergoExplainer">
@@ -353,7 +362,8 @@
 
         <!-- Policy Lever -->
         <div class="panel" id="policy-section" style="display:none;">
-            <h2>The Paris Agreement Gamble <span style="font-weight:400;color:var(--text-dimmer);font-size:0.8rem">&mdash; What does each target buy you?</span></h2>
+            <h2>What If We Stop At&hellip; <span style="font-weight:400;color:var(--text-dimmer);font-size:0.8rem">&mdash; The Paris Agreement Gamble</span></h2>
+            <p style="font-size:0.78rem; color:var(--text-dimmer); margin-bottom:0.5rem; line-height:1.5;">200 simulations per target. How much does each tenth of a degree buy in survival odds?</p>
             <div class="policy-grid" id="policyGrid"></div>
         </div>
 
@@ -407,7 +417,7 @@
     const DAMAGE_FNS = {
         nordhaus: { name: 'Nordhaus DICE', fn: T => 0.00236 * T * T, desc: 'Conservative quadratic' },
         howard: { name: 'Howard & Sterner', fn: T => 0.01145 * T * T, desc: 'Meta-analysis, ~5x DICE' },
-        dietz: { name: 'Dietz & Stern', fn: T => 1 - 1 / (1 + 0.05314 * T * T + 4 * Math.pow(T, 6.754)), desc: 'Catastrophic at high T' },
+        dietz: { name: 'Dietz & Stern', fn: T => 1 - 1 / (1 + 0.00284 * T * T + 0.00000507 * Math.pow(T, 6.754)), desc: 'Catastrophic at high T' },
         weitzman: { name: 'Weitzman Fat-Tail', fn: T => 0.00236 * T * T + 5.07e-6 * Math.pow(T, 6.754), desc: 'DICE + fat tail term' }
     };
 
@@ -573,6 +583,7 @@
     let currentDmgFn = 'howard';
     let userRunResults = [];
     let mcRuns = null;
+    let lastMCEndYear = null;
     let survivalChart = null;
     let histogramChart = null;
     let globe = null;
@@ -717,25 +728,50 @@
     // =========================================================================
     const damageSummary = document.getElementById('damageSummary');
 
+    const DMG_DESCRIPTIONS = {
+        nordhaus: 'Nordhaus DICE-2016R: The standard integrated assessment model. Conservative quadratic — widely criticised for underestimating tail risks and treating climate damages as modest.',
+        howard: 'Howard & Sterner (2017): Meta-analysis of 27 empirical studies. Estimates damages roughly 5x higher than DICE. Considered the current best-estimate central case by many economists.',
+        dietz: 'Dietz & Stern (2015): Includes catastrophic damages that standard models miss. Tracks close to Nordhaus at low temperatures but diverges sharply above ~5\u00B0C as tipping-point and systemic risks compound.',
+        weitzman: 'Weitzman (2012): Adds a fat-tail term to the DICE quadratic. Captures the possibility that extreme warming scenarios cause disproportionately catastrophic economic collapse.'
+    };
+
     function renderDamage() {
         const effectiveTemp = sim.currentTemp + sim.effectiveWarming;
         const tippedCount = sim.tippedSet.size;
-        let html = '';
-        for (const [key, df] of Object.entries(DAMAGE_FNS)) {
-            const d = getDamage(effectiveTemp, key);
-            const isSelected = key === currentDmgFn;
-            const borderStyle = isSelected ? 'border-color: var(--cyan);' : '';
-            html += `<div class="damage-card" style="${borderStyle}">
-                <div class="damage-value ${dmgColorClass(d.trillions)}">$${d.trillions < 100 ? d.trillions.toFixed(1) : d.trillions.toFixed(0)}T</div>
-                <div class="damage-label">${df.name}</div>
-                <div class="damage-pct">${(d.fraction * 100).toFixed(1)}% of world GDP</div>
-            </div>`;
-        }
+        const selected = DAMAGE_FNS[currentDmgFn];
+        const d = getDamage(effectiveTemp, currentDmgFn);
+
+        // Primary: 3 stat cards for the selected function
+        let html = '<div class="damage-primary">';
+        html += `<div class="damage-card" style="border-color: var(--cyan);">
+            <div class="damage-value ${dmgColorClass(d.trillions)}">$${d.trillions < 100 ? d.trillions.toFixed(1) : d.trillions.toFixed(0)}T</div>
+            <div class="damage-label">Annual Damages</div>
+            <div class="damage-pct">${selected.name}</div>
+        </div>`;
         html += `<div class="damage-card">
-            <div class="damage-value" style="color:${tippedCount > 0 ? 'var(--red)' : 'var(--green)'}">${tippedCount}</div>
+            <div class="damage-value ${dmgColorClass(d.trillions)}">${(d.fraction * 100).toFixed(1)}%</div>
+            <div class="damage-label">of World GDP</div>
+            <div class="damage-pct">$${WORLD_GDP}T baseline</div>
+        </div>`;
+        html += `<div class="damage-card">
+            <div class="damage-value" style="color:${tippedCount > 0 ? 'var(--red)' : 'var(--green)'}">${tippedCount} / 16</div>
             <div class="damage-label">Tipping Points Triggered</div>
             <div class="damage-pct">Effective temp: ${effectiveTemp.toFixed(2)}&deg;C</div>
         </div>`;
+        html += '</div>';
+
+        // Comparison row: other functions
+        const others = Object.entries(DAMAGE_FNS).filter(([k]) => k !== currentDmgFn);
+        html += '<div class="damage-compare">Compare: ';
+        html += others.map(([key, df]) => {
+            const od = getDamage(effectiveTemp, key);
+            return `<span>${df.name} <strong class="${dmgColorClass(od.trillions)}">$${od.trillions < 100 ? od.trillions.toFixed(1) : od.trillions.toFixed(0)}T</strong></span>`;
+        }).join(' ');
+        html += '</div>';
+
+        // Description
+        html += '<div class="damage-desc">\u2139\uFE0F ' + DMG_DESCRIPTIONS[currentDmgFn] + '</div>';
+
         damageSummary.innerHTML = html;
     }
 
@@ -813,7 +849,15 @@
 
     autoTarget.addEventListener('input', () => { autoTargetLabel.textContent = autoTarget.value; });
     sspSelect.addEventListener('change', () => { selectedSSP = sspSelect.value; });
-    dmgSelect.addEventListener('change', () => { currentDmgFn = dmgSelect.value; renderDamage(); if (mcRuns) renderErgoPanel(); });
+    dmgSelect.addEventListener('change', () => {
+        currentDmgFn = dmgSelect.value;
+        renderDamage();
+        if (mcRuns && lastMCEndYear) {
+            renderErgoPanel();
+            renderHistogram(lastMCEndYear);
+            updateErgoExplainer(lastMCEndYear);
+        }
+    });
 
     function doSingleRoll() {
         if (sim.currentYear >= 2100) return;
@@ -873,6 +917,7 @@
         sim = new Simulation(2025, selectedSSP);
         userRunResults = [];
         mcRuns = null;
+        lastMCEndYear = null;
         rollLog.innerHTML = '';
         rollBtn.disabled = false;
         autoRunBtn.disabled = false;
@@ -903,6 +948,7 @@
         setTimeout(() => {
             const endYear = Math.max(sim.currentYear, parseInt(autoTarget.value));
             mcRuns = runMonteCarlo(100, endYear, selectedSSP);
+            lastMCEndYear = endYear;
             mcStatus.textContent = '100 simulations complete (2025\u2013' + endYear + ')';
             mcRunBtn.disabled = false;
             renderSurvivalChart(endYear);
@@ -1010,7 +1056,9 @@
         damages.sort((a, b) => a - b);
 
         const mean = damages.reduce((s, d) => s + d, 0) / damages.length;
-        const p95 = damages[Math.floor(damages.length * 0.95)];
+        const cutoff = Math.floor(damages.length * 0.95);
+        const tail = damages.slice(cutoff);
+        const cvar95 = tail.reduce((s, d) => s + d, 0) / tail.length;
         const userEffTemp = sim.currentTemp + sim.effectiveWarming;
         const userDmg = getDamage(userEffTemp, fnKey).trillions;
 
@@ -1018,8 +1066,8 @@
         document.getElementById('ergoMean').className = 'ergo-value ' + dmgColorClass(mean);
         document.getElementById('ergoYours').textContent = '$' + userDmg.toFixed(1) + 'T';
         document.getElementById('ergoYours').className = 'ergo-value ' + dmgColorClass(userDmg);
-        document.getElementById('ergoWorst').textContent = '$' + p95.toFixed(1) + 'T';
-        document.getElementById('ergoWorst').className = 'ergo-value ' + dmgColorClass(p95);
+        document.getElementById('ergoWorst').textContent = '$' + cvar95.toFixed(1) + 'T';
+        document.getElementById('ergoWorst').className = 'ergo-value ' + dmgColorClass(cvar95);
     }
 
     // =========================================================================
@@ -1029,6 +1077,8 @@
         if (!mcRuns || mcRuns.length === 0) return;
         const fnKey = currentDmgFn;
         const damages = mcRuns.map(run => getDamage(run.finalEffectiveTemp, fnKey).trillions);
+        const userEffTemp = sim.currentTemp + sim.effectiveWarming;
+        const userDmg = getDamage(userEffTemp, fnKey).trillions;
         const maxD = Math.max(...damages, 10);
         const binWidth = Math.max(1, Math.ceil(maxD / 20));
         const nBins = Math.ceil(maxD / binWidth) + 1;
@@ -1044,6 +1094,9 @@
             return 'rgba(239,68,68,0.6)';
         });
 
+        // Find which bin the user's damage falls in
+        const userBinIdx = Math.min(nBins - 1, Math.floor(userDmg / binWidth));
+
         if (histogramChart) histogramChart.destroy();
         const ctx = document.getElementById('histogramChart').getContext('2d');
         histogramChart = new Chart(ctx, {
@@ -1055,7 +1108,30 @@
                     x: { title: { display: true, text: 'Economic damage ($ trillions)', color: '#777', font: { size: 11 } }, ticks: { color: '#666', font: { size: 9 }, maxRotation: 45 }, grid: { color: 'rgba(255,255,255,0.03)' } },
                     y: { title: { display: true, text: 'Number of simulations', color: '#777', font: { size: 11 } }, ticks: { color: '#666', font: { size: 10 }, stepSize: 5 }, grid: { color: 'rgba(255,255,255,0.05)' } }
                 },
-                plugins: { legend: { display: false }, tooltip: { callbacks: { label: item => item.parsed.y + ' simulations' } } }
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { callbacks: { label: item => item.parsed.y + ' simulations' } },
+                    annotation: {
+                        annotations: {
+                            yourEarth: {
+                                type: 'line',
+                                xMin: userBinIdx, xMax: userBinIdx,
+                                borderColor: '#00d4ff',
+                                borderWidth: 2,
+                                borderDash: [6, 3],
+                                label: {
+                                    display: true,
+                                    content: 'Your Earth ($' + userDmg.toFixed(1) + 'T)',
+                                    position: 'start',
+                                    backgroundColor: 'rgba(0,212,255,0.15)',
+                                    color: '#00d4ff',
+                                    font: { size: 11, weight: 'bold' },
+                                    padding: 4
+                                }
+                            }
+                        }
+                    }
+                }
             }
         });
     }
@@ -1072,11 +1148,17 @@
         const cascadeRuns = mcRuns.filter(r => r.tippedSet.size >= 3).length;
         const endTemp = yearToTemp(endYear, selectedSSP);
 
+        const sorted = [...damages].sort((a, b) => a - b);
+        const cutoff = Math.floor(sorted.length * 0.95);
+        const cvarTail = sorted.slice(cutoff);
+        const cvar = cvarTail.reduce((s, d) => s + d, 0) / cvarTail.length;
+
         document.getElementById('ergoExplainer').innerHTML = '<strong>Why does the mean mislead?</strong> Standard cost-benefit analysis averages across many hypothetical Earths &mdash; but we only live on one. Climate damages are multiplicative: once a tipping point fires, it compounds. The ensemble mean smooths over catastrophic trajectories, but if <em>your</em> Earth hits the tail, the damage is permanent.<br><br>'
             + 'Across 100 simulations to ' + endYear + ' (' + endTemp.toFixed(1) + '&deg;C under ' + selectedSSP + '): the mean damage is <strong>$' + mean.toFixed(1) + 'T</strong> using ' + DAMAGE_FNS[fnKey].name + ', but '
             + '<span class="insight-stat">' + catastrophic + '% of runs exceeded $50T in damages</span> and '
             + '<span class="insight-stat">' + cascadeRuns + '% triggered 3+ tipping cascades</span>. '
-            + 'The mean hides the tail. This is the ergodicity problem: the average across parallel worlds is not the average over time for a single world.';
+            + 'The worst 5% of scenarios average <span class="insight-stat">$' + cvar.toFixed(1) + 'T in damages</span> &mdash; this is CVaR (Conditional Value at Risk), what risk managers use because the mean hides the tail. '
+            + 'This is the ergodicity problem: the average across parallel worlds is not the average over time for a single world.';
     }
 
     // =========================================================================
