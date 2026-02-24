@@ -4,6 +4,7 @@ const mammoth = require('mammoth');
 
 const BASE_DIR = path.join(__dirname, '이슈분석 & 핫이슈');
 const OUTPUT_PATH = path.join(__dirname, 'data.json');
+const IMAGES_DIR = path.join(__dirname, 'images');
 
 // ==================== TAG & PEOPLE RULES (reused from previous version) ====================
 
@@ -241,9 +242,183 @@ function getIssueNum(dateStr) {
   return (y - 2016) * 12 + m;
 }
 
+// ==================== IMAGE EXTRACTION (PASS 2) ====================
+
+// Same header pattern used for HTML boundary detection
+const HEADER_PATTERN_GLOBAL = /(ISSUE\s*ANALYSIS|H0T\s*ISSUE|HOT\s*ISSUE|HOT\s*REPORT|HOT\s*Report|EDITOR['\u2019]S\s*CHOICE)/gi;
+
+async function extractImages(filePath, articleCount) {
+  let imageIndex = 0;
+  const collectedImages = [];
+
+  const options = {
+    convertImage: mammoth.images.imgElement(function(image) {
+      const idx = imageIndex++;
+      return image.read('base64').then(function(base64Data) {
+        collectedImages.push({
+          index: idx,
+          contentType: image.contentType,
+          base64Data: base64Data
+        });
+        return { src: `__IMG_${idx}__` };
+      });
+    })
+  };
+
+  const result = await mammoth.convertToHtml({ path: filePath }, options);
+  const html = result.value;
+
+  if (collectedImages.length === 0) return [];
+
+  // Find header positions in HTML (for article boundary mapping)
+  const hdrMatches = [];
+  const hdrRe = new RegExp(HEADER_PATTERN_GLOBAL.source, 'gi');
+  let hdrMatch;
+  while ((hdrMatch = hdrRe.exec(html)) !== null) {
+    if (hdrMatches.length > 0 && hdrMatch.index - hdrMatches[hdrMatches.length - 1] < 200) continue;
+    hdrMatches.push(hdrMatch.index);
+  }
+
+  // Split HTML into article sections
+  const articleSections = [];
+  for (let h = 0; h < hdrMatches.length; h++) {
+    const start = hdrMatches[h];
+    const end = h < hdrMatches.length - 1 ? hdrMatches[h + 1] : html.length;
+    articleSections.push(html.substring(start, end));
+  }
+  // If no headers found, treat entire HTML as one section
+  if (articleSections.length === 0) articleSections.push(html);
+
+  // For each article section, find images and their paragraph positions
+  const imagesByArticle = Array.from({ length: articleCount }, () => []);
+
+  for (let aIdx = 0; aIdx < articleSections.length && aIdx < articleCount; aIdx++) {
+    const section = articleSections[aIdx];
+
+    // Find the author pattern position — body starts after that
+    const authorMatch = AUTHOR_PATTERN.exec(section);
+    const bodyStartPos = authorMatch ? authorMatch.index + authorMatch[0].length : 0;
+    const bodyHtml = section.substring(bodyStartPos);
+
+    // Split body HTML into elements (paragraphs, images, etc.)
+    // We'll count <p> elements to determine paragraph position of each image
+    const elements = bodyHtml.split(/(?=<p[ >])|(?=<img )/i);
+
+    let paragraphCount = 0;
+    for (const el of elements) {
+      const trimmed = el.trim();
+      if (!trimmed) continue;
+
+      // Check for image placeholder
+      const imgMatch = trimmed.match(/__IMG_(\d+)__/);
+      if (imgMatch) {
+        const imgIdx = parseInt(imgMatch[1]);
+        const imgData = collectedImages[imgIdx];
+        if (!imgData) continue;
+        // Skip tiny images (< 2KB base64 ≈ ~1.5KB binary)
+        if (imgData.base64Data.length < 2700) continue;
+
+        imagesByArticle[aIdx].push({
+          contentType: imgData.contentType,
+          base64Data: imgData.base64Data,
+          afterParagraph: paragraphCount  // Insert after this many paragraphs
+        });
+      }
+
+      // Count paragraphs (any <p> element with actual text content)
+      if (/^<p[ >]/i.test(trimmed)) {
+        const textContent = trimmed.replace(/<[^>]+>/g, '').trim();
+        if (textContent.length > 5) paragraphCount++;
+      }
+    }
+  }
+
+  return imagesByArticle;
+}
+
+function saveArticleImages(imagesByArticle, issueNum) {
+  const results = [];
+  for (let aIdx = 0; aIdx < imagesByArticle.length; aIdx++) {
+    const images = imagesByArticle[aIdx];
+    if (images.length === 0) {
+      results.push({ imagePaths: [] });
+      continue;
+    }
+    const paths = [];
+    for (let iIdx = 0; iIdx < images.length; iIdx++) {
+      const img = images[iIdx];
+      const ext = img.contentType === 'image/jpeg' ? '.jpg' :
+                  img.contentType === 'image/gif' ? '.gif' : '.png';
+      const filename = `${issueNum}-${aIdx}-${iIdx}${ext}`;
+      const fullPath = path.join(IMAGES_DIR, filename);
+      const buffer = Buffer.from(img.base64Data, 'base64');
+      fs.writeFileSync(fullPath, buffer);
+      paths.push({ path: `images/${filename}`, afterParagraph: img.afterParagraph });
+    }
+    results.push({ imagePaths: paths });
+  }
+  return results;
+}
+
+function injectImageMarkers(body, imagePaths) {
+  if (!imagePaths || imagePaths.length === 0) return body;
+
+  // Split body into blocks (paragraphs and headings separated by \n\n)
+  const blocks = body.split('\n\n');
+  const result = [];
+  let paragraphCount = 0;
+
+  // Build a set of paragraph positions where images should be inserted
+  // afterParagraph=3 means "insert after the 3rd paragraph"
+  const imagesByPos = {};
+  for (const img of imagePaths) {
+    const pos = img.afterParagraph || 0;
+    if (!imagesByPos[pos]) imagesByPos[pos] = [];
+    imagesByPos[pos].push(img.path);
+  }
+
+  for (const block of blocks) {
+    const trimmed = block.trim();
+    if (!trimmed) continue;
+
+    result.push(trimmed);
+
+    // Count paragraphs (both regular and heading blocks count)
+    paragraphCount++;
+
+    // Check if any images should be inserted after this paragraph
+    if (imagesByPos[paragraphCount]) {
+      for (const imgPath of imagesByPos[paragraphCount]) {
+        result.push(`[IMG:${imgPath}]`);
+      }
+    }
+  }
+
+  // Any images with positions beyond the paragraph count go at the end
+  for (const [pos, imgs] of Object.entries(imagesByPos)) {
+    if (parseInt(pos) > paragraphCount) {
+      for (const imgPath of imgs) {
+        result.push(`[IMG:${imgPath}]`);
+      }
+    }
+  }
+  // Also handle position 0 (images before any paragraph)
+  if (imagesByPos[0]) {
+    // Insert at the beginning
+    for (const imgPath of imagesByPos[0].reverse()) {
+      result.unshift(`[IMG:${imgPath}]`);
+    }
+  }
+
+  return result.join('\n\n');
+}
+
 // ==================== MAIN ====================
 
 async function main() {
+  // Create images directory
+  fs.mkdirSync(IMAGES_DIR, { recursive: true });
+
   const yearFolders = fs.readdirSync(BASE_DIR)
     .filter(f => fs.statSync(path.join(BASE_DIR, f)).isDirectory())
     .sort();
@@ -252,6 +427,7 @@ async function main() {
 
   const allIssues = [];
   let totalArticles = 0;
+  let totalImages = 0;
 
   for (const yearFolder of yearFolders) {
     const yearPath = path.join(BASE_DIR, yearFolder);
@@ -281,6 +457,7 @@ async function main() {
       console.log(`Processing: ${docxFile} → ${dateStr} (issue ${issueNum})`);
 
       try {
+        // Pass 1: Text extraction (existing logic)
         const articles = await parseDocx(filePath);
 
         if (articles.length === 0) {
@@ -292,6 +469,28 @@ async function main() {
         articles.forEach((a, idx) => {
           a.id = `${issueNum}-${idx}`;
         });
+
+        // Pass 2: Image extraction
+        try {
+          const imagesByArticle = await extractImages(filePath, articles.length);
+          const savedPaths = saveArticleImages(imagesByArticle, issueNum);
+
+          let fileImages = 0;
+          articles.forEach((a, idx) => {
+            if (savedPaths[idx] && savedPaths[idx].imagePaths.length > 0) {
+              const imgPaths = savedPaths[idx].imagePaths;
+              fileImages += imgPaths.length;
+              // Inject image markers into body text
+              a.body = injectImageMarkers(a.body, imgPaths);
+            }
+          });
+          totalImages += fileImages;
+          if (fileImages > 0) {
+            console.log(`  → ${fileImages} image(s) extracted`);
+          }
+        } catch (imgErr) {
+          console.warn(`  Image extraction failed: ${imgErr.message}`);
+        }
 
         allIssues.push({
           date: dateStr,
@@ -313,7 +512,7 @@ async function main() {
 
   // Stats
   console.log(`\n${'='.repeat(60)}`);
-  console.log(`Total: ${allIssues.length} issues, ${totalArticles} articles`);
+  console.log(`Total: ${allIssues.length} issues, ${totalArticles} articles, ${totalImages} images`);
 
   const tagCounts = {};
   allIssues.forEach(issue => {
