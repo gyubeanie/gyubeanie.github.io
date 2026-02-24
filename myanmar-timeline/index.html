@@ -378,9 +378,69 @@ body{
   .modal-title{font-size:1.2rem}.coup-divider h2{font-size:1.3rem}
   .coup-divider-inner{padding:1rem 1.5rem}.lang-btn{font-size:0.6rem;padding:3px 7px}
 }
+
+/* ====== EMAIL GATE ====== */
+.gate-overlay{
+  position:fixed;inset:0;z-index:9999;
+  background:linear-gradient(180deg, #1a1a1a 0%, #2d1f1f 40%, #3d2222 100%);
+  display:flex;justify-content:center;align-items:center;
+  transition:opacity 0.5s, visibility 0.5s;
+}
+.gate-overlay.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.gate-box{
+  text-align:center;max-width:420px;width:90%;color:#f0ede8;
+}
+.gate-box h1{
+  font-family:var(--display);font-size:2.2rem;font-weight:900;
+  margin-bottom:0.5rem;letter-spacing:-0.02em;
+}
+.gate-box h1 em{font-style:italic;color:var(--accent-light);display:block;font-size:0.65em;margin-top:0.2em}
+.gate-box p{
+  font-family:var(--serif);font-size:0.95rem;
+  color:rgba(255,255,255,0.5);margin-bottom:2rem;line-height:1.6;
+}
+.gate-form{display:flex;flex-direction:column;gap:0.75rem;align-items:center}
+.gate-input{
+  font-family:var(--sans);font-size:0.9rem;
+  padding:12px 20px;width:100%;max-width:340px;
+  border:1px solid rgba(255,255,255,0.15);border-radius:6px;
+  background:rgba(255,255,255,0.06);color:#fff;
+  outline:none;transition:border-color 0.2s;
+}
+.gate-input::placeholder{color:rgba(255,255,255,0.3)}
+.gate-input:focus{border-color:var(--accent-light)}
+.gate-submit{
+  font-family:var(--sans);font-size:0.8rem;font-weight:600;
+  padding:10px 32px;border:none;border-radius:6px;
+  background:var(--accent);color:#fff;cursor:pointer;
+  letter-spacing:0.05em;text-transform:uppercase;transition:all 0.2s;
+}
+.gate-submit:hover{background:var(--accent-light);transform:translateY(-1px)}
+.gate-error{
+  font-family:var(--sans);font-size:0.75rem;
+  color:var(--accent-light);min-height:1.2em;margin-top:0.25rem;
+}
+.gate-source{
+  font-family:var(--sans);font-size:0.6rem;
+  color:rgba(255,255,255,0.2);margin-top:2rem;letter-spacing:0.1em;text-transform:uppercase;
+}
 </style>
 </head>
 <body>
+
+<!-- EMAIL GATE -->
+<div class="gate-overlay" id="gate">
+  <div class="gate-box">
+    <h1>Myanmar in Crisis<em>A Chronicle of Upheaval</em></h1>
+    <p>This archive is available to authorized readers.<br>Please enter your email to continue.</p>
+    <form class="gate-form" id="gateForm">
+      <input class="gate-input" type="email" id="gateEmail" placeholder="your@email.com" required autocomplete="email" autofocus>
+      <button class="gate-submit" type="submit">Enter</button>
+      <div class="gate-error" id="gateError"></div>
+    </form>
+    <div class="gate-source">MBRI Newsletter Archive</div>
+  </div>
+</div>
 
 <!-- HERO -->
 <section class="hero" id="top">
@@ -471,7 +531,46 @@ body{
    - Photo cards for highlights only, clean text cards for the rest
    - KO/EN language toggle with pre-translated titles
    - Left timeline rail with scroll tracking
+   - Email gate with localStorage persistence
    ================================================================ */
+
+// ==================== EMAIL GATE ====================
+const APPROVED_EMAILS = [
+  // Add approved email addresses here (lowercase)
+  'example@gmail.com',
+  'admin@mbri.org',
+];
+
+const GATE_KEY = 'myanmar-chronicle-access';
+
+function checkGate() {
+  const stored = localStorage.getItem(GATE_KEY);
+  if (stored && APPROVED_EMAILS.includes(stored)) {
+    document.getElementById('gate').classList.add('hidden');
+    return true;
+  }
+  return false;
+}
+
+document.getElementById('gateForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const email = document.getElementById('gateEmail').value.trim().toLowerCase();
+  const errorEl = document.getElementById('gateError');
+
+  if (APPROVED_EMAILS.includes(email)) {
+    localStorage.setItem(GATE_KEY, email);
+    document.getElementById('gate').classList.add('hidden');
+    errorEl.textContent = '';
+  } else {
+    errorEl.textContent = 'This email is not on the access list.';
+    document.getElementById('gateEmail').focus();
+  }
+});
+
+// Check on load
+checkGate();
+
+// ==================== APP ====================
 
 const TAG_LABELS = {
   coup:'Coup & Military', sanctions:'Sanctions', economy:'Economy',
