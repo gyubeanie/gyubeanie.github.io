@@ -379,68 +379,43 @@ body{
   .coup-divider-inner{padding:1rem 1.5rem}.lang-btn{font-size:0.6rem;padding:3px 7px}
 }
 
-/* ====== EMAIL GATE ====== */
-.gate-overlay{
-  position:fixed;inset:0;z-index:9999;
-  background:linear-gradient(180deg, #1a1a1a 0%, #2d1f1f 40%, #3d2222 100%);
-  display:flex;justify-content:center;align-items:center;
-  transition:opacity 0.5s, visibility 0.5s;
+/* ====== MODAL AUTH FORM ====== */
+.modal-auth{
+  text-align:center;padding:2rem 0 0.5rem;
+  border-top:1px solid var(--border-light);margin-top:1rem;
 }
-.gate-overlay.hidden{opacity:0;visibility:hidden;pointer-events:none}
-.gate-box{
-  text-align:center;max-width:420px;width:90%;color:#f0ede8;
+.modal-auth p{
+  font-family:var(--sans);font-size:0.8rem;color:var(--text-muted);
+  margin-bottom:1rem;line-height:1.5;
 }
-.gate-box h1{
-  font-family:var(--display);font-size:2.2rem;font-weight:900;
-  margin-bottom:0.5rem;letter-spacing:-0.02em;
+.modal-auth-form{display:flex;gap:0.5rem;justify-content:center;align-items:center;flex-wrap:wrap}
+.modal-auth-input{
+  font-family:var(--sans);font-size:0.8rem;
+  padding:8px 14px;width:220px;
+  border:1px solid var(--border);border-radius:4px;
+  background:var(--bg-alt);color:var(--text);outline:none;transition:border-color 0.2s;
 }
-.gate-box h1 em{font-style:italic;color:var(--accent-light);display:block;font-size:0.65em;margin-top:0.2em}
-.gate-box p{
-  font-family:var(--serif);font-size:0.95rem;
-  color:rgba(255,255,255,0.5);margin-bottom:2rem;line-height:1.6;
-}
-.gate-form{display:flex;flex-direction:column;gap:0.75rem;align-items:center}
-.gate-input{
-  font-family:var(--sans);font-size:0.9rem;
-  padding:12px 20px;width:100%;max-width:340px;
-  border:1px solid rgba(255,255,255,0.15);border-radius:6px;
-  background:rgba(255,255,255,0.06);color:#fff;
-  outline:none;transition:border-color 0.2s;
-}
-.gate-input::placeholder{color:rgba(255,255,255,0.3)}
-.gate-input:focus{border-color:var(--accent-light)}
-.gate-submit{
-  font-family:var(--sans);font-size:0.8rem;font-weight:600;
-  padding:10px 32px;border:none;border-radius:6px;
+.modal-auth-input::placeholder{color:var(--text-muted)}
+.modal-auth-input:focus{border-color:var(--accent)}
+.modal-auth-submit{
+  font-family:var(--sans);font-size:0.75rem;font-weight:600;
+  padding:8px 18px;border:none;border-radius:4px;
   background:var(--accent);color:#fff;cursor:pointer;
-  letter-spacing:0.05em;text-transform:uppercase;transition:all 0.2s;
+  letter-spacing:0.03em;transition:all 0.2s;
 }
-.gate-submit:hover{background:var(--accent-light);transform:translateY(-1px)}
-.gate-error{
-  font-family:var(--sans);font-size:0.75rem;
-  color:var(--accent-light);min-height:1.2em;margin-top:0.25rem;
+.modal-auth-submit:hover{background:var(--accent-light)}
+.modal-auth-error{
+  font-family:var(--sans);font-size:0.7rem;
+  color:var(--accent-light);margin-top:0.5rem;width:100%;
 }
-.gate-source{
-  font-family:var(--sans);font-size:0.6rem;
-  color:rgba(255,255,255,0.2);margin-top:2rem;letter-spacing:0.1em;text-transform:uppercase;
+.modal-auth-status{
+  font-family:var(--sans);font-size:0.7rem;color:var(--text-muted);
+  margin-top:0.5rem;
 }
+.modal-auth-status a{color:var(--accent);cursor:pointer;text-decoration:underline}
 </style>
 </head>
 <body>
-
-<!-- EMAIL GATE -->
-<div class="gate-overlay" id="gate">
-  <div class="gate-box">
-    <h1>Myanmar in Crisis<em>A Chronicle of Upheaval</em></h1>
-    <p>This archive is available to authorized readers.<br>Please enter your email to continue.</p>
-    <form class="gate-form" id="gateForm">
-      <input class="gate-input" type="email" id="gateEmail" placeholder="your@email.com" required autocomplete="email" autofocus>
-      <button class="gate-submit" type="submit">Enter</button>
-      <div class="gate-error" id="gateError"></div>
-    </form>
-    <div class="gate-source">MBRI Newsletter Archive</div>
-  </div>
-</div>
 
 <!-- HERO -->
 <section class="hero" id="top">
@@ -534,51 +509,59 @@ body{
    - Email gate with localStorage persistence
    ================================================================ */
 
-// ==================== EMAIL GATE ====================
+// ==================== AUTH (in-modal, not page-blocking) ====================
 const APPROVED_EMAILS = [
   'hky0304@gmail.com',
 ];
-
 const GATE_KEY = 'myanmar-chronicle-access';
 
 function isApproved(email) {
   if (!email) return false;
   const e = email.trim().toLowerCase();
-  return APPROVED_EMAILS.some(function(approved) {
-    return approved.trim().toLowerCase() === e;
-  });
+  return APPROVED_EMAILS.some(function(a) { return a.trim().toLowerCase() === e; });
 }
 
-function checkGate() {
+function isUserLoggedIn() {
   const stored = localStorage.getItem(GATE_KEY);
-  if (stored && isApproved(stored)) {
-    document.getElementById('gate').classList.add('hidden');
-    return true;
-  }
-  // Clear stale/invalid stored emails
-  if (stored && !isApproved(stored)) {
-    localStorage.removeItem(GATE_KEY);
-  }
+  if (stored && isApproved(stored)) return true;
+  if (stored) localStorage.removeItem(GATE_KEY); // clear stale
   return false;
 }
 
-document.getElementById('gateForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const email = document.getElementById('gateEmail').value.trim().toLowerCase();
-  const errorEl = document.getElementById('gateError');
+function logoutUser() {
+  localStorage.removeItem(GATE_KEY);
+}
 
-  if (isApproved(email)) {
-    localStorage.setItem(GATE_KEY, email);
-    document.getElementById('gate').classList.add('hidden');
-    errorEl.textContent = '';
-  } else {
-    errorEl.textContent = 'This email is not on the access list. Please check and try again.';
-    document.getElementById('gateEmail').focus();
+// Handle modal auth form submission (delegated, since form is dynamically created)
+document.addEventListener('submit', function(e) {
+  if (e.target && e.target.id === 'modalAuthForm') {
+    e.preventDefault();
+    const input = document.getElementById('modalAuthEmail');
+    const errorEl = document.getElementById('modalAuthError');
+    if (!input || !errorEl) return;
+    const email = input.value.trim().toLowerCase();
+    if (isApproved(email)) {
+      localStorage.setItem(GATE_KEY, email);
+      errorEl.textContent = '';
+      // Re-open the current modal to show full content
+      const currentId = document.getElementById('modal').dataset.currentArticle;
+      if (currentId) openModal(currentId);
+    } else {
+      errorEl.textContent = 'This email is not on the access list.';
+      input.focus();
+    }
   }
 });
 
-// Check on load
-checkGate();
+// Handle logout link click (delegated)
+document.addEventListener('click', function(e) {
+  if (e.target && e.target.id === 'modalLogout') {
+    e.preventDefault();
+    logoutUser();
+    const currentId = document.getElementById('modal').dataset.currentArticle;
+    if (currentId) openModal(currentId);
+  }
+});
 
 // ==================== APP ====================
 
@@ -896,6 +879,9 @@ function openModal(id) {
   if (!article) return;
 
   const overlay = document.getElementById('modalOverlay');
+  const modal = document.getElementById('modal');
+  modal.dataset.currentArticle = id;
+
   const photo = getPhoto(article);
   document.getElementById('modalHero').style.backgroundImage = `url('${photo}')`;
   document.getElementById('modalType').textContent = article.type === 'analysis' ? 'Analysis / Special Report' : 'News Report';
@@ -910,9 +896,10 @@ function openModal(id) {
   (article.people || []).forEach(p => { peopleH += `<span class="person-pill">${p}</span>`; });
   document.getElementById('modalPeople').innerHTML = peopleH;
 
-  // Show both Korean and English title in modal
+  // Show both Korean and English title
   const koTitle = cleanTitle(article.title);
   const enTitle = article.titleEn ? cleanTitle(article.titleEn) : '';
+
   let bodyH = `<p>This article was published in the <strong>${formatDateLabel(issueDate)}</strong> issue of the MBRI Newsletter.</p>`;
   if (enTitle && enTitle !== koTitle) {
     bodyH += `<p style="font-size:1.05rem;font-weight:600;color:var(--text);line-height:1.6">\u201C${enTitle}\u201D</p>`;
@@ -920,9 +907,23 @@ function openModal(id) {
   } else {
     bodyH += `<p style="font-size:1.05rem;font-weight:600;color:var(--text);line-height:1.6">\u201C${koTitle}\u201D</p>`;
   }
-  bodyH += `<div class="modal-context">Full article text will be available in a future update.</div>`;
-  document.getElementById('modalText').innerHTML = bodyH;
 
+  // Auth-gated body text section
+  if (isUserLoggedIn()) {
+    bodyH += `<div class="modal-context">Full article text will be available in a future update.</div>`;
+    bodyH += `<div class="modal-auth-status">Signed in \u00b7 <a id="modalLogout">Sign out</a></div>`;
+  } else {
+    bodyH += `<div class="modal-auth">
+      <p>Sign in to read the full article text.</p>
+      <form class="modal-auth-form" id="modalAuthForm">
+        <input class="modal-auth-input" type="email" id="modalAuthEmail" placeholder="your@email.com" required autocomplete="email">
+        <button class="modal-auth-submit" type="submit">Sign in</button>
+      </form>
+      <div class="modal-auth-error" id="modalAuthError"></div>
+    </div>`;
+  }
+
+  document.getElementById('modalText').innerHTML = bodyH;
   overlay.classList.add('show');
   document.body.style.overflow = 'hidden';
 }
