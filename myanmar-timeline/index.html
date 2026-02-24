@@ -323,12 +323,16 @@ body{
 .modal-hero{width:100%;height:200px;background-size:cover;background-position:center;position:relative}
 .modal-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg, var(--card-bg) 0%, rgba(255,255,255,0.3) 60%, transparent 100%)}
 .modal-body-content{padding:0 2.5rem 2.5rem;margin-top:-1.5rem;position:relative;z-index:1}
-.modal-close{
-  position:absolute;top:0.75rem;right:0.75rem;background:rgba(0,0,0,0.4);
-  border:none;font-size:1.2rem;cursor:pointer;color:#fff;line-height:1;
-  padding:6px 10px;border-radius:4px;z-index:10;transition:background 0.2s;
+.modal-top-bar{
+  position:absolute;top:0.75rem;right:0.75rem;display:flex;gap:0.4rem;z-index:10;
 }
-.modal-close:hover{background:rgba(0,0,0,0.7)}
+.modal-close,.modal-share{
+  background:rgba(0,0,0,0.4);border:none;font-size:1.2rem;cursor:pointer;color:#fff;
+  line-height:1;padding:6px 10px;border-radius:4px;transition:background 0.2s;
+}
+.modal-close:hover,.modal-share:hover{background:rgba(0,0,0,0.7)}
+.modal-share{font-size:0.75rem;font-family:var(--sans);font-weight:500;display:flex;align-items:center;gap:4px}
+.modal-share .copied{color:var(--gold);font-weight:600}
 .modal-type{font-family:var(--sans);font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.15em;color:var(--accent);margin-bottom:0.5rem}
 .modal-date{font-family:var(--sans);font-size:0.7rem;color:var(--text-muted);margin-bottom:0.75rem}
 .modal-title{font-family:var(--display);font-size:1.5rem;font-weight:700;line-height:1.3;margin-bottom:1.25rem;color:var(--text)}
@@ -371,12 +375,10 @@ body{
   .nav-search input{width:100px}
   .nav-search input:focus{width:140px}
 }
-@media(max-width:768px){.articles-grid{grid-template-columns:1fr}.article-card.photo-card{min-height:180px}}
 @media(max-width:600px){
-  .nav-title{font-size:0.8rem}.nav-divider{display:none}.hero h1{font-size:2.2rem}
-  .month-header h3{font-size:1.2rem}.modal-body-content{padding:0 1.5rem 1.5rem}
-  .modal-title{font-size:1.2rem}.coup-divider h2{font-size:1.3rem}
-  .coup-divider-inner{padding:1rem 1.5rem}.lang-btn{font-size:0.6rem;padding:3px 7px}
+  .nav-title{font-size:0.8rem}.nav-divider{display:none}
+  .month-header h3{font-size:1.2rem}
+  .lang-btn{font-size:0.6rem;padding:3px 7px}
 }
 
 /* ====== MODAL AUTH FORM ====== */
@@ -413,9 +415,133 @@ body{
   margin-top:0.5rem;
 }
 .modal-auth-status a{color:var(--accent);cursor:pointer;text-decoration:underline}
+
+/* ====== READING PROGRESS BAR ====== */
+.progress-bar{
+  position:fixed;top:0;left:0;height:3px;z-index:9999;
+  background:linear-gradient(to right, var(--accent), var(--gold));
+  width:0;transition:width 0.1s linear;pointer-events:none;
+}
+
+/* ====== FILTER COUNT BADGES ====== */
+.filter-count{
+  display:inline-block;font-size:0.55rem;font-weight:700;
+  background:var(--text-muted);color:#fff;border-radius:8px;
+  padding:0 5px;margin-left:4px;min-width:16px;text-align:center;
+  line-height:1.4;vertical-align:middle;transition:all 0.3s;
+}
+.filter-btn.active .filter-count{background:rgba(255,255,255,0.35)}
+.filter-btn:not(.active) .filter-count{background:var(--border)}
+
+/* ====== YEAR DIVIDER (enhanced) ====== */
+.year-divider{padding:3rem 0 1.5rem;border-top:2px solid var(--border);margin:2.5rem 0 0.5rem;position:relative}
+.year-divider:first-child{border-top:none;margin-top:0}
+.year-divider h2{font-family:var(--display);font-size:3.5rem;font-weight:900;color:var(--text);letter-spacing:-0.03em;line-height:1}
+.year-divider .year-context{
+  font-family:var(--serif);font-size:1rem;color:var(--text-secondary);
+  margin-top:0.5rem;font-style:italic;font-weight:300;
+}
+
+/* ====== ANALYSIS CARD ACCENT ====== */
+.article-card.text-card.analysis-card{border-left:3px solid var(--gold)}
+.article-card.text-card.analysis-card .card-type{color:var(--gold)}
+.article-card.text-card.analysis-card .card-type .type-dot{background:var(--gold)}
+
+/* ====== STAGGERED CARD ANIMATION ====== */
+.card-stagger-1{transition-delay:0s}
+.card-stagger-2{transition-delay:0.06s}
+.card-stagger-3{transition-delay:0.12s}
+.card-stagger-4{transition-delay:0.18s}
+.card-stagger-5{transition-delay:0.24s}
+.card-stagger-6{transition-delay:0.3s}
+
+/* ====== MOBILE TIMELINE SHEET ====== */
+.mobile-timeline-btn{
+  display:none;position:fixed;bottom:5rem;right:2rem;z-index:50;
+  background:var(--text);color:#fff;border:none;
+  padding:10px 18px;border-radius:24px;cursor:pointer;
+  font-family:var(--sans);font-size:0.7rem;font-weight:600;
+  letter-spacing:0.05em;box-shadow:0 4px 12px rgba(0,0,0,0.2);
+  transition:all 0.2s;
+}
+.mobile-timeline-btn:hover{transform:scale(1.05)}
+.mobile-timeline-sheet{
+  position:fixed;bottom:0;left:0;right:0;max-height:55vh;
+  background:var(--card-bg);border-radius:16px 16px 0 0;
+  transform:translateY(100%);transition:transform 0.3s ease;
+  z-index:1000;overflow-y:auto;padding:0;
+  box-shadow:0 -4px 24px rgba(0,0,0,0.15);
+}
+.mobile-timeline-sheet.open{transform:translateY(0)}
+.mobile-sheet-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.3);z-index:999;
+  display:none;opacity:0;transition:opacity 0.3s;
+}
+.mobile-sheet-overlay.show{display:block;opacity:1}
+.mobile-sheet-handle{
+  width:36px;height:4px;background:var(--border);border-radius:2px;
+  margin:10px auto 6px;
+}
+.mobile-sheet-header{
+  font-family:var(--sans);font-size:0.7rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:0.15em;color:var(--text-muted);
+  padding:0 1.25rem 0.5rem;border-bottom:1px solid var(--border-light);
+}
+.mobile-sheet-year{
+  font-family:var(--display);font-size:1.1rem;font-weight:700;
+  color:var(--text);padding:1rem 1.25rem 0.25rem;
+}
+.mobile-sheet-months{display:flex;flex-wrap:wrap;gap:0.4rem;padding:0.5rem 1.25rem 1rem}
+.mobile-sheet-chip{
+  font-family:var(--sans);font-size:0.7rem;font-weight:500;
+  padding:6px 14px;border-radius:20px;border:1px solid var(--border);
+  background:transparent;color:var(--text-secondary);cursor:pointer;
+  transition:all 0.2s;
+}
+.mobile-sheet-chip:hover,.mobile-sheet-chip.active{
+  background:var(--accent);border-color:var(--accent);color:#fff;
+}
+
+/* ====== STICKY MONTH INDICATOR (mobile) ====== */
+.sticky-month{
+  display:none;position:fixed;top:62px;left:50%;transform:translateX(-50%);
+  background:var(--text);color:#fff;padding:4px 16px;border-radius:20px;
+  font-family:var(--sans);font-size:0.7rem;font-weight:600;letter-spacing:0.03em;
+  z-index:100;opacity:0;transition:opacity 0.3s;pointer-events:none;
+  box-shadow:0 2px 8px rgba(0,0,0,0.2);
+}
+.sticky-month.visible{opacity:1}
+
+/* ====== MOBILE RESPONSIVE OVERRIDES ====== */
+@media(max-width:900px){
+  .mobile-timeline-btn{display:flex;align-items:center;gap:6px}
+  .sticky-month{display:block}
+}
+@media(max-width:768px){
+  .nav-inner{flex-wrap:wrap;height:auto;padding:8px 1rem}
+  .nav-filters{order:10;width:100%;padding:4px 0;gap:0.3rem;
+    overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;flex:none}
+  .nav-filters::-webkit-scrollbar{display:none}
+  .nav-search{order:5;flex:1;min-width:0}
+  .nav-search input{width:100%}
+  .nav-search input:focus{width:100%}
+  .filter-btn{min-height:36px;padding:6px 14px;font-size:0.7rem}
+  .article-card.text-card{padding:0.9rem 1rem}
+  .article-card.photo-card{min-height:160px}
+  .modal{max-width:100%;max-height:100vh;border-radius:0;margin:0}
+  .modal-overlay{padding:0}
+  .modal-body-content{padding:0 1.25rem 1.5rem}
+  .modal-title{font-size:1.15rem}
+  .article-card:active{transform:scale(0.98) !important}
+  .content-area{padding:1rem}
+  .hero h1{font-size:2rem}
+  .coup-divider h2{font-size:1.2rem}
+  .coup-divider-inner{padding:1rem 1.25rem}
+}
 </style>
 </head>
 <body>
+<div class="progress-bar" id="progressBar"></div>
 
 <!-- HERO -->
 <section class="hero" id="top">
@@ -480,7 +606,10 @@ body{
 <!-- MODAL -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal" id="modal">
-    <button class="modal-close" id="modalClose">&times;</button>
+    <div class="modal-top-bar">
+      <button class="modal-share" id="modalShare" title="Copy link">&#128279; Share</button>
+      <button class="modal-close" id="modalClose">&times;</button>
+    </div>
     <div class="modal-hero" id="modalHero"></div>
     <div class="modal-body-content">
       <div class="modal-type" id="modalType"></div>
@@ -494,6 +623,14 @@ body{
 </div>
 
 <button class="back-top" id="backTop" title="Back to top">&uarr;</button>
+<button class="mobile-timeline-btn" id="mobileTimelineBtn">&#9776; Timeline</button>
+<div class="mobile-sheet-overlay" id="mobileSheetOverlay"></div>
+<div class="mobile-timeline-sheet" id="mobileTimelineSheet">
+  <div class="mobile-sheet-handle"></div>
+  <div class="mobile-sheet-header">Jump to month</div>
+  <div id="mobileSheetContent"></div>
+</div>
+<div class="sticky-month" id="stickyMonth"></div>
 
 <footer class="footer">
   <p>Data sourced from the MBRI Newsletter Archive (2016&ndash;2026). Focused on Feb 2021 onward.</p>
@@ -502,17 +639,17 @@ body{
 
 <script>
 /* ================================================================
-   MYANMAR TIMELINE v3
-   - Photo cards for highlights only, clean text cards for the rest
+   MYANMAR TIMELINE v4
+   - Photo cards for highlights, clean text cards for the rest
    - KO/EN language toggle with pre-translated titles
    - Left timeline rail with scroll tracking
-   - Email gate with localStorage persistence
+   - URL state management with shareable links
+   - Reading progress bar, filter counts, staggered animations
+   - Mobile timeline bottom sheet, sticky month indicator
    ================================================================ */
 
 // ==================== AUTH (in-modal, not page-blocking) ====================
-const APPROVED_EMAILS = [
-  'hky0304@gmail.com',
-];
+const APPROVED_EMAILS = ['hky0304@gmail.com'];
 const GATE_KEY = 'myanmar-chronicle-access';
 
 function isApproved(email) {
@@ -520,19 +657,14 @@ function isApproved(email) {
   const e = email.trim().toLowerCase();
   return APPROVED_EMAILS.some(function(a) { return a.trim().toLowerCase() === e; });
 }
-
 function isUserLoggedIn() {
   const stored = localStorage.getItem(GATE_KEY);
   if (stored && isApproved(stored)) return true;
-  if (stored) localStorage.removeItem(GATE_KEY); // clear stale
+  if (stored) localStorage.removeItem(GATE_KEY);
   return false;
 }
+function logoutUser() { localStorage.removeItem(GATE_KEY); }
 
-function logoutUser() {
-  localStorage.removeItem(GATE_KEY);
-}
-
-// Handle modal auth form submission (delegated, since form is dynamically created)
 document.addEventListener('submit', function(e) {
   if (e.target && e.target.id === 'modalAuthForm') {
     e.preventDefault();
@@ -543,7 +675,6 @@ document.addEventListener('submit', function(e) {
     if (isApproved(email)) {
       localStorage.setItem(GATE_KEY, email);
       errorEl.textContent = '';
-      // Re-open the current modal to show full content
       const currentId = document.getElementById('modal').dataset.currentArticle;
       if (currentId) openModal(currentId);
     } else {
@@ -552,8 +683,6 @@ document.addEventListener('submit', function(e) {
     }
   }
 });
-
-// Handle logout link click (delegated)
 document.addEventListener('click', function(e) {
   if (e.target && e.target.id === 'modalLogout') {
     e.preventDefault();
@@ -561,6 +690,66 @@ document.addEventListener('click', function(e) {
     const currentId = document.getElementById('modal').dataset.currentArticle;
     if (currentId) openModal(currentId);
   }
+});
+
+// ==================== URL STATE ====================
+let suppressHashChange = false;
+
+function stateToHash(articleId) {
+  const params = [];
+  if (currentFilter !== 'all') params.push('filter=' + encodeURIComponent(currentFilter));
+  if (searchQuery) params.push('q=' + encodeURIComponent(searchQuery));
+  if (currentLang !== 'en') params.push('lang=' + encodeURIComponent(currentLang));
+  if (articleId) params.push('article=' + encodeURIComponent(articleId));
+  return params.length ? '#' + params.join('&') : '';
+}
+
+function hashToState() {
+  const hash = location.hash.slice(1);
+  if (!hash) return;
+  const params = {};
+  hash.split('&').forEach(p => {
+    const [k, v] = p.split('=');
+    if (k && v) params[decodeURIComponent(k)] = decodeURIComponent(v);
+  });
+
+  if (params.filter) {
+    currentFilter = params.filter;
+    document.querySelectorAll('.filter-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.filter === currentFilter);
+    });
+  }
+  if (params.q) {
+    searchQuery = params.q;
+    document.getElementById('searchInput').value = searchQuery;
+  }
+  if (params.lang && (params.lang === 'ko' || params.lang === 'en')) {
+    currentLang = params.lang;
+    document.querySelectorAll('.lang-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.lang === currentLang);
+    });
+  }
+  if (params.article && allData) {
+    // Defer to allow render to finish
+    setTimeout(() => openModal(params.article), 100);
+  }
+}
+
+function pushState(articleId) {
+  const newHash = stateToHash(articleId);
+  suppressHashChange = true;
+  if (newHash) {
+    history.replaceState(null, '', newHash);
+  } else {
+    history.replaceState(null, '', location.pathname);
+  }
+  setTimeout(() => { suppressHashChange = false; }, 50);
+}
+
+window.addEventListener('hashchange', () => {
+  if (suppressHashChange) return;
+  hashToState();
+  if (allData) render();
 });
 
 // ==================== APP ====================
@@ -624,17 +813,19 @@ function getPhoto(article) {
   return photos[hash % photos.length];
 }
 
-const YEAR_LABELS = {
-  '2016':'Pre-Coup Era','2017':'Rohingya Crisis','2018':'Democratic Tensions',
-  '2019':'Fragile Democracy','2020':'Election Year','2021':'The Year of the Coup',
-  '2022':'Under Military Rule','2023':'Deepening Crisis','2024':'Resistance & Conflict',
-  '2025':'Ongoing Struggle','2026':'No End in Sight'
+const YEAR_CONTEXT = {
+  '2016':'Background','2017':'Background','2018':'Background',
+  '2019':'Background','2020':'Background',
+  '2021':'The Military Coup','2022':'Deepening Crisis',
+  '2023':'Resistance & Resilience','2024':'Stalemate',
+  '2025':'Into the Unknown','2026':'The Present'
 };
 
 let allData = null;
 let currentFilter = 'all';
 let searchQuery = '';
-let currentLang = 'en'; // 'en' or 'ko'
+let currentLang = 'en';
+let currentVisibleMonth = '';
 
 // ========== LOAD ==========
 async function loadData() {
@@ -642,8 +833,11 @@ async function loadData() {
     const res = await fetch('data.json');
     allData = await res.json();
     document.getElementById('loading').remove();
+    hashToState(); // Apply URL state before first render
     render();
     initScrollObserver();
+    updateFilterCounts();
+    buildMobileTimeline();
   } catch (e) {
     document.getElementById('loading').innerHTML =
       '<div style="text-align:center"><h3 style="font-size:1rem;margin-bottom:0.5rem">Unable to load data</h3><p style="font-size:0.8rem;color:#888">Make sure data.json is in the same directory.</p></div>';
@@ -655,11 +849,7 @@ function getTitle(article) {
   if (currentLang === 'en' && article.titleEn) return article.titleEn;
   return article.title;
 }
-
-function displayTitle(article) {
-  return cleanTitle(getTitle(article));
-}
-
+function displayTitle(article) { return cleanTitle(getTitle(article)); }
 function cleanTitle(t) {
   return t.replace(/^\d+\.\s*/, '')
     .replace(/^ISSUE ANALYSIS:\s*/i, '')
@@ -671,10 +861,34 @@ function cleanTitle(t) {
     .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
     .trim();
 }
-
 function formatDateLabel(d) {
   const [y, m] = d.split('-');
   return `${MONTH_NAMES[m] || m} ${y}`;
+}
+
+// ========== FILTER COUNTS ==========
+function updateFilterCounts() {
+  if (!allData) return;
+  const allArticles = [];
+  allData.issues.forEach(issue => {
+    issue.articles.forEach(a => allArticles.push(a));
+  });
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    const f = btn.dataset.filter;
+    let count;
+    if (f === 'all') {
+      count = allArticles.length;
+    } else {
+      count = allArticles.filter(a => a.tags && a.tags.includes(f)).length;
+    }
+    let badge = btn.querySelector('.filter-count');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'filter-count';
+      btn.appendChild(badge);
+    }
+    badge.textContent = count;
+  });
 }
 
 // ========== RENDER ==========
@@ -697,10 +911,11 @@ function render() {
       <div class="section-title">Before the Coup</div>
       <div class="section-desc">Key events from Myanmar\u2019s democratic transition era that set the stage for the military takeover of February 2021.</div>
       <div class="articles-grid">`;
+    let bgIdx = 0;
     backgroundIssues.forEach(issue => {
       filterArticles(issue.articles).forEach(a => {
         totalArticles++;
-        html += renderCard(a, issue, true);
+        html += renderCard(a, issue, true, bgIdx++);
       });
     });
     html += `</div></div>`;
@@ -716,8 +931,11 @@ function render() {
 
     if (year !== lastYear) {
       lastYear = year;
-      html += `<div class="year-marker" id="year-${year}"><h2>${year}</h2>
-        ${YEAR_LABELS[year] ? `<div class="year-label">${YEAR_LABELS[year]}</div>` : ''}</div>`;
+      // Enhanced year divider
+      html += `<div class="year-divider fade-in" id="year-${year}">
+        <h2>${year}</h2>
+        ${YEAR_CONTEXT[year] ? `<div class="year-context">${YEAR_CONTEXT[year]}</div>` : ''}
+      </div>`;
     }
 
     if (issue.date === '2021-02' && !coupDividerShown) {
@@ -738,7 +956,7 @@ function render() {
         <span class="issue-num">Issue No. ${issue.issueNum} \u00b7 ${articles.length} articles</span>
       </div><div class="articles-grid">`;
 
-    articles.forEach(a => { html += renderCard(a, issue, false); });
+    articles.forEach((a, idx) => { html += renderCard(a, issue, false, idx); });
     html += `</div></section>`;
   });
 
@@ -756,27 +974,30 @@ function render() {
 
   buildTimeline(timelineNodes);
   initFadeIn();
+  pushState(); // Sync URL
 }
 
-function renderCard(a, issue, isBackground) {
+function renderCard(a, issue, isBackground, idx) {
   const isHL = a.isHighlight;
-  const usePhoto = isHL; // Only highlight articles get photo cards
+  const usePhoto = isHL;
+  const isAnalysis = a.type === 'analysis';
+  const staggerClass = `card-stagger-${((idx || 0) % 6) + 1}`;
 
-  const typeLabel = a.type === 'analysis' ? (
+  const typeLabel = isAnalysis ? (
     a.title.includes('HOT ISSUE') ? 'Hot Issue' :
     a.title.includes('HOT REPORT') || a.title.includes('HOT Report') ? 'Report' :
     a.title.includes('ISSUE ANALYSIS') ? 'Analysis' :
     a.title.includes("EDITOR\u2019S CHOICE") || a.title.includes("EDITOR'S CHOICE") ? "Editor\u2019s Choice" :
     'Analysis'
-  ) : '';
+  ) : 'News';
 
   let cls, style = '';
   if (usePhoto) {
     const photo = getPhoto(a);
-    cls = `article-card photo-card${isBackground ? ' background-card' : ''}`;
+    cls = `article-card photo-card fade-in ${staggerClass}${isBackground ? ' background-card' : ''}`;
     style = ` style="background-image:url('${photo}')"`;
   } else {
-    cls = `article-card text-card${isBackground ? ' background-card' : ''}`;
+    cls = `article-card text-card fade-in ${staggerClass}${isBackground ? ' background-card' : ''}${isAnalysis ? ' analysis-card' : ''}`;
   }
 
   let h = `<div class="${cls}" data-id="${a.id}"${style} onclick="openModal('${a.id}')">`;
@@ -851,13 +1072,22 @@ function initScrollObserver() {
   const obs = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
+        // Desktop timeline
         document.querySelectorAll('.timeline-node').forEach(n => n.classList.remove('active'));
         const node = document.querySelector(`.timeline-node[data-target="${entry.target.id}"]`);
         if (node) { node.classList.add('active'); node.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+        // Mobile sticky month
+        const section = entry.target;
+        if (section.id && section.id.startsWith('month-')) {
+          const dateStr = section.id.replace('month-', '');
+          currentVisibleMonth = formatDateLabel(dateStr);
+          const stickyEl = document.getElementById('stickyMonth');
+          if (stickyEl) stickyEl.textContent = currentVisibleMonth;
+        }
       }
     });
   }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
-  document.querySelectorAll('.month-section, .year-marker').forEach(el => obs.observe(el));
+  document.querySelectorAll('.month-section, .year-marker, .year-divider').forEach(el => obs.observe(el));
 }
 
 function initFadeIn() {
@@ -896,7 +1126,6 @@ function openModal(id) {
   (article.people || []).forEach(p => { peopleH += `<span class="person-pill">${p}</span>`; });
   document.getElementById('modalPeople').innerHTML = peopleH;
 
-  // Show both Korean and English title
   const koTitle = cleanTitle(article.title);
   const enTitle = article.titleEn ? cleanTitle(article.titleEn) : '';
 
@@ -908,7 +1137,6 @@ function openModal(id) {
     bodyH += `<p style="font-size:1.05rem;font-weight:600;color:var(--text);line-height:1.6">\u201C${koTitle}\u201D</p>`;
   }
 
-  // Auth-gated body text section
   if (isUserLoggedIn()) {
     bodyH += `<div class="modal-context">Full article text will be available in a future update.</div>`;
     bodyH += `<div class="modal-auth-status">Signed in \u00b7 <a id="modalLogout">Sign out</a></div>`;
@@ -926,12 +1154,33 @@ function openModal(id) {
   document.getElementById('modalText').innerHTML = bodyH;
   overlay.classList.add('show');
   document.body.style.overflow = 'hidden';
+  pushState(id); // Add article to URL
 }
-function closeModal() { document.getElementById('modalOverlay').classList.remove('show'); document.body.style.overflow = ''; }
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+  pushState(); // Remove article from URL
+}
 
 document.getElementById('modalClose').addEventListener('click', closeModal);
 document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ========== SHARE BUTTON ==========
+document.getElementById('modalShare').addEventListener('click', function() {
+  const articleId = document.getElementById('modal').dataset.currentArticle;
+  const url = location.origin + location.pathname + stateToHash(articleId);
+  navigator.clipboard.writeText(url).then(() => {
+    const btn = document.getElementById('modalShare');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<span class="copied">Copied!</span>';
+    setTimeout(() => { btn.innerHTML = orig; }, 1500);
+  }).catch(() => {
+    // Fallback
+    prompt('Copy this link:', url);
+  });
+});
 
 // ========== FILTERS ==========
 document.getElementById('filters').addEventListener('click', e => {
@@ -962,13 +1211,81 @@ document.getElementById('searchInput').addEventListener('input', e => {
   searchTimeout = setTimeout(() => { searchQuery = e.target.value.trim(); render(); }, 300);
 });
 
+// ========== READING PROGRESS BAR ==========
+function updateProgressBar() {
+  const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+  const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+  document.getElementById('progressBar').style.width = scrolled + '%';
+}
+
+// ========== STICKY MONTH (mobile) ==========
+function updateStickyMonth() {
+  const stickyEl = document.getElementById('stickyMonth');
+  if (!stickyEl) return;
+  const heroBottom = document.querySelector('.hero');
+  if (!heroBottom) return;
+  const pastHero = window.scrollY > heroBottom.offsetHeight;
+  stickyEl.classList.toggle('visible', pastHero && currentVisibleMonth);
+}
+
 // ========== SCROLL ==========
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => {
   nav.classList.toggle('scrolled', window.scrollY > 100);
   document.getElementById('backTop').classList.toggle('show', window.scrollY > 600);
+  updateProgressBar();
+  updateStickyMonth();
 }, { passive: true });
 document.getElementById('backTop').addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+// ========== MOBILE TIMELINE SHEET ==========
+function buildMobileTimeline() {
+  if (!allData) return;
+  const content = document.getElementById('mobileSheetContent');
+  if (!content) return;
+  let html = '';
+  let lastYear = '';
+  allData.issues.forEach(issue => {
+    if (issue.isBackground) return;
+    const [year, month] = issue.date.split('-');
+    if (year !== lastYear) {
+      lastYear = year;
+      html += `<div class="mobile-sheet-year">${year}</div><div class="mobile-sheet-months">`;
+    }
+    const monthName = MONTH_NAMES[month] || month;
+    html += `<button class="mobile-sheet-chip" data-target="month-${issue.date}">${monthName.substring(0, 3)}</button>`;
+    // Close months div before next year
+    const nextIssue = allData.issues[allData.issues.indexOf(issue) + 1];
+    if (!nextIssue || nextIssue.isBackground || nextIssue.date.split('-')[0] !== year) {
+      html += `</div>`;
+    }
+  });
+  content.innerHTML = html;
+
+  // Click handlers for chips
+  content.querySelectorAll('.mobile-sheet-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const target = document.getElementById(chip.dataset.target);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        closeMobileSheet();
+      }
+    });
+  });
+}
+
+function openMobileSheet() {
+  document.getElementById('mobileTimelineSheet').classList.add('open');
+  document.getElementById('mobileSheetOverlay').classList.add('show');
+}
+function closeMobileSheet() {
+  document.getElementById('mobileTimelineSheet').classList.remove('open');
+  document.getElementById('mobileSheetOverlay').classList.remove('show');
+}
+
+document.getElementById('mobileTimelineBtn').addEventListener('click', openMobileSheet);
+document.getElementById('mobileSheetOverlay').addEventListener('click', closeMobileSheet);
 
 // ========== INIT ==========
 loadData();
