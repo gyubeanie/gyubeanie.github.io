@@ -541,11 +541,23 @@ const APPROVED_EMAILS = [
 
 const GATE_KEY = 'myanmar-chronicle-access';
 
+function isApproved(email) {
+  if (!email) return false;
+  const e = email.trim().toLowerCase();
+  return APPROVED_EMAILS.some(function(approved) {
+    return approved.trim().toLowerCase() === e;
+  });
+}
+
 function checkGate() {
   const stored = localStorage.getItem(GATE_KEY);
-  if (stored && APPROVED_EMAILS.includes(stored)) {
+  if (stored && isApproved(stored)) {
     document.getElementById('gate').classList.add('hidden');
     return true;
+  }
+  // Clear stale/invalid stored emails
+  if (stored && !isApproved(stored)) {
+    localStorage.removeItem(GATE_KEY);
   }
   return false;
 }
@@ -555,12 +567,12 @@ document.getElementById('gateForm').addEventListener('submit', function(e) {
   const email = document.getElementById('gateEmail').value.trim().toLowerCase();
   const errorEl = document.getElementById('gateError');
 
-  if (APPROVED_EMAILS.includes(email)) {
+  if (isApproved(email)) {
     localStorage.setItem(GATE_KEY, email);
     document.getElementById('gate').classList.add('hidden');
     errorEl.textContent = '';
   } else {
-    errorEl.textContent = 'This email is not on the access list.';
+    errorEl.textContent = 'This email is not on the access list. Please check and try again.';
     document.getElementById('gateEmail').focus();
   }
 });
