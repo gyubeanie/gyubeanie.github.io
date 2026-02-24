@@ -317,8 +317,8 @@ body{
 }
 .modal-overlay.show{display:flex;opacity:1}
 .modal{
-  background:var(--card-bg);border-radius:6px;max-width:640px;width:100%;
-  max-height:80vh;overflow-y:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.3);
+  background:var(--card-bg);border-radius:6px;max-width:720px;width:100%;
+  max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.3);
 }
 .modal-hero{width:100%;height:200px;background-size:cover;background-position:center;position:relative}
 .modal-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg, var(--card-bg) 0%, rgba(255,255,255,0.3) 60%, transparent 100%)}
@@ -343,6 +343,20 @@ body{
 .modal-text{font-family:var(--serif);font-size:0.95rem;line-height:1.8;color:var(--text-secondary);border-top:1px solid var(--border-light);padding-top:1.25rem}
 .modal-text p{margin-bottom:0.75rem}
 .modal-context{font-family:var(--sans);font-size:0.75rem;color:var(--text-muted);background:var(--bg-alt);padding:1rem;border-radius:4px;margin-top:1rem}
+
+/* ====== ARTICLE BODY TEXT ====== */
+.modal-body-text{font-family:var(--serif);font-size:0.92rem;line-height:1.9;color:var(--text-secondary);margin-top:1.25rem}
+.modal-body-text p{margin-bottom:1rem}
+.modal-body-text .section-heading{
+  font-family:var(--sans);font-weight:700;font-size:0.92rem;color:var(--text);
+  margin:1.75rem 0 0.75rem;padding-top:0.75rem;border-top:1px solid var(--border-light);
+}
+.modal-body-text .section-heading:first-child{border-top:none;margin-top:0;padding-top:0}
+.modal-body-blur{position:relative;max-height:200px;overflow:hidden}
+.modal-body-blur::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:120px;
+  background:linear-gradient(transparent, var(--card-bg));pointer-events:none;
+}
 
 /* ====== MISC ====== */
 .back-top{
@@ -548,7 +562,7 @@ body{
   <div class="hero-content">
     <p class="hero-dateline">A documentary timeline &middot; 2021&ndash;2026</p>
     <h1>Myanmar in Crisis<em>A Chronicle of Upheaval</em></h1>
-    <p class="hero-sub">From the military coup of February 2021 through years of resistance and repression &mdash; tracing Myanmar's political and economic upheaval through primary reporting.</p>
+    <p class="hero-sub">From the military coup of February 2021 through years of resistance and repression &mdash; in-depth analysis of Myanmar's political and economic upheaval.</p>
     <p class="hero-meta">Based on the MBRI Newsletter Archive</p>
   </div>
   <div class="hero-scroll">Scroll<br></div>
@@ -586,7 +600,7 @@ body{
 <!-- STATS -->
 <div class="stats-bar">
   <div class="stats-inner">
-    <span>Showing <span class="stats-count" id="articleCount">&mdash;</span> articles</span>
+    <span>Showing <span class="stats-count" id="articleCount">&mdash;</span> in-depth analyses</span>
     <span id="dateRange"></span>
   </div>
 </div>
@@ -633,7 +647,7 @@ body{
 <div class="sticky-month" id="stickyMonth"></div>
 
 <footer class="footer">
-  <p>Data sourced from the MBRI Newsletter Archive (2016&ndash;2026). Focused on Feb 2021 onward.</p>
+  <p>In-depth analysis from the MBRI Newsletter Archive (2021&ndash;2026). Full text articles by Kim Jung-hee.</p>
   <p style="margin-top:0.5rem">Built by <a href="https://gyubeanie.github.io" target="_blank">gyubeanie</a></p>
 </footer>
 
@@ -1098,6 +1112,28 @@ function initFadeIn() {
   document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
 }
 
+// ========== ARTICLE BODY RENDERING ==========
+function renderArticleBody(body) {
+  if (!body) return '';
+  const blocks = body.split('\n\n');
+  let html = '<div class="modal-body-text">';
+  for (const block of blocks) {
+    const trimmed = block.trim();
+    if (!trimmed) continue;
+    if (trimmed.startsWith('[H]')) {
+      html += `<p class="section-heading">${escapeHtml(trimmed.slice(3))}</p>`;
+    } else {
+      html += `<p>${escapeHtml(trimmed)}</p>`;
+    }
+  }
+  html += '</div>';
+  return html;
+}
+
+function escapeHtml(text) {
+  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
 // ========== MODAL ==========
 function openModal(id) {
   if (!allData) return;
@@ -1129,26 +1165,38 @@ function openModal(id) {
   const koTitle = cleanTitle(article.title);
   const enTitle = article.titleEn ? cleanTitle(article.titleEn) : '';
 
-  let bodyH = `<p>This article was published in the <strong>${formatDateLabel(issueDate)}</strong> issue of the MBRI Newsletter.</p>`;
-  if (enTitle && enTitle !== koTitle) {
-    bodyH += `<p style="font-size:1.05rem;font-weight:600;color:var(--text);line-height:1.6">\u201C${enTitle}\u201D</p>`;
-    bodyH += `<p style="font-size:0.9rem;color:var(--text-secondary);line-height:1.6">${koTitle}</p>`;
-  } else {
-    bodyH += `<p style="font-size:1.05rem;font-weight:600;color:var(--text);line-height:1.6">\u201C${koTitle}\u201D</p>`;
-  }
+  let bodyH = `<p style="font-family:var(--sans);font-size:0.75rem;color:var(--text-muted)">Published in the <strong>${formatDateLabel(issueDate)}</strong> issue of the MBRI Newsletter &middot; By Kim Jung-hee</p>`;
 
-  if (isUserLoggedIn()) {
-    bodyH += `<div class="modal-context">Full article text will be available in a future update.</div>`;
-    bodyH += `<div class="modal-auth-status">Signed in \u00b7 <a id="modalLogout">Sign out</a></div>`;
-  } else {
+  // Render article body text
+  const hasBody = article.body && article.body.length > 50;
+
+  if (hasBody && isUserLoggedIn()) {
+    // Full body text for logged-in users
+    bodyH += renderArticleBody(article.body);
+    bodyH += `<div class="modal-auth-status" style="margin-top:1.5rem">Signed in \u00b7 <a id="modalLogout">Sign out</a></div>`;
+  } else if (hasBody) {
+    // Show blurred preview + sign in for non-logged-in users
+    bodyH += `<div class="modal-body-blur">${renderArticleBody(article.body)}</div>`;
     bodyH += `<div class="modal-auth">
-      <p>Sign in to read the full article text.</p>
+      <p>Sign in to read the full article.</p>
       <form class="modal-auth-form" id="modalAuthForm">
         <input class="modal-auth-input" type="email" id="modalAuthEmail" placeholder="your@email.com" required autocomplete="email">
         <button class="modal-auth-submit" type="submit">Sign in</button>
       </form>
       <div class="modal-auth-error" id="modalAuthError"></div>
     </div>`;
+  } else {
+    bodyH += `<div class="modal-context">Article text is being prepared.</div>`;
+    if (!isUserLoggedIn()) {
+      bodyH += `<div class="modal-auth">
+        <p>Sign in for access.</p>
+        <form class="modal-auth-form" id="modalAuthForm">
+          <input class="modal-auth-input" type="email" id="modalAuthEmail" placeholder="your@email.com" required autocomplete="email">
+          <button class="modal-auth-submit" type="submit">Sign in</button>
+        </form>
+        <div class="modal-auth-error" id="modalAuthError"></div>
+      </div>`;
+    }
   }
 
   document.getElementById('modalText').innerHTML = bodyH;

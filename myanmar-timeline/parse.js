@@ -1,19 +1,18 @@
 const fs = require('fs');
 const path = require('path');
+const mammoth = require('mammoth');
 
-const inputPath = path.join('C:', 'Users', 'gyubi', 'Downloads', 'docx_output.txt');
-const outputPath = path.join('C:', 'Users', 'gyubi', 'OneDrive', 'Desktop', 'Github pages', 'gyubeanie.github.io', 'myanmar-timeline', 'data.json');
+const BASE_DIR = path.join(__dirname, '이슈분석 & 핫이슈');
+const OUTPUT_PATH = path.join(__dirname, 'data.json');
 
-const text = fs.readFileSync(inputPath, 'utf8');
-const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+// ==================== TAG & PEOPLE RULES (reused from previous version) ====================
 
-// Tag rules
 const TAG_RULES = {
   coup: [/쿠데타/i, /쿠테타/i, /coup/i, /군부/i, /SAC/i, /민아웅\s*흘라잉/i, /민 아웅 흘라잉/i, /MAH/i, /비상사태/i, /군정/i, /군사/i, /총사령관/i, /USDP/i, /계엄/i],
-  sanctions: [/제재/i, /sanct/i, /블랙리스트/i, /blacklist/i, /OFAC/i, /dirty\s*list/i, /제재조치/i],
-  economy: [/경제/i, /투자/i, /FDI/i, /무역/i, /수출/i, /수입/i, /환율/i, /세금/i, /관세/i, /GDP/i, /인플레이션/i, /은행/i, /CBM/i, /금융/i, /증권/i, /주식/i, /부동산/i, /산업단지/i, /MIC/i, /DICA/i],
+  sanctions: [/제재/i, /sanct/i, /블랙리스트/i, /blacklist/i, /OFAC/i, /dirty\s*list/i, /FATF/i],
+  economy: [/경제/i, /투자/i, /FDI/i, /무역/i, /수출/i, /수입/i, /환율/i, /세금/i, /관세/i, /GDP/i, /인플레이션/i, /은행/i, /CBM/i, /금융/i, /증권/i, /주식/i, /부동산/i, /산업단지/i, /MIC/i, /DICA/i, /RCEP/i],
   human_rights: [/인권/i, /사형/i, /난민/i, /시위/i, /탄압/i, /강제/i, /refugee/i, /protest/i, /로힝가/i, /Rohingya/i, /구속/i, /체포영장/i, /ICC/i, /사면/i],
-  china: [/중국/i, /China/i, /왕이/i, /시진핑/i, /일대일로/i, /CITIC/i, /짜욱퓨/i, /Kyaukphyu/i, /위안화/i, /중앙은행.*위안/i, /윈난/i, /Myitsone/i, /희토류/i],
+  china: [/중국/i, /China/i, /왕이/i, /시진핑/i, /일대일로/i, /CITIC/i, /짜욱퓨/i, /Kyaukphyu/i, /위안화/i, /윈난/i, /Myitsone/i, /희토류/i],
   resistance: [/NUG/i, /PDF/i, /CRPH/i, /CDM/i, /저항/i, /반군부/i, /인민방위군/i, /국민통합정부/i, /봄혁명/i, /불매/i],
   ethnic_conflict: [/EAO/i, /KIA/i, /KNU/i, /\bAA\b/i, /TNLA/i, /MNDAA/i, /UWSA/i, /소수민족/i, /무장/i, /카친/i, /카렌/i, /라카인/i, /Arakan/i, /1027/i, /3BHA/i, /Kokang/i],
   energy: [/전력/i, /에너지/i, /발전소/i, /가스/i, /석유/i, /태양광/i, /수력/i, /LNG/i, /원자력/i, /원전/i, /Rosatom/i, /연료/i],
@@ -21,9 +20,8 @@ const TAG_RULES = {
   aung_san_suu_kyi: [/수지/i, /Suu\s*Kyi/i, /아웅산/i]
 };
 
-// People rules
 const PEOPLE_RULES = [
-  { name: 'Min Aung Hlaing', patterns: [/민\s*아웅\s*흘라잉/i, /\bMAH\b/, /총사령관/i, /SAC\s*의장/i, /SAC의장/i] },
+  { name: 'Min Aung Hlaing', patterns: [/민\s*아웅\s*흘라잉/i, /\bMAH\b/, /총사령관/i, /SAC\s*의장/i] },
   { name: 'Aung San Suu Kyi', patterns: [/수지/i, /Suu\s*Kyi/i] },
   { name: 'NUG', patterns: [/\bNUG\b/, /국민통합정부/] },
   { name: 'ASEAN', patterns: [/아세안/i, /\bASEAN\b/i] },
@@ -33,263 +31,302 @@ const PEOPLE_RULES = [
   { name: 'USA', patterns: [/미국/i, /\bUSA\b/i, /바이든/i, /트럼프/i, /블링컨/i, /OFAC/i] }
 ];
 
-function getTags(title) {
+function getTags(text) {
   const tags = [];
   for (const [tag, patterns] of Object.entries(TAG_RULES)) {
     for (const p of patterns) {
-      if (p.test(title)) { tags.push(tag); break; }
+      if (p.test(text)) { tags.push(tag); break; }
     }
   }
   return tags;
 }
 
-function getPeople(title) {
+function getPeople(text) {
   const people = [];
   for (const rule of PEOPLE_RULES) {
     for (const p of rule.patterns) {
-      if (p.test(title)) { people.push(rule.name); break; }
+      if (p.test(text)) { people.push(rule.name); break; }
     }
   }
   return people;
 }
 
-// Parse issue headers
-// Pattern: "2021년 2월호(통권61호) 목차" or "2023년 2월호(통권 84호)"
-const issuePattern = /^(\d{4})년\s*(\d{1,2})월호\s*\(통권\s*(\d+)호\)\s*목차?$/;
-const issuePattern2 = /^(\d{4})년\s*(\d{1,2})월호\s*\(통권\s*(\d+)호\)$/;
-// Special case: "2016년 1월호(창간호) 목차"
-const issuePatternInaugural = /^(\d{4})년\s*(\d{1,2})월호\s*\(창간호\)\s*목차?$/;
+// ==================== ARTICLE HEADER DETECTION ====================
 
-const issues = [];
-let currentIssue = null;
-let articleIdx = 0;
+// Matches: ISSUE ANALYSIS, HOT ISSUE, H0T ISSUE, HOT REPORT, HOT Report, EDITOR'S CHOICE
+const HEADER_PATTERN = /^(ISSUE\s*ANALYSIS|H0T\s*ISSUE|HOT\s*ISSUE|HOT\s*REPORT|HOT\s*Report|EDITOR['\u2019]S\s*CHOICE)/i;
+const AUTHOR_PATTERN = /(MBRI\s*소장|김정희|우리회계법인)/i;
 
-for (let i = 0; i < lines.length; i++) {
-  const line = lines[i];
+// ==================== SECTION HEADING DETECTION ====================
 
-  let match = line.match(issuePattern) || line.match(issuePattern2) || line.match(issuePatternInaugural);
-  if (match) {
-    // For inaugural issue, set issueNum to 1
-    if (!match[3]) match[3] = '1';
-    if (currentIssue) issues.push(currentIssue);
-    const year = match[1];
-    const month = match[2].padStart(2, '0');
-    const issueNum = parseInt(match[3]);
-    currentIssue = {
-      date: `${year}-${month}`,
-      label: `${year}년 ${match[2]}월호`,
-      issueNum,
-      articles: []
-    };
-    articleIdx = 0;
-    continue;
-  }
-
-  if (!currentIssue) continue;
-
-  // Skip empty or pure whitespace
-  if (!line.trim()) continue;
-
-  // Determine article type
-  const isAnalysis = /^(ISSUE ANALYSIS|HOT ISSUE|HOT REPORT|HOT Report|EDITOR'S CHOICE|MEMO:|주요 경제|주목할 만한|Update|Latest|별첨|ISSUE Check)/i.test(line);
-  const isNumbered = /^\d+\.\s*/.test(line);
-
-  // Skip lines that are just section markers or stats references
-  if (/^(주요 경제 외교 뉴스|경제통계|주목할 만한 경제 통계|별첨|Update 경제통계|Latest statistics)$/i.test(line)) continue;
-
-  if (isAnalysis || isNumbered) {
-    const tags = getTags(line);
-    const people = getPeople(line);
-
-    // Determine highlight status
-    let isHighlight = isAnalysis;
-    // Also highlight important coup/sanctions/resistance articles
-    if (tags.includes('coup') && (tags.includes('sanctions') || tags.includes('human_rights'))) isHighlight = true;
-    // Key events
-    const highlightKeywords = [/쿠데타/i, /쿠테타/i, /비상사태/i, /사형/i, /체포영장/i, /총선/i, /NUG.*선포/i, /1027/i, /계엄/i, /ICC/i, /아세안.*특별/i];
-    for (const kw of highlightKeywords) {
-      if (kw.test(line)) { isHighlight = true; break; }
-    }
-
-    currentIssue.articles.push({
-      id: `${currentIssue.issueNum}-${articleIdx}`,
-      title: line,
-      type: isAnalysis ? 'analysis' : 'news',
-      tags,
-      people,
-      isHighlight
-    });
-    articleIdx++;
-  }
-}
-
-if (currentIssue) issues.push(currentIssue);
-
-// ========== FILTER: Focus on coup era (Feb 2021+) with key pre-coup highlights ==========
-
-const COUP_CUTOFF = '2021-02';
-
-// Post-coup: everything from Feb 2021 onwards
-const postCoup = issues.filter(i => i.date >= COUP_CUTOFF);
-
-// Pre-coup: cherry-pick only the most important highlight articles
-// Include select issues with key background context
-const preCoupHighlights = [];
-const preCoupIssues = issues.filter(i => i.date < COUP_CUTOFF);
-
-for (const issue of preCoupIssues) {
-  const keyArticles = issue.articles.filter(a => {
-    // Only keep articles that are highlights AND relate to critical pre-coup themes
-    if (!a.isHighlight) return false;
-    // Key pre-coup themes: elections, Suu Kyi, military tensions, democratic transition
-    const criticalTags = ['coup', 'human_rights', 'aung_san_suu_kyi', 'ethnic_conflict'];
-    const hasCriticalTag = a.tags.some(t => criticalTags.includes(t));
-    // Also keep articles with key pre-coup keywords
-    const preCoupKeywords = [/총선/i, /선거/i, /NLD/i, /민주/i, /헌법/i, /로힝가/i, /Rohingya/i, /수지/i, /Suu Kyi/i, /군부/i, /ICJ/i];
-    const hasKeyword = preCoupKeywords.some(kw => kw.test(a.title));
-    return hasCriticalTag || hasKeyword;
-  });
-
-  if (keyArticles.length > 0) {
-    preCoupHighlights.push({
-      ...issue,
-      articles: keyArticles,
-      isBackground: true // Flag for UI styling
-    });
-  }
-}
-
-// ========== RELEVANCE FILTER: Keep only coup/crisis-relevant articles ==========
-// Drop routine business, agriculture, construction, sports, tourism articles
-// that aren't related to the coup, political crisis, or crisis economy
-
-const IRRELEVANT_PATTERNS = [
-  // Routine business/development unrelated to crisis
-  /농업/i,           // agriculture
-  /기공식/i,         // groundbreaking ceremony
-  /착공식/i,         // construction ceremony
-  /준공식/i,         // completion ceremony
-  /관광/i,           // tourism (unless crisis context)
-  /스포츠/i,         // sports
-  /축구/i,           // football
-  /골프/i,           // golf
-  /문화행사/i,       // cultural events
-  /맥주/i,           // beer
-  /부동산.*분양/i,   // real estate sales
-  /아파트.*분양/i,   // apartment sales
-  /호텔.*개관/i,     // hotel opening
-  /호텔.*오픈/i,     // hotel opening
-  /쇼핑몰/i,         // shopping mall
-  /패션/i,           // fashion
-  /뷰티/i,           // beauty
-  /한류/i,           // Korean wave/culture
-  /K-pop/i,          // K-pop
-  /드라마/i,         // drama
-  /영화제/i,         // film festival
-  /요리/i,           // cooking
-  /레시피/i,         // recipe
-  /결혼/i,           // marriage/wedding
-  /CNG 생산/i,       // CNG production
-  /제철소.*재가동/i, // steel mill restart
-  /시멘트/i,         // cement
-  /비료/i,           // fertilizer
-];
-
-// Crisis-relevant keywords that KEEP an article even if untagged
-const CRISIS_RELEVANT = [
-  /정변/i, /쿠데타/i, /쿠테타/i, /군부/i, /군정/i, /군사/i,
-  /시위/i, /시민불복종/i, /CDM/i, /탄압/i, /체포/i, /구금/i, /사형/i,
-  /NLD/i, /NUG/i, /PDF/i, /CRPH/i, /저항/i,
-  /제재/i, /sanct/i, /OFAC/i,
-  /위기/i, /붕괴/i, /급락/i, /폭락/i, /인플레/i, /물가.*상승/i, /통화.*하락/i,
-  /현금.*부족/i, /은행.*제한/i, /송금.*제한/i, /화폐/i, /달러.*부족/i,
-  /중단/i, /철수/i, /매각/i, /폐쇄/i, /사업.*중단/i, /투자.*중단/i,
-  /원조.*중단/i, /지원.*중단/i, /차관.*중단/i,
-  /난민/i, /피난/i, /실향민/i, /내전/i,
-  /로힝가/i, /Rohingya/i,
-  /인권/i, /ICC/i, /ICJ/i,
-  /아세안/i, /ASEAN/i, /유엔/i, /\bUN\b/i,
-  /미국/i, /중국/i, /일본/i, /러시아/i, /인도(?!네시아)/i,
-  /바이든/i, /트럼프/i, /블링컨/i,
-  /수지/i, /Suu\s*Kyi/i, /민\s*아웅/i, /총사령관/i,
-  /EAO/i, /KIA/i, /KNU/i, /\bAA\b/i, /TNLA/i, /MNDAA/i, /1027/i, /3BHA/i,
-  /계엄/i, /비상사태/i, /총선/i, /선거/i, /헌법/i,
-  /코로나/i, /COVID/i, /산소.*부족/i, /의료/i,
-  /전력.*부족/i, /정전/i, /전력.*위기/i,
-  /월드뱅크/i, /World\s*Bank/i, /IMF/i, /ADB/i,
-  /텔레노/i, /Telenor/i,
-  /Fitch/i, /ILO/i, /Moody/i,
-  /회계연도/i, /예산/i,
-  /연방/i, /UEC/i,
-  /폭력/i, /사망/i, /추락/i, /공습/i, /폭격/i, /전투/i,
-  /대사/i, /외교/i, /정상회담/i,
-  /로펌/i, /법적/i,
-  /불법/i, /밀수/i, /마약/i,
-];
-
-function isCrisisRelevant(article) {
-  const title = article.title;
-
-  // If it has any crisis-related tag, keep it
-  const crisisTags = ['coup', 'sanctions', 'human_rights', 'resistance', 'ethnic_conflict',
-                       'international', 'aung_san_suu_kyi', 'china'];
-  if (article.tags.some(t => crisisTags.includes(t))) return true;
-
-  // If it has people tags, keep it (mentions key political figures)
-  if (article.people && article.people.length > 0) return true;
-
-  // If it's a highlight/analysis, keep it (editorial judgment)
-  if (article.isHighlight) return true;
-
-  // Check against irrelevant patterns — drop if matches
-  for (const pat of IRRELEVANT_PATTERNS) {
-    if (pat.test(title)) return false;
-  }
-
-  // Check against crisis-relevant keywords — keep if matches
-  for (const pat of CRISIS_RELEVANT) {
-    if (pat.test(title)) return true;
-  }
-
-  // Economy-tagged articles: keep only if they have crisis keywords
-  if (article.tags.includes('economy')) {
-    // Economy articles are kept by default since the crisis heavily impacts the economy
-    return true;
-  }
-
-  // Energy-tagged: keep (energy crisis is part of the story)
-  if (article.tags.includes('energy')) return true;
-
-  // Untagged and no crisis keywords — drop
+function isLikelySectionHeading(line, prevEmpty, nextEmpty) {
+  // Section headings are typically:
+  // - Short (under 80 chars)
+  // - Followed and/or preceded by empty lines
+  // - End without period/comma (not mid-sentence)
+  // - Not a data reference line
+  if (!line || line.length > 100) return false;
+  if (line.length < 5) return false;
+  if (!prevEmpty && !nextEmpty) return false;
+  // Must not end with typical sentence endings (comma, period + more text)
+  if (/[.]\s*$/.test(line) && line.length > 60) return false;
+  // Skip lines that are just data references, page numbers etc.
+  if (/^(자료원|출처|Source|참고|\d+$|•|\*)/i.test(line.trim())) return false;
+  // Skip very short non-heading lines
+  if (line.length < 8 && !/[가-힣]/.test(line)) return false;
+  // Heading if surrounded by blanks and reasonably short
+  if (prevEmpty && nextEmpty && line.length < 80) return true;
   return false;
 }
 
-// Apply relevance filter to post-coup issues
-const filteredPostCoup = postCoup.map(issue => {
-  const relevantArticles = issue.articles.filter(a => isCrisisRelevant(a));
-  return { ...issue, articles: relevantArticles };
-}).filter(issue => issue.articles.length > 0);
+// ==================== BODY TEXT FORMATTING ====================
 
-console.log(`Post-coup: ${postCoup.reduce((s,i) => s + i.articles.length, 0)} -> ${filteredPostCoup.reduce((s,i) => s + i.articles.length, 0)} after relevance filter`);
+function formatBody(rawText) {
+  const lines = rawText.split('\n');
+  const blocks = [];
+  let currentBlock = [];
 
-// Combine: pre-coup highlights + filtered post-coup
-const finalIssues = [...preCoupHighlights, ...filteredPostCoup];
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    const prevEmpty = i === 0 || lines[i - 1].trim() === '';
+    const nextEmpty = i === lines.length - 1 || lines[i + 1].trim() === '';
 
-// Output stats
-let totalArticles = 0;
-finalIssues.forEach(i => totalArticles += i.articles.length);
-console.log(`Parsed ${finalIssues.length} issues (${preCoupHighlights.length} background + ${postCoup.length} post-coup) with ${totalArticles} total articles`);
+    if (line === '') {
+      // End current block
+      if (currentBlock.length > 0) {
+        blocks.push({ type: 'paragraph', text: currentBlock.join(' ') });
+        currentBlock = [];
+      }
+    } else if (isLikelySectionHeading(line, prevEmpty, nextEmpty)) {
+      // Save any pending paragraph
+      if (currentBlock.length > 0) {
+        blocks.push({ type: 'paragraph', text: currentBlock.join(' ') });
+        currentBlock = [];
+      }
+      blocks.push({ type: 'heading', text: line });
+    } else {
+      currentBlock.push(line);
+    }
+  }
+  if (currentBlock.length > 0) {
+    blocks.push({ type: 'paragraph', text: currentBlock.join(' ') });
+  }
 
-// Tag distribution
-const tagCounts = {};
-finalIssues.forEach(issue => {
-  issue.articles.forEach(a => {
-    (a.tags || []).forEach(t => { tagCounts[t] = (tagCounts[t] || 0) + 1; });
+  // Convert to simple markup: headings use [H] prefix, paragraphs separated by \n\n
+  return blocks.map(b => {
+    if (b.type === 'heading') return '[H]' + b.text;
+    return b.text;
+  }).join('\n\n');
+}
+
+// ==================== PARSE A SINGLE DOCX ====================
+
+async function parseDocx(filePath) {
+  const result = await mammoth.extractRawText({ path: filePath });
+  const text = result.value;
+  const lines = text.split('\n');
+
+  // Find article boundaries: lines matching HEADER_PATTERN
+  const headerIndices = [];
+  for (let i = 0; i < lines.length; i++) {
+    if (HEADER_PATTERN.test(lines[i].trim())) {
+      // Skip duplicate headers (appear twice due to formatting)
+      // If the previous header was within 5 lines, skip this one
+      if (headerIndices.length > 0 && i - headerIndices[headerIndices.length - 1] < 5) continue;
+      headerIndices.push(i);
+    }
+  }
+
+  // If no headers found, treat entire document as one article
+  if (headerIndices.length === 0) {
+    // Try to find any article content
+    const nonEmpty = lines.filter(l => l.trim().length > 10);
+    if (nonEmpty.length < 3) return []; // Skip essentially empty docs
+    headerIndices.push(0);
+  }
+
+  const articles = [];
+
+  for (let h = 0; h < headerIndices.length; h++) {
+    const startLine = headerIndices[h];
+    const endLine = h < headerIndices.length - 1 ? headerIndices[h + 1] : lines.length;
+    const section = lines.slice(startLine, endLine);
+
+    // Determine article type from header
+    const headerLine = section[0].trim();
+    let type = 'analysis';
+    let typeLabel = 'ISSUE ANALYSIS';
+    if (/H0T\s*ISSUE|HOT\s*ISSUE/i.test(headerLine)) typeLabel = 'HOT ISSUE';
+    if (/HOT\s*REPORT/i.test(headerLine)) typeLabel = 'HOT REPORT';
+    if (/EDITOR/i.test(headerLine)) typeLabel = "EDITOR'S CHOICE";
+
+    // Find title: first substantial non-empty line after header, before author line
+    let title = '';
+    let authorLineIdx = -1;
+    let titleParts = [];
+
+    for (let i = 1; i < section.length; i++) {
+      const line = section[i].trim();
+      if (!line) continue;
+
+      // Check if this is the author line
+      if (AUTHOR_PATTERN.test(line)) {
+        authorLineIdx = i;
+        break;
+      }
+
+      // Collect title parts (title might span multiple lines)
+      // Skip the header type number (like "1" or "2" standalone)
+      if (/^\d+$/.test(line)) continue;
+      titleParts.push(line);
+    }
+
+    title = titleParts.join(' ').trim();
+    if (!title) continue; // Skip articles without a title
+
+    // Clean title: remove leading numbers, type prefixes
+    title = title.replace(/^\d+\.\s*/, '').trim();
+
+    // Extract body: everything after the author line
+    let bodyLines = [];
+    if (authorLineIdx >= 0) {
+      // Skip author line and any empty lines after it
+      let bodyStart = authorLineIdx + 1;
+      while (bodyStart < section.length && section[bodyStart].trim() === '') bodyStart++;
+      bodyLines = section.slice(bodyStart);
+    }
+
+    let body = formatBody(bodyLines.join('\n'));
+
+    // Clean: remove author name from start of body
+    body = body.replace(/^김정희\s*/, '').trim();
+
+    // Skip TOC entries: articles with no body text or title with tab/page numbers
+    if (!body || body.length < 50) continue;
+    if (/\t\d+/.test(title)) continue; // Has tab + page number = TOC entry
+
+    // Clean title: remove tab characters, page numbers, extra whitespace
+    title = title.replace(/\t\d+\s*/g, ' ').replace(/\s+/g, ' ').trim();
+
+    // Apply tag and people rules to title + first part of body for better classification
+    const classificationText = title + ' ' + (body.substring(0, 500) || '');
+    const tags = getTags(classificationText);
+    const people = getPeople(classificationText);
+
+    articles.push({
+      title: typeLabel + ': ' + title,
+      type,
+      tags,
+      people,
+      isHighlight: true, // All analysis articles are highlights
+      body
+    });
+  }
+
+  return articles;
+}
+
+// ==================== ISSUE NUMBER MAPPING ====================
+
+// Feb 2021 = issue 61. Monthly increment from there.
+function getIssueNum(dateStr) {
+  const [y, m] = dateStr.split('-').map(Number);
+  // Jan 2016 = issue 1. Each month +1.
+  // So Feb 2021 = (2021-2016)*12 + (2-1) + 1 = 5*12 + 2 = 62... let me verify:
+  // Actually from the original data: Feb 2021 = issue 61 (통권61호)
+  // Jan 2016 = issue 1, so Feb 2016 = 2, ... Jan 2021 = 61? No, let me calculate:
+  // Jan 2016 = 1, Dec 2020 = 60 (5 years * 12), Jan 2021 = 61, Feb 2021 = 62
+  // Wait, the original data says Feb 2021 is 통권61호. Let me just use:
+  // Months from Jan 2016: (y-2016)*12 + m = issueNum
+  return (y - 2016) * 12 + m;
+}
+
+// ==================== MAIN ====================
+
+async function main() {
+  const yearFolders = fs.readdirSync(BASE_DIR)
+    .filter(f => fs.statSync(path.join(BASE_DIR, f)).isDirectory())
+    .sort();
+
+  console.log(`Found ${yearFolders.length} year folders: ${yearFolders.join(', ')}`);
+
+  const allIssues = [];
+  let totalArticles = 0;
+
+  for (const yearFolder of yearFolders) {
+    const yearPath = path.join(BASE_DIR, yearFolder);
+    const docxFiles = fs.readdirSync(yearPath)
+      .filter(f => f.endsWith('.docx') && !f.startsWith('~'))
+      .sort((a, b) => {
+        // Sort by month number
+        const mA = parseInt(a.match(/(\d+)월/)?.[1] || '0');
+        const mB = parseInt(b.match(/(\d+)월/)?.[1] || '0');
+        return mA - mB;
+      });
+
+    for (const docxFile of docxFiles) {
+      const filePath = path.join(yearPath, docxFile);
+
+      // Extract date from filename: "2021년 2월호.docx" → "2021-02"
+      const fileMatch = docxFile.match(/(\d{4})년\s*(\d{1,2})월호/);
+      if (!fileMatch) {
+        console.warn(`Skipping unrecognized filename: ${docxFile}`);
+        continue;
+      }
+      const year = fileMatch[1];
+      const month = fileMatch[2].padStart(2, '0');
+      const dateStr = `${year}-${month}`;
+      const issueNum = getIssueNum(dateStr);
+
+      console.log(`Processing: ${docxFile} → ${dateStr} (issue ${issueNum})`);
+
+      try {
+        const articles = await parseDocx(filePath);
+
+        if (articles.length === 0) {
+          console.warn(`  No articles found in ${docxFile}`);
+          continue;
+        }
+
+        // Assign IDs
+        articles.forEach((a, idx) => {
+          a.id = `${issueNum}-${idx}`;
+        });
+
+        allIssues.push({
+          date: dateStr,
+          label: `${year}년 ${parseInt(month)}월호`,
+          issueNum,
+          articles
+        });
+
+        totalArticles += articles.length;
+        console.log(`  → ${articles.length} article(s): ${articles.map(a => a.title.substring(0, 50)).join(' | ')}`);
+      } catch (e) {
+        console.error(`  ERROR parsing ${docxFile}: ${e.message}`);
+      }
+    }
+  }
+
+  // Sort by date
+  allIssues.sort((a, b) => a.date.localeCompare(b.date));
+
+  // Stats
+  console.log(`\n${'='.repeat(60)}`);
+  console.log(`Total: ${allIssues.length} issues, ${totalArticles} articles`);
+
+  const tagCounts = {};
+  allIssues.forEach(issue => {
+    issue.articles.forEach(a => {
+      (a.tags || []).forEach(t => { tagCounts[t] = (tagCounts[t] || 0) + 1; });
+    });
   });
-});
-console.log('Tag distribution:', tagCounts);
-console.log(`Pre-coup highlights: ${preCoupHighlights.reduce((s,i) => s + i.articles.length, 0)} articles from ${preCoupHighlights.length} issues`);
+  console.log('Tag distribution:', tagCounts);
 
-// Write output
-fs.writeFileSync(outputPath, JSON.stringify({ issues: finalIssues }, null, 0), 'utf8');
-console.log(`Written to ${outputPath}`);
+  // Write output
+  fs.writeFileSync(OUTPUT_PATH, JSON.stringify({ issues: allIssues }, null, 0), 'utf8');
+  console.log(`Written to ${OUTPUT_PATH}`);
+  console.log(`File size: ${(fs.statSync(OUTPUT_PATH).size / 1024).toFixed(1)} KB`);
+}
+
+main().catch(e => console.error('Fatal:', e));
