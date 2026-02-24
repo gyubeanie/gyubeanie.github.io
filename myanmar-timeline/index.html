@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Myanmar in Crisis — A Chronicle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ====== RESET & BASE ====== */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --serif:'Source Serif 4','Georgia',serif;
+  --display:'Playfair Display','Georgia',serif;
+  --sans:'Inter','Helvetica Neue',sans-serif;
+  --bg:#faf8f5;
+  --bg-alt:#f0ede8;
+  --text:#1a1a1a;
+  --text-secondary:#4a4a4a;
+  --text-muted:#888;
+  --accent:#8b0000;
+  --accent-light:#c4302b;
+  --border:#d4d0c8;
+  --border-light:#e8e4dc;
+  --gold:#b8860b;
+  --timeline-line:#c4302b;
+  --card-bg:#ffffff;
+  --shadow:0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-hover:0 4px 12px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:var(--serif);
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{background:rgba(139,0,0,0.15);color:var(--text)}
+
+/* ====== HEADER / HERO ====== */
+.hero{
+  position:relative;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:3rem 2rem;
+  background:linear-gradient(180deg, #1a1a1a 0%, #2d1f1f 40%, #3d2222 100%);
+  color:#f0ede8;
+  overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.hero-content{position:relative;z-index:1;max-width:800px}
+.hero-dateline{
+  font-family:var(--sans);
+  font-size:0.75rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.5);
+  margin-bottom:2rem;
+}
+.hero h1{
+  font-family:var(--display);
+  font-size:clamp(2.5rem,6vw,4.5rem);
+  font-weight:900;
+  line-height:1.1;
+  margin-bottom:1rem;
+  letter-spacing:-0.02em;
+}
+.hero h1 em{
+  font-style:italic;
+  color:var(--accent-light);
+  display:block;
+  font-size:0.7em;
+  margin-top:0.3em;
+}
+.hero-sub{
+  font-family:var(--serif);
+  font-size:clamp(1rem,2vw,1.3rem);
+  color:rgba(255,255,255,0.65);
+  max-width:600px;
+  margin:0 auto 2.5rem;
+  font-weight:300;
+  line-height:1.6;
+}
+.hero-meta{
+  font-family:var(--sans);
+  font-size:0.7rem;
+  color:rgba(255,255,255,0.35);
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+}
+.hero-scroll{
+  position:absolute;
+  bottom:2rem;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:0.5rem;
+  color:rgba(255,255,255,0.35);
+  font-family:var(--sans);
+  font-size:0.65rem;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  animation:pulse 2s infinite;
+}
+.hero-scroll::after{
+  content:'';width:1px;height:30px;background:rgba(255,255,255,0.2);
+}
+@keyframes pulse{0%,100%{opacity:0.4}50%{opacity:0.8}}
+
+/* ====== NAVIGATION BAR ====== */
+.nav{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(250,248,245,0.95);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border-light);
+  transition:box-shadow 0.3s;
+}
+.nav.scrolled{box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.nav-inner{
+  max-width:1200px;
+  margin:0 auto;
+  padding:0 2rem;
+  display:flex;
+  align-items:center;
+  gap:1.5rem;
+  height:56px;
+}
+.nav-title{
+  font-family:var(--display);
+  font-size:0.95rem;
+  font-weight:700;
+  color:var(--accent);
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.nav-divider{width:1px;height:24px;background:var(--border);flex-shrink:0}
+.nav-filters{
+  display:flex;
+  gap:0.4rem;
+  overflow-x:auto;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+  flex:1;
+  padding:4px 0;
+}
+.nav-filters::-webkit-scrollbar{display:none}
+.filter-btn{
+  font-family:var(--sans);
+  font-size:0.7rem;
+  font-weight:500;
+  padding:5px 12px;
+  border:1px solid var(--border);
+  border-radius:20px;
+  background:transparent;
+  color:var(--text-secondary);
+  cursor:pointer;
+  white-space:nowrap;
+  transition:all 0.2s;
+  letter-spacing:0.02em;
+}
+.filter-btn:hover{border-color:var(--accent);color:var(--accent)}
+.filter-btn.active{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:#fff;
+}
+.nav-search{
+  position:relative;
+  flex-shrink:0;
+}
+.nav-search input{
+  font-family:var(--sans);
+  font-size:0.75rem;
+  padding:6px 12px 6px 30px;
+  border:1px solid var(--border);
+  border-radius:20px;
+  background:transparent;
+  color:var(--text);
+  width:180px;
+  transition:all 0.2s;
+  outline:none;
+}
+.nav-search input:focus{border-color:var(--accent);width:220px}
+.nav-search::before{
+  content:'⌕';
+  position:absolute;
+  left:10px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:0.85rem;
+  color:var(--text-muted);
+}
+
+/* ====== STATS BAR ====== */
+.stats-bar{
+  background:var(--bg-alt);
+  border-bottom:1px solid var(--border-light);
+  padding:0.6rem 2rem;
+}
+.stats-inner{
+  max-width:1200px;
+  margin:0 auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-family:var(--sans);
+  font-size:0.7rem;
+  color:var(--text-muted);
+}
+.stats-count{font-weight:600;color:var(--text-secondary)}
+.stats-range{}
+
+/* ====== YEAR MARKER ====== */
+.year-marker{
+  position:relative;
+  max-width:1200px;
+  margin:0 auto;
+  padding:4rem 2rem 1.5rem;
+}
+.year-marker h2{
+  font-family:var(--display);
+  font-size:3.5rem;
+  font-weight:900;
+  color:var(--text);
+  opacity:0.12;
+  letter-spacing:-0.03em;
+}
+.year-marker .year-label{
+  font-family:var(--sans);
+  font-size:0.65rem;
+  text-transform:uppercase;
+  letter-spacing:0.2em;
+  color:var(--text-muted);
+  margin-top:0.3rem;
+}
+
+/* ====== MONTH SECTION ====== */
+.month-section{
+  max-width:1200px;
+  margin:0 auto;
+  padding:0 2rem 3rem;
+}
+.month-header{
+  display:flex;
+  align-items:baseline;
+  gap:1rem;
+  padding-bottom:0.75rem;
+  border-bottom:2px solid var(--text);
+  margin-bottom:1.5rem;
+}
+.month-header h3{
+  font-family:var(--display);
+  font-size:1.5rem;
+  font-weight:700;
+}
+.month-header .issue-num{
+  font-family:var(--sans);
+  font-size:0.65rem;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+}
+
+/* ====== ARTICLE GRID ====== */
+.articles-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1.25rem;
+}
+@media(max-width:768px){.articles-grid{grid-template-columns:1fr}}
+
+/* ====== ARTICLE CARD ====== */
+.article-card{
+  background:var(--card-bg);
+  border:1px solid var(--border-light);
+  border-radius:3px;
+  padding:1.25rem 1.5rem;
+  cursor:pointer;
+  transition:all 0.25s ease;
+  position:relative;
+}
+.article-card:hover{
+  box-shadow:var(--shadow-hover);
+  border-color:var(--border);
+  transform:translateY(-1px);
+}
+.article-card.highlight{
+  grid-column:1/-1;
+  border-left:3px solid var(--accent);
+  background:linear-gradient(135deg, #fff 0%, #fefcf9 100%);
+}
+.article-card.highlight .card-title{
+  font-size:1.15rem;
+  font-weight:700;
+}
+.card-type{
+  font-family:var(--sans);
+  font-size:0.6rem;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:0.12em;
+  color:var(--accent);
+  margin-bottom:0.4rem;
+}
+.card-title{
+  font-family:var(--serif);
+  font-size:0.95rem;
+  font-weight:600;
+  line-height:1.5;
+  color:var(--text);
+  margin-bottom:0.75rem;
+}
+.card-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:0.3rem;
+}
+.tag{
+  font-family:var(--sans);
+  font-size:0.58rem;
+  font-weight:500;
+  padding:2px 8px;
+  border-radius:2px;
+  text-transform:uppercase;
+  letter-spacing:0.06em;
+}
+.tag-coup{background:#f8e8e8;color:#8b0000}
+.tag-sanctions{background:#e8ecf8;color:#1a3a8b}
+.tag-economy{background:#e8f4e8;color:#1a6b1a}
+.tag-human_rights{background:#f8e8f4;color:#6b1a5b}
+.tag-china{background:#fef3e3;color:#b8620b}
+.tag-resistance{background:#eef0f8;color:#3a3a8b}
+.tag-ethnic_conflict{background:#f5eee3;color:#7a5a0b}
+.tag-energy{background:#e3f5f8;color:#0b6a7a}
+.tag-international{background:#e8e8f0;color:#4a4a6b}
+.tag-aung_san_suu_kyi{background:#fbe8f0;color:#8b1a4a}
+
+/* ====== PEOPLE PILLS ====== */
+.card-people{
+  display:flex;
+  flex-wrap:wrap;
+  gap:0.3rem;
+  margin-top:0.4rem;
+}
+.person-pill{
+  font-family:var(--sans);
+  font-size:0.55rem;
+  font-weight:500;
+  padding:2px 7px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  color:var(--text-muted);
+  letter-spacing:0.02em;
+}
+
+/* ====== MODAL ====== */
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.5);
+  z-index:200;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  padding:2rem;
+  opacity:0;
+  transition:opacity 0.3s;
+}
+.modal-overlay.show{display:flex;opacity:1}
+.modal{
+  background:var(--card-bg);
+  border-radius:4px;
+  max-width:640px;
+  width:100%;
+  max-height:80vh;
+  overflow-y:auto;
+  padding:2.5rem;
+  position:relative;
+  box-shadow:0 20px 60px rgba(0,0,0,0.2);
+}
+.modal-close{
+  position:absolute;
+  top:1rem;
+  right:1rem;
+  background:none;
+  border:none;
+  font-size:1.5rem;
+  cursor:pointer;
+  color:var(--text-muted);
+  line-height:1;
+  padding:4px;
+}
+.modal-close:hover{color:var(--text)}
+.modal-type{
+  font-family:var(--sans);
+  font-size:0.65rem;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:0.15em;
+  color:var(--accent);
+  margin-bottom:0.5rem;
+}
+.modal-date{
+  font-family:var(--sans);
+  font-size:0.7rem;
+  color:var(--text-muted);
+  margin-bottom:1rem;
+}
+.modal-title{
+  font-family:var(--display);
+  font-size:1.6rem;
+  font-weight:700;
+  line-height:1.3;
+  margin-bottom:1.5rem;
+  color:var(--text);
+}
+.modal-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:0.4rem;
+  margin-bottom:1rem;
+}
+.modal-people{
+  display:flex;
+  flex-wrap:wrap;
+  gap:0.4rem;
+  margin-bottom:1.5rem;
+}
+.modal-body{
+  font-family:var(--serif);
+  font-size:0.95rem;
+  line-height:1.8;
+  color:var(--text-secondary);
+  border-top:1px solid var(--border-light);
+  padding-top:1.5rem;
+}
+.modal-body p{margin-bottom:1rem}
+.modal-context{
+  font-family:var(--sans);
+  font-size:0.75rem;
+  color:var(--text-muted);
+  background:var(--bg-alt);
+  padding:1rem;
+  border-radius:3px;
+  margin-top:1rem;
+}
+
+/* ====== TIMELINE SPINE ====== */
+.timeline-spine{
+  position:fixed;
+  right:1.5rem;
+  top:50%;
+  transform:translateY(-50%);
+  z-index:50;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:2px;
+}
+.spine-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--border);
+  cursor:pointer;
+  transition:all 0.2s;
+  position:relative;
+}
+.spine-dot:hover{background:var(--accent);transform:scale(1.5)}
+.spine-dot.active{background:var(--accent);transform:scale(1.3)}
+.spine-dot .spine-label{
+  position:absolute;
+  right:16px;
+  top:50%;
+  transform:translateY(-50%);
+  font-family:var(--sans);
+  font-size:0.6rem;
+  color:var(--text-muted);
+  white-space:nowrap;
+  opacity:0;
+  transition:opacity 0.2s;
+  pointer-events:none;
+}
+.spine-dot:hover .spine-label{opacity:1}
+
+/* ====== BACK TO TOP ====== */
+.back-top{
+  position:fixed;
+  bottom:2rem;
+  right:2rem;
+  z-index:50;
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  cursor:pointer;
+  font-size:1.1rem;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 2px 8px rgba(139,0,0,0.3);
+  transition:all 0.2s;
+}
+.back-top.show{display:flex}
+.back-top:hover{transform:scale(1.1)}
+
+/* ====== NO RESULTS ====== */
+.no-results{
+  text-align:center;
+  padding:4rem 2rem;
+  font-family:var(--sans);
+  color:var(--text-muted);
+}
+.no-results h3{font-size:1.1rem;margin-bottom:0.5rem;color:var(--text-secondary)}
+.no-results p{font-size:0.85rem}
+
+/* ====== FOOTER ====== */
+.footer{
+  text-align:center;
+  padding:3rem 2rem;
+  border-top:1px solid var(--border-light);
+  font-family:var(--sans);
+  font-size:0.7rem;
+  color:var(--text-muted);
+  background:var(--bg-alt);
+}
+.footer a{color:var(--accent);text-decoration:none}
+.footer a:hover{text-decoration:underline}
+
+/* ====== LOADING ====== */
+.loading{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:50vh;
+  font-family:var(--sans);
+  color:var(--text-muted);
+  font-size:0.85rem;
+}
+.loading::before{
+  content:'';
+  width:20px;
+  height:20px;
+  border:2px solid var(--border);
+  border-top-color:var(--accent);
+  border-radius:50%;
+  animation:spin 0.8s linear infinite;
+  margin-right:0.75rem;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ====== RESPONSIVE ====== */
+@media(max-width:900px){
+  .timeline-spine{display:none}
+  .nav-inner{gap:0.75rem}
+  .nav-search input{width:120px}
+  .nav-search input:focus{width:160px}
+}
+@media(max-width:600px){
+  .nav-title{font-size:0.8rem}
+  .nav-divider{display:none}
+  .hero h1{font-size:2.2rem}
+  .month-header h3{font-size:1.2rem}
+  .modal{padding:1.5rem}
+  .modal-title{font-size:1.2rem}
+}
+
+/* ====== COUP DIVIDER ====== */
+.coup-divider{
+  max-width:1200px;
+  margin:0 auto;
+  padding:3rem 2rem;
+  text-align:center;
+}
+.coup-divider-inner{
+  border-top:3px solid var(--accent);
+  border-bottom:3px solid var(--accent);
+  padding:2rem;
+  position:relative;
+}
+.coup-divider h2{
+  font-family:var(--display);
+  font-size:2rem;
+  font-weight:900;
+  color:var(--accent);
+  margin-bottom:0.5rem;
+}
+.coup-divider p{
+  font-family:var(--serif);
+  font-size:0.95rem;
+  color:var(--text-secondary);
+  max-width:500px;
+  margin:0 auto;
+  line-height:1.6;
+}
+.coup-divider .coup-date{
+  font-family:var(--sans);
+  font-size:0.65rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--text-muted);
+  margin-bottom:1rem;
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-content">
+    <p class="hero-dateline">A documentary timeline &middot; 2016&ndash;2026</p>
+    <h1>Myanmar in Crisis<em>A Chronicle of Upheaval</em></h1>
+    <p class="hero-sub">Tracing a decade of Myanmar's political and economic transformation &mdash; from democratic hopes to military coup and its lasting aftermath, drawn from 120 issues of primary reporting.</p>
+    <p class="hero-meta">Based on the WOORI Myanmar Economic Newsletter Archive</p>
+  </div>
+  <div class="hero-scroll">Scroll<br></div>
+</section>
+
+<!-- STICKY NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <div class="nav-title">Myanmar Chronicle</div>
+    <div class="nav-divider"></div>
+    <div class="nav-filters" id="filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="coup">Coup &amp; Military</button>
+      <button class="filter-btn" data-filter="sanctions">Sanctions</button>
+      <button class="filter-btn" data-filter="resistance">Resistance</button>
+      <button class="filter-btn" data-filter="human_rights">Human Rights</button>
+      <button class="filter-btn" data-filter="china">China</button>
+      <button class="filter-btn" data-filter="international">International</button>
+      <button class="filter-btn" data-filter="ethnic_conflict">Ethnic Conflict</button>
+      <button class="filter-btn" data-filter="economy">Economy</button>
+      <button class="filter-btn" data-filter="energy">Energy</button>
+      <button class="filter-btn" data-filter="aung_san_suu_kyi">Aung San Suu Kyi</button>
+    </div>
+    <div class="nav-search">
+      <input type="text" id="searchInput" placeholder="Search articles...">
+    </div>
+  </div>
+</nav>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <span>Showing <span class="stats-count" id="articleCount">—</span> articles</span>
+    <span class="stats-range" id="dateRange"></span>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main id="timeline">
+  <div class="loading" id="loading">Loading timeline data...</div>
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal">
+    <button class="modal-close" id="modalClose">&times;</button>
+    <div class="modal-type" id="modalType"></div>
+    <div class="modal-date" id="modalDate"></div>
+    <h2 class="modal-title" id="modalTitle"></h2>
+    <div class="modal-tags" id="modalTags"></div>
+    <div class="modal-people" id="modalPeople"></div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- BACK TO TOP -->
+<button class="back-top" id="backTop" title="Back to top">↑</button>
+
+<!-- SPINE -->
+<div class="timeline-spine" id="spine"></div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p>Data sourced from 120 issues of the WOORI Myanmar Economic Newsletter (2016&ndash;2026).</p>
+  <p style="margin-top:0.5rem">Built by <a href="https://gyubeanie.github.io" target="_blank">gyubeanie</a></p>
+</footer>
+
+<script>
+/* ================================================================
+   MYANMAR TIMELINE — Interactive Chronicle
+   ================================================================ */
+
+const TAG_LABELS = {
+  coup: 'Coup & Military',
+  sanctions: 'Sanctions',
+  economy: 'Economy',
+  human_rights: 'Human Rights',
+  china: 'China',
+  resistance: 'Resistance',
+  ethnic_conflict: 'Ethnic Conflict',
+  energy: 'Energy',
+  international: 'International',
+  aung_san_suu_kyi: 'Aung San Suu Kyi'
+};
+
+const MONTH_NAMES = {
+  '01':'January','02':'February','03':'March','04':'April',
+  '05':'May','06':'June','07':'July','08':'August',
+  '09':'September','10':'October','11':'November','12':'December'
+};
+
+let allData = null;
+let currentFilter = 'all';
+let searchQuery = '';
+
+// ========== LOAD DATA ==========
+async function loadData() {
+  try {
+    const res = await fetch('data.json');
+    allData = await res.json();
+    document.getElementById('loading').remove();
+    render();
+  } catch (e) {
+    document.getElementById('loading').innerHTML =
+      '<div style="text-align:center"><h3 style="font-size:1rem;margin-bottom:0.5rem">Unable to load data</h3><p style="font-size:0.8rem;color:#888">Make sure data.json is in the same directory.</p></div>';
+    console.error(e);
+  }
+}
+
+// ========== RENDER ==========
+function render() {
+  const timeline = document.getElementById('timeline');
+  const issues = filterIssues();
+
+  let totalArticles = 0;
+  let html = '';
+  let lastYear = '';
+  let coupDividerShown = false;
+
+  issues.forEach(issue => {
+    const [year, month] = issue.date.split('-');
+    const articles = filterArticles(issue.articles);
+    if (articles.length === 0) return;
+    totalArticles += articles.length;
+
+    // Year marker
+    if (year !== lastYear) {
+      lastYear = year;
+      html += `<div class="year-marker" id="year-${year}">
+        <h2>${year}</h2>
+        <div class="year-label">${year === '2021' ? 'The Year of the Coup' : year >= '2022' ? 'Under Military Rule' : 'Democratic Transition Era'}</div>
+      </div>`;
+    }
+
+    // Coup divider
+    if (issue.date === '2021-02' && !coupDividerShown) {
+      coupDividerShown = true;
+      html += `<div class="coup-divider">
+        <div class="coup-divider-inner">
+          <div class="coup-date">February 1, 2021</div>
+          <h2>The Military Seizes Power</h2>
+          <p>Myanmar's military detains Aung San Suu Kyi and senior government leaders, declaring a one-year state of emergency and ending a decade of fragile democratic governance.</p>
+        </div>
+      </div>`;
+    }
+
+    // Month section
+    const monthName = MONTH_NAMES[month] || month;
+    html += `<section class="month-section" id="month-${issue.date}">
+      <div class="month-header">
+        <h3>${monthName} ${year}</h3>
+        <span class="issue-num">Issue No. ${issue.issueNum} &middot; ${articles.length} articles</span>
+      </div>
+      <div class="articles-grid">`;
+
+    articles.forEach(a => {
+      const isHL = a.isHighlight;
+      const typeLabel = a.type === 'analysis' ? (
+        a.title.includes('HOT ISSUE') ? 'Hot Issue' :
+        a.title.includes('HOT REPORT') || a.title.includes('HOT Report') ? 'Report' :
+        a.title.includes('ISSUE ANALYSIS') ? 'Analysis' :
+        a.title.includes("EDITOR'S CHOICE") || a.title.includes('EDITOR\'S CHOICE') ? "Editor's Choice" :
+        'Analysis'
+      ) : '';
+
+      html += `<div class="article-card${isHL ? ' highlight' : ''}" data-id="${a.id}" onclick="openModal('${a.id}')">`;
+      if (typeLabel) html += `<div class="card-type">${typeLabel}</div>`;
+      html += `<div class="card-title">${cleanTitle(a.title)}</div>`;
+
+      if (a.tags && a.tags.length > 0) {
+        html += `<div class="card-tags">`;
+        a.tags.forEach(t => {
+          html += `<span class="tag tag-${t}">${TAG_LABELS[t] || t}</span>`;
+        });
+        html += `</div>`;
+      }
+      if (a.people && a.people.length > 0) {
+        html += `<div class="card-people">`;
+        a.people.forEach(p => {
+          html += `<span class="person-pill">${p}</span>`;
+        });
+        html += `</div>`;
+      }
+      html += `</div>`;
+    });
+
+    html += `</div></section>`;
+  });
+
+  if (totalArticles === 0) {
+    html = `<div class="no-results">
+      <h3>No articles found</h3>
+      <p>Try adjusting your filter or search query.</p>
+    </div>`;
+  }
+
+  timeline.innerHTML = html;
+  document.getElementById('articleCount').textContent = totalArticles.toLocaleString();
+
+  const dates = issues.map(i => i.date).sort();
+  if (dates.length > 0) {
+    const first = formatDateLabel(dates[0]);
+    const last = formatDateLabel(dates[dates.length - 1]);
+    document.getElementById('dateRange').textContent = `${first} — ${last}`;
+  }
+
+  buildSpine();
+}
+
+function cleanTitle(t) {
+  // Remove leading numbers, colons, prefixes
+  return t.replace(/^\d+\.\s*/, '')
+          .replace(/^ISSUE ANALYSIS:\s*/i, '')
+          .replace(/^HOT ISSUE\s*\d*:\s*/i, '')
+          .replace(/^HOT REPORT\s*\d*:\s*/i, '')
+          .replace(/^HOT Report\s*\d*:\s*/i, '')
+          .replace(/^EDITOR'S CHOICE:\s*/i, '')
+          .replace(/^MEMO:\s*/i, '')
+          .replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+          .replace(/&amp;/g, '&')
+          .trim();
+}
+
+function formatDateLabel(d) {
+  const [y, m] = d.split('-');
+  return `${MONTH_NAMES[m] || m} ${y}`;
+}
+
+// ========== FILTER ==========
+function filterIssues() {
+  if (!allData) return [];
+  return allData.issues.filter(issue => {
+    const arts = filterArticles(issue.articles);
+    return arts.length > 0;
+  });
+}
+
+function filterArticles(articles) {
+  return articles.filter(a => {
+    // Tag filter
+    if (currentFilter !== 'all') {
+      if (!a.tags || !a.tags.includes(currentFilter)) return false;
+    }
+    // Search
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      const inTitle = a.title.toLowerCase().includes(q);
+      const inTags = (a.tags || []).some(t => TAG_LABELS[t]?.toLowerCase().includes(q));
+      const inPeople = (a.people || []).some(p => p.toLowerCase().includes(q));
+      if (!inTitle && !inTags && !inPeople) return false;
+    }
+    return true;
+  });
+}
+
+// ========== MODAL ==========
+function openModal(id) {
+  if (!allData) return;
+  let article = null, issueDate = '';
+  for (const issue of allData.issues) {
+    const found = issue.articles.find(a => a.id === id);
+    if (found) { article = found; issueDate = issue.date; break; }
+  }
+  if (!article) return;
+
+  const modal = document.getElementById('modal');
+  const overlay = document.getElementById('modalOverlay');
+
+  const typeLabel = article.type === 'analysis' ? 'Analysis / Special Report' : 'News Report';
+  document.getElementById('modalType').textContent = typeLabel;
+  document.getElementById('modalDate').textContent = formatDateLabel(issueDate);
+  document.getElementById('modalTitle').textContent = cleanTitle(article.title);
+
+  // Tags
+  let tagsHtml = '';
+  (article.tags || []).forEach(t => {
+    tagsHtml += `<span class="tag tag-${t}">${TAG_LABELS[t] || t}</span>`;
+  });
+  document.getElementById('modalTags').innerHTML = tagsHtml;
+
+  // People
+  let peopleHtml = '';
+  (article.people || []).forEach(p => {
+    peopleHtml += `<span class="person-pill">${p}</span>`;
+  });
+  document.getElementById('modalPeople').innerHTML = peopleHtml;
+
+  // Body
+  let bodyHtml = `<p>This article was published in the <strong>${formatDateLabel(issueDate)}</strong> issue of the WOORI Myanmar Economic Newsletter.</p>`;
+  bodyHtml += `<p style="font-size:1.05rem;font-weight:600;color:var(--text);line-height:1.6">"${article.title}"</p>`;
+  bodyHtml += `<div class="modal-context">Full article text will be available soon. Click on a title in the timeline to preview the article metadata and classification.</div>`;
+  document.getElementById('modalBody').innerHTML = bodyHtml;
+
+  overlay.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+// ========== FILTERS ==========
+document.getElementById('filters').addEventListener('click', e => {
+  const btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter = btn.dataset.filter;
+  render();
+  // Scroll to first result
+  const firstSection = document.querySelector('.month-section');
+  if (firstSection) firstSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+// ========== SEARCH ==========
+let searchTimeout;
+document.getElementById('searchInput').addEventListener('input', e => {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    searchQuery = e.target.value.trim();
+    render();
+  }, 300);
+});
+
+// ========== NAV SCROLL SHADOW ==========
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 100);
+  const btn = document.getElementById('backTop');
+  btn.classList.toggle('show', window.scrollY > 600);
+}, { passive: true });
+
+document.getElementById('backTop').addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// ========== SPINE ==========
+function buildSpine() {
+  const spine = document.getElementById('spine');
+  const yearEls = document.querySelectorAll('.year-marker');
+  let html = '';
+  yearEls.forEach(el => {
+    const year = el.id.replace('year-', '');
+    html += `<div class="spine-dot" data-target="${el.id}">
+      <span class="spine-label">${year}</span>
+    </div>`;
+  });
+  spine.innerHTML = html;
+
+  spine.querySelectorAll('.spine-dot').forEach(dot => {
+    dot.addEventListener('click', () => {
+      const target = document.getElementById(dot.dataset.target);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // Observe which year is active
+  if ('IntersectionObserver' in window) {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          spine.querySelectorAll('.spine-dot').forEach(d => d.classList.remove('active'));
+          const dot = spine.querySelector(`[data-target="${entry.target.id}"]`);
+          if (dot) dot.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-30% 0px -60% 0px' });
+    yearEls.forEach(el => obs.observe(el));
+  }
+}
+
+// ========== INIT ==========
+loadData();
+</script>
+</body>
+</html>
