@@ -867,11 +867,9 @@ function renderBoard() {
 function onCellClick(r, c) {
     if (!isMyTurn() || exchangeMode) return;
 
-    // Return placed tile to rack
+    // Return placed tile to rack (just remove from localPlaced, effectiveRack recalculates)
     const pi = localPlaced.findIndex(p => p.row === r && p.col === c);
     if (pi !== -1) {
-        const placed = localPlaced[pi];
-        myRack().push(placed.originalLetter);
         localPlaced.splice(pi, 1);
         selectedTile = -1;
         renderBoard(); renderRack();
@@ -880,7 +878,7 @@ function onCellClick(r, c) {
 
     // Place selected tile
     if (selectedTile >= 0 && !getBoardTile(r, c) && !localPlaced.find(p => p.row === r && p.col === c)) {
-        const rack = myRack();
+        const rack = effectiveRack();
         const letter = rack[selectedTile];
         if (letter === '_') {
             pendingBlank = { row: r, col: c, rackIndex: selectedTile };
@@ -892,15 +890,24 @@ function onCellClick(r, c) {
 }
 
 function doPlace(r, c, displayLetter, originalLetter) {
-    const rack = myRack();
-    rack.splice(selectedTile, 1);
-    localPlaced.push({ row: r, col: c, displayLetter, originalLetter });
+    localPlaced.push({ row: r, col: c, displayLetter, originalLetter, rackIndex: selectedTile });
     selectedTile = -1;
     renderBoard(); renderRack();
 }
 
 function myRack() {
     return gameData?.racks?.[mySlot] || [];
+}
+
+// Compute the effective rack: server rack minus tiles currently placed on board locally
+function effectiveRack() {
+    const serverRack = (gameData?.racks?.[mySlot] || []).slice();
+    // Remove letters that are in localPlaced (consume from serverRack copy)
+    for (const p of localPlaced) {
+        const idx = serverRack.indexOf(p.originalLetter);
+        if (idx >= 0) serverRack.splice(idx, 1);
+    }
+    return serverRack;
 }
 
 function getBoardTile(r, c) {
@@ -926,10 +933,9 @@ function showBlankModal() {
 function renderRack() {
     const el = document.getElementById('rack');
     el.innerHTML = '';
-    const rack = myRack();
+    const rack = effectiveRack();
 
     rack.forEach((letter, i) => {
-        // Skip tiles that are locally placed on board
         const tile = document.createElement('div');
         tile.className = 'tile';
         if (i === selectedTile) tile.classList.add('selected');
@@ -1062,9 +1068,9 @@ async function submitWord() {
     updates.firstMove = false;
     updates.lastMovePositions = localPlaced.map(p => ({ row: p.row, col: p.col }));
 
-    // Draw tiles from bag
-    const rack = myRack();
-    const bag = gameData.bag || [];
+    // Draw tiles from bag — use effectiveRack (server rack minus placed tiles)
+    const rack = effectiveRack();
+    const bag = (gameData.bag || []).slice();
     const draw = Math.min(localPlaced.length, bag.length);
     for (let i = 0; i < draw; i++) rack.push(bag.pop());
     updates[`racks/${mySlot}`] = rack;
@@ -1138,8 +1144,6 @@ function hlInvalid() {
 // ==================== ACTIONS ====================
 
 function recallTiles() {
-    const rack = myRack();
-    localPlaced.forEach(p => rack.push(p.originalLetter));
     localPlaced = []; selectedTile = -1;
     renderBoard(); renderRack();
 }
@@ -1153,7 +1157,7 @@ async function doPass() {
         turnNumber: (gameData.turnNumber || 1) + 1,
         lastMovePositions: [],
         [`players/${mySlot}/timerRemaining`]: gameData.players[mySlot].timerRemaining,
-        [`racks/${mySlot}`]: myRack()
+        [`racks/${mySlot}`]: effectiveRack()
     };
     if (passes >= 6) updates.phase = 'gameover';
     toast(`${gameData.players[mySlot].name} passed`, 'info');
@@ -1162,8 +1166,8 @@ async function doPass() {
 
 async function doExchange() {
     if (exchangeSel.length === 0) { toast('Select tiles to exchange', 'error'); return; }
-    const rack = myRack();
-    const bag = gameData.bag || [];
+    const rack = effectiveRack();
+    const bag = (gameData.bag || []).slice();
     const sorted = [...exchangeSel].sort((a,b) => b-a);
     const returned = sorted.map(i => rack[i]);
     sorted.forEach(i => rack.splice(i, 1));
@@ -1288,7 +1292,7 @@ async function playBestWord() {
             vBoard[r][c] = v;
         }
 
-        const rack = myRack().slice();
+        const rack = effectiveRack();
         const move = findBestMoveVB(vBoard, rack, gameData.firstMove);
 
         if (!move || move.score === 0) {
@@ -1296,19 +1300,19 @@ async function playBestWord() {
             return;
         }
 
-        bestWordUsed = true;
-
-        // Place tiles with animation
-        const rackRef = myRack();
+        // Place tiles with animation — find index in effectiveRack each time
         move.tiles.forEach((t, i) => {
             setTimeout(() => {
-                const idx = rackRef.indexOf(t.rackLetter);
+                const currentRack = effectiveRack();
+                const idx = currentRack.indexOf(t.rackLetter);
                 if (idx >= 0) {
                     selectedTile = idx;
                     doPlace(t.row, t.col, t.displayLetter, t.rackLetter);
                 }
                 if (i === move.tiles.length - 1) {
                     setTimeout(async () => {
+                        // Mark best word as used only after placing — submitWord will handle the rest
+                        bestWordUsed = true;
                         await gameRef.update({ [`players/${mySlot}/bestWordUsed`]: true });
                         submitWord();
                     }, 300);
@@ -1334,7 +1338,50 @@ function findBestMoveVB(vBoard, rack, isFirst) {
     for (const [ar,ac] of anchors) {
         for (const dir of ['across','down']) {
             const moves = genMovesAt(vBoard, ar, ac, dir, rack);
-            for (const m of moves) if (m.score > bestScore) { bestScore = m.score; best = m; }
+            for (const m of moves) {
+                // Verify connectivity: at least one placed tile must be adjacent to an existing board tile
+                const connected = m.tiles.some(t =>
+                    [[0,1],[0,-1],[1,0],[-1,0]].some(([dr,dc]) => {
+                        const nr = t.row + dr, nc = t.col + dc;
+                        if (nr < 0 || nr > 14 || nc < 0 || nc > 14) return false;
+                        // Must be an existing board tile, NOT one of the tiles in this move
+                        return vBoard[nr][nc] && !m.tiles.some(mt => mt.row === nr && mt.col === nc);
+                    })
+                );
+                if (!connected) continue;
+
+                // Verify all placed tiles are in a single line with no gaps
+                if (m.tiles.length > 1) {
+                    const rows = [...new Set(m.tiles.map(t => t.row))];
+                    const cols = [...new Set(m.tiles.map(t => t.col))];
+                    if (rows.length > 1 && cols.length > 1) continue; // not in a line
+
+                    if (rows.length === 1) {
+                        const r = rows[0];
+                        const minC = Math.min(...m.tiles.map(t => t.col));
+                        const maxC = Math.max(...m.tiles.map(t => t.col));
+                        let hasGap = false;
+                        for (let c = minC; c <= maxC; c++) {
+                            if (!vBoard[r][c] && !m.tiles.some(t => t.row === r && t.col === c)) { hasGap = true; break; }
+                        }
+                        if (hasGap) continue;
+                    } else {
+                        const c = cols[0];
+                        const minR = Math.min(...m.tiles.map(t => t.row));
+                        const maxR = Math.max(...m.tiles.map(t => t.row));
+                        let hasGap = false;
+                        for (let r = minR; r <= maxR; r++) {
+                            if (!vBoard[r][c] && !m.tiles.some(t => t.row === r && t.col === c)) { hasGap = true; break; }
+                        }
+                        if (hasGap) continue;
+                    }
+                }
+
+                // Verify the word formed is in the dictionary
+                if (m.word && m.word.length >= 2 && !DICT.has(m.word)) continue;
+
+                if (m.score > bestScore) { bestScore = m.score; best = m; }
+            }
         }
     }
     return best;
@@ -1398,6 +1445,7 @@ function genMovesAt(vBoard, ar, ac, dir, rack) {
 function bldPre(vB, node, steps, aR, aC, placed, word, counts, moves, dir, dr, dc) {
     if (steps === 0) { extR(vB, node, aR, aC, placed.slice(), word, {...counts}, moves, dir, dr, dc); return; }
     const r=aR-dr*steps, c=aC-dc*steps;
+    if (r<0||r>14||c<0||c>14||vB[r][c]) return; // out of bounds or occupied
     for (const ch in node.c) {
         if (!chkCross(vB, r, c, ch, dir)) continue;
         if (counts[ch]>0) { counts[ch]--; placed.push({row:r,col:c,displayLetter:ch,rackLetter:ch}); bldPre(vB,node.c[ch],steps-1,aR,aC,placed,word+ch,counts,moves,dir,dr,dc); placed.pop(); counts[ch]++; }
