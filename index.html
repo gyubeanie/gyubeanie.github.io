@@ -104,6 +104,7 @@
 
         footer { text-align: center; padding: 2rem; font-size: 0.72rem; color: var(--footer); letter-spacing: 0.03em; }
 
+        /* Theme toggle */
         .theme-toggle {
             position: fixed; top: 1rem; right: 1rem; z-index: 100;
             width: 40px; height: 40px; border-radius: 50%;
@@ -131,10 +132,46 @@
         </header>
 
         <main class="apps-grid">
-            <a class="app-card" href="/sugi-idea-maicon/">
-                <span class="tag" style="color:#4a5d23;background:rgba(74,93,35,0.1);">Military AI</span>
-                <h2>SUGI</h2>
-                <p>Succession-resilient Unified Guidance Intelligence. A command continuity AI system that preserves commander intent as a shared digital asset, enabling uninterrupted operations through leadership transitions and communication disruptions.</p>
+            <a class="app-card" href="/movie-night-swipe/">
+                <span class="tag" style="color:#e94560;background:rgba(233,69,96,0.08);">Social</span>
+                <h2>Binge</h2>
+                <p>Swipe on movies Hinge-style with friends. Join a room, swipe right on what you want to watch, and get matched when everyone agrees. AI-powered taste profiling and compatibility heatmaps.</p>
+                <span class="arrow">View &rarr;</span>
+            </a>
+            <a class="app-card" href="/emergence/">
+                <span class="tag" style="color:#8b5cf6;background:rgba(139,92,246,0.08);">Agent-Based Model</span>
+                <h2>Emergence</h2>
+                <p>A climate economics simulator inspired by complexity science. 200+ energy companies follow simple rules &mdash; watch booms, busts, and the clean energy transition emerge from their interactions.</p>
+                <span class="arrow">View &rarr;</span>
+            </a>
+            <a class="app-card" href="/ergodicity/">
+                <span class="tag" style="color:#00d4ff;background:rgba(0,212,255,0.08);">Interactive</span>
+                <h2>The Ergodicity Machine</h2>
+                <p>Would you take a bet with +5% expected value? You'd lose. An interactive proof that the average of possibilities is not the reality of living through them, one flip at a time.</p>
+                <span class="arrow">View &rarr;</span>
+            </a>
+            <a class="app-card" href="/climate-roulette/">
+                <span class="tag" style="color:#ef4444;background:rgba(239,68,68,0.08);">Simulation</span>
+                <h2>Climate Roulette</h2>
+                <p>Roll through decades on 16 climate tipping points with an interactive 3D globe. Choose an SSP emissions pathway, run Monte Carlo simulations, and see the ergodicity problem visualized.</p>
+                <span class="arrow">View &rarr;</span>
+            </a>
+            <a class="app-card" href="/climate-survey/">
+                <span class="tag">Interactive</span>
+                <h2>Climate Warming Survey</h2>
+                <p>Draw your prediction for global temperature through 2100, based on historical ERA5 data. See how your outlook compares to others.</p>
+                <span class="arrow">View &rarr;</span>
+            </a>
+            <a class="app-card" href="/myanmar-timeline/">
+                <span class="tag" style="color:#8b0000;background:rgba(139,0,0,0.08);">Documentary</span>
+                <h2>Myanmar in Crisis</h2>
+                <p>An interactive chronicle of Myanmar's political upheaval since the 2021 coup. Filter 1,400+ articles by theme, people, and era — drawn from the MBRI Newsletter Archive.</p>
+                <span class="arrow">View &rarr;</span>
+            </a>
+            <a class="app-card" href="/scrabble/">
+                <span class="tag" style="color:#f59e0b;background:rgba(245,158,11,0.08);">Game</span>
+                <h2>Scrabble</h2>
+                <p>Two-player Scrabble across devices. Create a game, share the PIN, and play in real-time. Chess-clock timers, taunts, and a once-per-game AI "best word" play. Full SOWPODS dictionary.</p>
                 <span class="arrow">View &rarr;</span>
             </a>
         </main>
@@ -154,6 +191,7 @@
             toggle.title = theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
         }
 
+        // Init from localStorage or system preference
         const saved = localStorage.getItem('theme');
         if (saved) {
             setTheme(saved);
