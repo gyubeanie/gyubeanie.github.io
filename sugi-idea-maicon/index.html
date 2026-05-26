@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUGI — 수기(帥旗) | 지휘 연속성 AI 체계</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #f4f3ef;
+            --bg2: #eae9e3;
+            --surface: #ffffff;
+            --surface2: #f8f7f4;
+            --border: #d5d3cb;
+            --border2: #c8c5ba;
+            --text: #3d3d32;
+            --text-dim: #6b6b5e;
+            --text-dimmer: #9c9c8c;
+            --text-bright: #2a2a22;
+            --text-white: #1a1a14;
+            --olive: #4a5d23;
+            --olive-dim: rgba(74,93,35,0.1);
+            --olive-light: #6b7f3a;
+            --brown: #7a5c3a;
+            --brown-dim: rgba(122,92,58,0.1);
+            --steel: #4a6a82;
+            --steel-dim: rgba(74,106,130,0.1);
+            --red-muted: #8b3a3a;
+            --red-dim: rgba(139,58,58,0.08);
+            --green-muted: #3a6b3a;
+            --green-dim: rgba(58,107,58,0.08);
+            --amber-muted: #8b6914;
+            --amber-dim: rgba(139,105,20,0.08);
+            --sidebar-w: 220px;
+            --header-h: 48px;
+            --radius: 4px;
+            --radius-lg: 6px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            overflow: hidden;
+            font-size: 13px;
+        }
+
+        /* ─── Sidebar ─── */
+        .sidebar {
+            width: var(--sidebar-w);
+            height: 100vh;
+            background: #3a3d2e;
+            color: #c8c8b8;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 50;
+        }
+
+        .sidebar-brand {
+            padding: 1rem 1rem 0.85rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .sidebar-brand h1 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #e8e8d8;
+            letter-spacing: 0.06em;
+        }
+        .sidebar-brand .sub {
+            font-size: 0.65rem;
+            color: #8a8a78;
+            margin-top: 0.15rem;
+            letter-spacing: 0.02em;
+        }
+
+        .sidebar-nav { flex: 1; padding: 0.5rem 0.4rem; overflow-y: auto; }
+
+        .nav-section {
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: #6a6a5a;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.7rem 0.6rem 0.3rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.6rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            color: #a0a090;
+            transition: all 0.12s;
+            margin-bottom: 1px;
+        }
+        .nav-item:hover { background: rgba(255,255,255,0.06); color: #d0d0c0; }
+        .nav-item.active { background: rgba(255,255,255,0.1); color: #e8e8d8; }
+        .nav-item .icon { font-size: 0.85rem; width: 1.1rem; text-align: center; flex-shrink: 0; }
+        .nav-item .badge {
+            margin-left: auto;
+            font-size: 0.6rem;
+            background: var(--red-muted);
+            color: #e8d8d8;
+            padding: 0.1em 0.4em;
+            border-radius: 2px;
+            font-weight: 600;
+        }
+
+        .sidebar-footer {
+            padding: 0.6rem 1rem;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            font-size: 0.65rem;
+            color: #6a6a5a;
+        }
+        .sidebar-footer .status-dot {
+            display: inline-block;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #6b8b3a;
+            margin-right: 0.3rem;
+        }
+
+        /* ─── Main ─── */
+        .main {
+            margin-left: var(--sidebar-w);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ─── Header ─── */
+        .header {
+            height: var(--header-h);
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 1.25rem;
+            flex-shrink: 0;
+            gap: 0.75rem;
+        }
+        .header-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-bright);
+        }
+        .header-meta {
+            font-size: 0.68rem;
+            color: var(--text-dim);
+            margin-left: auto;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        .header-meta .tag {
+            padding: 0.15em 0.5em;
+            border-radius: 2px;
+            font-size: 0.62rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+        .tag-olive { background: var(--olive-dim); color: var(--olive); }
+        .tag-brown { background: var(--brown-dim); color: var(--brown); }
+        .tag-steel { background: var(--steel-dim); color: var(--steel); }
+        .tag-red { background: var(--red-dim); color: var(--red-muted); }
+        .tag-green { background: var(--green-dim); color: var(--green-muted); }
+        .tag-amber { background: var(--amber-dim); color: var(--amber-muted); }
+
+        /* ─── Content ─── */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.25rem;
+        }
+
+        .view { display: none; }
+        .view.active { display: block; }
+
+        /* ─── Cards ─── */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1rem 1.15rem;
+            margin-bottom: 0.85rem;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-bottom: 0.85rem;
+        }
+        .card-header h3 {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-bright);
+        }
+        .card-header .card-icon {
+            font-size: 0.9rem;
+        }
+        .card-header .card-badge {
+            margin-left: auto;
+            font-size: 0.6rem;
+            padding: 0.12em 0.45em;
+            border-radius: 2px;
+            font-weight: 600;
+        }
+
+        /* ─── Dashboard Grid ─── */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.6rem;
+            margin-bottom: 0.85rem;
+        }
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 0.85rem;
+        }
+        .stat-card .label {
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .stat-card .value {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-bright);
+        }
+        .stat-card .delta {
+            font-size: 0.62rem;
+            margin-top: 0.2rem;
+        }
+        .delta-up { color: var(--green-muted); }
+        .delta-warn { color: var(--amber-muted); }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
+
+        /* ─── Tables ─── */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.76rem;
+        }
+        .data-table th {
+            text-align: left;
+            color: var(--text-dim);
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            padding: 0.45rem 0.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+        .data-table td {
+            padding: 0.5rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+        }
+        .data-table tr:last-child td { border-bottom: none; }
+        .data-table td.bright { color: var(--text-bright); font-weight: 500; }
+        .data-table td.dim { color: var(--text-dimmer); }
+
+        /* ─── Intent Graph (SVG) ─── */
+        .graph-container {
+            position: relative;
+            width: 100%;
+            height: 460px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        .graph-container svg { width: 100%; height: 100%; }
+
+        .graph-node { cursor: pointer; }
+        .graph-node:hover rect { stroke-width: 2.5; }
+        .graph-node rect {
+            rx: 4;
+            ry: 4;
+            stroke-width: 1.5;
+        }
+        .graph-node text {
+            font-family: inherit;
+            font-size: 10.5px;
+            fill: var(--text-bright);
+            text-anchor: middle;
+            dominant-baseline: central;
+            font-weight: 500;
+        }
+        .graph-edge {
+            fill: none;
+            stroke-width: 1.2;
+            opacity: 0.45;
+        }
+        .graph-edge-label {
+            font-family: inherit;
+            font-size: 8.5px;
+            fill: var(--text-dimmer);
+            text-anchor: middle;
+        }
+
+        .graph-legend {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.6rem;
+            flex-wrap: wrap;
+        }
+        .graph-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.68rem;
+            color: var(--text-dim);
+        }
+        .legend-line {
+            width: 20px;
+            height: 2px;
+            border-radius: 1px;
+        }
+
+        /* ─── Node Detail Panel ─── */
+        .node-detail {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            width: 260px;
+            background: var(--surface);
+            border: 1px solid var(--border2);
+            border-radius: var(--radius);
+            padding: 0.85rem;
+            display: none;
+            z-index: 10;
+        }
+        .node-detail.visible { display: block; }
+        .node-detail h4 {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-bright);
+            margin-bottom: 0.4rem;
+        }
+        .node-detail .meta {
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            margin-bottom: 0.4rem;
+        }
+        .node-detail .desc {
+            font-size: 0.75rem;
+            color: var(--text);
+            line-height: 1.55;
+        }
+        .node-detail .close-btn {
+            position: absolute;
+            top: 0.4rem;
+            right: 0.4rem;
+            background: none;
+            border: none;
+            color: var(--text-dimmer);
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        /* ─── Chat / Coaching ─── */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - var(--header-h) - 2.5rem - 50px);
+        }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.75rem 0;
+        }
+        .chat-msg {
+            display: flex;
+            gap: 0.6rem;
+            margin-bottom: 0.85rem;
+            max-width: 85%;
+        }
+        .chat-msg.ai { max-width: 90%; }
+        .chat-msg.user { margin-left: auto; flex-direction: row-reverse; }
+
+        .chat-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+            font-weight: 600;
+        }
+        .chat-msg.ai .chat-avatar { background: var(--olive-dim); color: var(--olive); }
+        .chat-msg.user .chat-avatar { background: var(--steel-dim); color: var(--steel); }
+
+        .chat-bubble {
+            padding: 0.65rem 0.85rem;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            line-height: 1.6;
+        }
+        .chat-msg.ai .chat-bubble {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        .chat-msg.user .chat-bubble {
+            background: #e8ece0;
+            border: 1px solid #c8d0b8;
+            color: var(--text-bright);
+        }
+
+        .chat-bubble .source {
+            font-size: 0.63rem;
+            color: var(--text-dimmer);
+            margin-top: 0.45rem;
+            padding-top: 0.35rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .chat-input-bar {
+            display: flex;
+            gap: 0.4rem;
+            padding: 0.6rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+        .chat-input-bar input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text);
+            font-size: 0.78rem;
+            font-family: inherit;
+        }
+        .chat-input-bar input::placeholder { color: var(--text-dimmer); }
+        .chat-input-bar button {
+            padding: 0.35rem 0.85rem;
+            background: #3a3d2e;
+            color: #d8d8c8;
+            border: none;
+            border-radius: 3px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .chat-input-bar button:hover { background: #4a4d3e; }
+
+        .suggested-questions {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.6rem;
+        }
+        .suggested-q {
+            padding: 0.3rem 0.65rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            font-size: 0.68rem;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: all 0.12s;
+        }
+        .suggested-q:hover {
+            border-color: var(--olive);
+            color: var(--olive);
+            background: var(--olive-dim);
+        }
+
+        /* ─── Audit ─── */
+        .audit-timeline {
+            position: relative;
+            padding-left: 1.75rem;
+        }
+        .audit-timeline::before {
+            content: '';
+            position: absolute;
+            left: 9px;
+            top: 0;
+            bottom: 0;
+            width: 1.5px;
+            background: var(--border);
+        }
+        .audit-item {
+            position: relative;
+            margin-bottom: 1rem;
+            padding: 0.85rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+        .audit-item::before {
+            content: '';
+            position: absolute;
+            left: -1.45rem;
+            top: 1rem;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            border: 2px solid;
+        }
+        .audit-item.critical::before { border-color: var(--red-muted); background: var(--red-dim); }
+        .audit-item.warning::before { border-color: var(--amber-muted); background: var(--amber-dim); }
+        .audit-item.info::before { border-color: var(--steel); background: var(--steel-dim); }
+        .audit-item.ok::before { border-color: var(--green-muted); background: var(--green-dim); }
+
+        .audit-item .audit-header {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-bottom: 0.4rem;
+        }
+        .audit-item .audit-type {
+            font-size: 0.6rem;
+            font-weight: 600;
+            padding: 0.1em 0.4em;
+            border-radius: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .audit-item.critical .audit-type { background: var(--red-dim); color: var(--red-muted); }
+        .audit-item.warning .audit-type { background: var(--amber-dim); color: var(--amber-muted); }
+        .audit-item.info .audit-type { background: var(--steel-dim); color: var(--steel); }
+        .audit-item.ok .audit-type { background: var(--green-dim); color: var(--green-muted); }
+
+        .audit-item .audit-time {
+            font-size: 0.62rem;
+            color: var(--text-dimmer);
+            margin-left: auto;
+        }
+        .audit-item .audit-question {
+            font-size: 0.78rem;
+            color: var(--text-bright);
+            line-height: 1.55;
+            margin-bottom: 0.4rem;
+        }
+        .audit-item .audit-context {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+        }
+        .audit-item .audit-actions {
+            display: flex;
+            gap: 0.4rem;
+            margin-top: 0.6rem;
+        }
+        .audit-btn {
+            padding: 0.25rem 0.6rem;
+            border-radius: 3px;
+            font-size: 0.68rem;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            background: var(--surface2);
+            color: var(--text-dim);
+            transition: all 0.12s;
+        }
+        .audit-btn:hover { border-color: var(--olive); color: var(--olive); }
+        .audit-btn.primary {
+            background: #3a3d2e;
+            border-color: #3a3d2e;
+            color: #d8d8c8;
+        }
+
+        /* ─── Timeline ─── */
+        .timeline-entry {
+            display: flex;
+            gap: 0.85rem;
+            padding: 0.75rem 0.85rem;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: background 0.12s;
+        }
+        .timeline-entry:hover { background: var(--surface2); }
+        .timeline-entry:last-child { border-bottom: none; }
+        .timeline-entry .time-col {
+            width: 70px;
+            flex-shrink: 0;
+            text-align: center;
+        }
+        .timeline-entry .time-col .date {
+            font-size: 0.68rem;
+            color: var(--text-dim);
+            font-weight: 600;
+        }
+        .timeline-entry .time-col .time {
+            font-size: 0.6rem;
+            color: var(--text-dimmer);
+        }
+        .timeline-entry .content-col { flex: 1; }
+        .timeline-entry .content-col h4 {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-bright);
+            margin-bottom: 0.15rem;
+        }
+        .timeline-entry .content-col p {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+        }
+        .timeline-entry .type-col {
+            width: 70px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-end;
+        }
+
+        /* ─── Input Form ─── */
+        .input-form { max-width: 640px; }
+        .form-group { margin-bottom: 0.85rem; }
+        .form-group label {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-dim);
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 0.5rem 0.7rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            color: var(--text);
+            font-size: 0.78rem;
+            font-family: inherit;
+            outline: none;
+        }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            border-color: var(--olive);
+        }
+        .form-group textarea { resize: vertical; min-height: 90px; }
+        .form-group select { cursor: pointer; }
+        .form-group select option { background: var(--surface); }
+
+        .form-actions {
+            display: flex;
+            gap: 0.4rem;
+            margin-top: 1.25rem;
+        }
+        .form-actions button {
+            padding: 0.45rem 1rem;
+            border-radius: 3px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            background: var(--surface2);
+            color: var(--text);
+            transition: all 0.12s;
+        }
+        .form-actions button.primary {
+            background: #3a3d2e;
+            border-color: #3a3d2e;
+            color: #d8d8c8;
+        }
+        .form-actions button:hover { opacity: 0.85; }
+
+        /* ─── Scrollbar ─── */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+        /* ─── Toast ─── */
+        .toast {
+            position: fixed;
+            bottom: 1.25rem;
+            right: 1.25rem;
+            padding: 0.6rem 1rem;
+            background: #3a3d2e;
+            color: #d8d8c8;
+            border-radius: var(--radius);
+            font-size: 0.75rem;
+            z-index: 1000;
+            transform: translateY(80px);
+            opacity: 0;
+            transition: all 0.25s;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+
+        /* ─── Typing indicator ─── */
+        .typing-dots {
+            display: inline-flex;
+            gap: 3px;
+            padding: 0.2rem 0;
+        }
+        .typing-dots span {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--text-dimmer);
+            animation: typing 1.2s infinite;
+        }
+        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing { 0%,60%,100% { opacity: 0.25; } 30% { opacity: 1; } }
+
+        /* ─── Responsive ─── */
+        @media (max-width: 900px) {
+            .sidebar { width: 54px; }
+            .sidebar .nav-item span:not(.icon), .sidebar-brand .sub, .sidebar-footer, .nav-section { display: none; }
+            .sidebar-brand h1 { font-size: 0.78rem; text-align: center; }
+            .main { margin-left: 54px; }
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+            .grid-2 { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══ Sidebar ═══ -->
+<aside class="sidebar">
+    <div class="sidebar-brand">
+        <h1>수기 SUGI</h1>
+        <div class="sub">지휘 연속성 AI 체계 v0.1</div>
+    </div>
+    <nav class="sidebar-nav">
+        <div class="nav-section">메인</div>
+        <div class="nav-item active" data-view="dashboard">
+            <span class="icon">◉</span>
+            <span>대시보드</span>
+        </div>
+        <div class="nav-item" data-view="graph">
+            <span class="icon">◈</span>
+            <span>의도 그래프</span>
+        </div>
+        <div class="nav-item" data-view="coaching">
+            <span class="icon">◆</span>
+            <span>승계 코칭</span>
+        </div>
+
+        <div class="nav-section">분석</div>
+        <div class="nav-item" data-view="audit">
+            <span class="icon">◇</span>
+            <span>결심 감사</span>
+            <span class="badge">3</span>
+        </div>
+        <div class="nav-item" data-view="timeline">
+            <span class="icon">▤</span>
+            <span>결심 이력</span>
+        </div>
+
+        <div class="nav-section">관리</div>
+        <div class="nav-item" data-view="input">
+            <span class="icon">▢</span>
+            <span>의도 입력</span>
+        </div>
+    </nav>
+    <div class="sidebar-footer">
+        <span class="status-dot"></span>
+        엣지 서버 · 국방망
+    </div>
+</aside>
+
+<!-- ═══ Main ═══ -->
+<div class="main">
+    <header class="header">
+        <div class="header-title" id="headerTitle">대시보드</div>
+        <div class="header-meta">
+            <span>KCTC 2026 상반기 여단급 쌍방훈련</span>
+            <span class="tag tag-olive">제5보병사단 제35보병여단</span>
+            <span class="tag tag-brown">철원 일대</span>
+            <span>2026.05.26 14:30</span>
+        </div>
+    </header>
+
+    <div class="content">
+
+        <!-- ═══ DASHBOARD ═══ -->
+        <div class="view active" id="view-dashboard">
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="label">결심 노드</div>
+                    <div class="value">47</div>
+                    <div class="delta delta-up">+5 이번 주</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">그래프 밀도</div>
+                    <div class="value">0.73</div>
+                    <div class="delta delta-up">+0.08</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">대기 감사</div>
+                    <div class="value" style="color:var(--amber-muted)">3</div>
+                    <div class="delta delta-warn">응답 필요</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">마지막 동기화</div>
+                    <div class="value" style="font-size:1rem">2분 전</div>
+                    <div class="delta delta-up">정상</div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-icon">◈</span>
+                        <h3>의도 그래프 요약</h3>
+                        <span class="card-badge tag tag-olive">실시간</span>
+                    </div>
+                    <div style="font-size:0.76rem; color:var(--text-dim); line-height:1.65;">
+                        <div style="display:flex; justify-content:space-between; padding:0.35rem 0; border-bottom:1px solid var(--border);">
+                            <span>핵심 결심 노드</span><span style="color:var(--text-bright)">12개</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; padding:0.35rem 0; border-bottom:1px solid var(--border);">
+                            <span>파생 판단 노드</span><span style="color:var(--text-bright)">35개</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; padding:0.35rem 0; border-bottom:1px solid var(--border);">
+                            <span>연결 엣지</span><span style="color:var(--text-bright)">89개</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; padding:0.35rem 0; border-bottom:1px solid var(--border);">
+                            <span>마지막 업데이트</span><span style="color:var(--text-bright)">05.26 13:45</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; padding:0.35rem 0;">
+                            <span>지휘관 승인율</span><span style="color:var(--green-muted)">94%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-icon">▸</span>
+                        <h3>최근 활동</h3>
+                    </div>
+                    <div style="font-size:0.74rem; line-height:1.7;">
+                        <div style="padding:0.3rem 0; border-bottom:1px solid var(--border);">
+                            <span style="color:var(--text-dimmer); font-size:0.63rem;">14:22</span>
+                            <span style="color:var(--green-muted); margin:0 0.35rem;">●</span>
+                            작전명령 #47 의도 그래프 반영
+                        </div>
+                        <div style="padding:0.3rem 0; border-bottom:1px solid var(--border);">
+                            <span style="color:var(--text-dimmer); font-size:0.63rem;">13:55</span>
+                            <span style="color:var(--amber-muted); margin:0 0.35rem;">●</span>
+                            소크라테스 감사 #12 생성
+                        </div>
+                        <div style="padding:0.3rem 0; border-bottom:1px solid var(--border);">
+                            <span style="color:var(--text-dimmer); font-size:0.63rem;">13:10</span>
+                            <span style="color:var(--steel); margin:0 0.35rem;">●</span>
+                            지휘관 회의록 분석 — 신규 결심 2건
+                        </div>
+                        <div style="padding:0.3rem 0; border-bottom:1px solid var(--border);">
+                            <span style="color:var(--text-dimmer); font-size:0.63rem;">11:30</span>
+                            <span style="color:var(--olive); margin:0 0.35rem;">●</span>
+                            승계 코칭 세션 #3 완료 (부여단장)
+                        </div>
+                        <div style="padding:0.3rem 0;">
+                            <span style="color:var(--text-dimmer); font-size:0.63rem;">09:00</span>
+                            <span style="color:var(--green-muted); margin:0 0.35rem;">●</span>
+                            일일 동기화 — 국방통합데이터센터
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top:0;">
+                <div class="card-header">
+                    <span class="card-icon">◉</span>
+                    <h3>핵심 의도 현황</h3>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>결심</th>
+                            <th>우선순위</th>
+                            <th>전제 조건</th>
+                            <th>업데이트</th>
+                            <th>상태</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="bright">851고지–삼각고지 주저항선 사수</td>
+                            <td><span class="tag tag-red">최상</span></td>
+                            <td>적 기계화여단 규모 공격 시</td>
+                            <td class="dim">05.25</td>
+                            <td><span class="tag tag-green">승인</span></td>
+                        </tr>
+                        <tr>
+                            <td class="bright">통신 두절 시 대대장 자율 판단 허용</td>
+                            <td><span class="tag tag-red">최상</span></td>
+                            <td>30분 이상 통신 단절</td>
+                            <td class="dim">05.24</td>
+                            <td><span class="tag tag-green">승인</span></td>
+                        </tr>
+                        <tr>
+                            <td class="bright">예비대 투입 — 여단장 승인 필수</td>
+                            <td><span class="tag tag-amber">상</span></td>
+                            <td>1개 중대 이상 손실 확인 시</td>
+                            <td class="dim">05.23</td>
+                            <td><span class="tag tag-green">승인</span></td>
+                        </tr>
+                        <tr>
+                            <td class="bright">포병 화력 — 철원 평야 우선 배분</td>
+                            <td><span class="tag tag-amber">상</span></td>
+                            <td>적 주공 축선 확인 시</td>
+                            <td class="dim">05.22</td>
+                            <td><span class="tag tag-green">승인</span></td>
+                        </tr>
+                        <tr>
+                            <td class="bright">적 UAV 탐지 시 즉각 방공 사격</td>
+                            <td><span class="tag tag-steel">중</span></td>
+                            <td>아군 UAV 식별 완료 후</td>
+                            <td class="dim">05.20</td>
+                            <td><span class="tag tag-amber">검토중</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card" style="margin-top:0;">
+                <div class="card-header">
+                    <span class="card-icon">▤</span>
+                    <h3>훈련 시나리오 정보</h3>
+                </div>
+                <div style="font-size:0.74rem; color:var(--text-dim); line-height:1.65;">
+                    <div style="display:grid; grid-template-columns:120px 1fr; gap:0.25rem 0.75rem;">
+                        <span style="font-weight:600; color:var(--text);">훈련명</span><span>KCTC 2026년도 상반기 여단급 쌍방 자유기동훈련</span>
+                        <span style="font-weight:600; color:var(--text);">청군 (방어)</span><span>제5보병사단(열쇠부대) 예하 제35보병여단</span>
+                        <span style="font-weight:600; color:var(--text);">적군 (공격)</span><span>KCTC 대항군(OPFOR) 기계화보병여단 규모</span>
+                        <span style="font-weight:600; color:var(--text);">훈련 지역</span><span>철원 일대 (KCTC 훈련장, 851고지–삼각고지–금학산 일대)</span>
+                        <span style="font-weight:600; color:var(--text);">훈련 기간</span><span>2026.05.25 ~ 2026.06.05 (12일간)</span>
+                        <span style="font-weight:600; color:var(--text);">현재 훈련일</span><span>D+2 (05.26 기준)</span>
+                        <span style="font-weight:600; color:var(--text);">훈련 목적</span><span>여단급 방어작전 수행 능력 평가, 지휘관 결심 능력 검증</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ INTENT GRAPH ═══ -->
+        <div class="view" id="view-graph">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">◈</span>
+                    <h3>여단장 의도 그래프</h3>
+                    <span class="card-badge tag tag-olive">인터랙티브</span>
+                </div>
+                <div class="graph-container" id="graphContainer">
+                    <svg id="graphSvg" viewBox="0 0 900 460"></svg>
+                    <div class="node-detail" id="nodeDetail">
+                        <button class="close-btn" onclick="closeNodeDetail()">✕</button>
+                        <h4 id="ndTitle"></h4>
+                        <div class="meta" id="ndMeta"></div>
+                        <div class="desc" id="ndDesc"></div>
+                    </div>
+                </div>
+                <div class="graph-legend">
+                    <div class="graph-legend-item">
+                        <div class="legend-line" style="background:var(--red-muted);"></div>
+                        <span>근거 관계</span>
+                    </div>
+                    <div class="graph-legend-item">
+                        <div class="legend-line" style="background:var(--amber-muted);"></div>
+                        <span>우선순위</span>
+                    </div>
+                    <div class="graph-legend-item">
+                        <div class="legend-line" style="background:var(--steel);"></div>
+                        <span>전제 조건</span>
+                    </div>
+                    <div class="graph-legend-item">
+                        <div class="legend-line" style="background:var(--green-muted);"></div>
+                        <span>파생 관계</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ SUCCESSION COACHING ═══ -->
+        <div class="view" id="view-coaching">
+            <div class="card" style="margin-bottom:0.6rem;">
+                <div class="card-header">
+                    <span class="card-icon">◆</span>
+                    <h3>승계 코칭 세션</h3>
+                    <span class="card-badge tag tag-olive">신임 여단장</span>
+                </div>
+                <p style="font-size:0.74rem; color:var(--text-dim); line-height:1.5;">
+                    전임 여단장(대령 김철수)의 의도 그래프를 기반으로 주요 결심 사례를 학습합니다.
+                    가상 시나리오 질의응답을 통해 의도 동조화를 가속합니다.
+                </p>
+            </div>
+
+            <div class="suggested-questions" id="suggestedQuestions">
+                <div class="suggested-q" data-q="전임 여단장은 적 기계화부대 위협을 어떻게 판단했습니까?">적 기계화 위협 판단</div>
+                <div class="suggested-q" data-q="통신이 두절되면 하급 제대가 어떻게 행동해야 합니까?">통신 두절 시 행동</div>
+                <div class="suggested-q" data-q="예비대 투입의 조건과 우선순위를 설명해주세요.">예비대 투입 조건</div>
+                <div class="suggested-q" data-q="철원 평야 방면 포병 화력 배분 기준은 무엇입니까?">포병 화력 배분</div>
+            </div>
+
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="chat-msg ai">
+                        <div class="chat-avatar">S</div>
+                        <div class="chat-bubble">
+                            수기 승계 코칭을 시작합니다. 신임 여단장님, 전임 여단장(대령 김철수)의 의도 그래프에는
+                            <strong>47개의 결심 노드</strong>와 <strong>89개의 관계 엣지</strong>가 등록되어 있습니다.<br><br>
+                            주요 결심 영역:<br>
+                            ① 851고지–삼각고지 주저항선 방어<br>
+                            ② 적 기계화부대 대응 우선순위<br>
+                            ③ 통신 단절 시 자율 판단 기준<br>
+                            ④ 예비대 운용 원칙<br>
+                            ⑤ 철원 평야 포병 화력 배분<br><br>
+                            질문하시거나 아래 제안 질문을 선택하세요.
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-input-bar">
+                    <input type="text" id="chatInput" placeholder="전임 지휘관의 의도에 대해 질문하세요..." />
+                    <button onclick="sendChat()">전송</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ SOCRATIC AUDIT ═══ -->
+        <div class="view" id="view-audit">
+            <div class="card" style="margin-bottom:0.6rem;">
+                <div class="card-header">
+                    <span class="card-icon">◇</span>
+                    <h3>소크라테스식 결심 감사</h3>
+                    <span class="card-badge tag tag-amber">3건 대기</span>
+                </div>
+                <p style="font-size:0.74rem; color:var(--text-dim); line-height:1.5;">
+                    결심 과정에서 반대 가설, 누락 변수, 과거 의도와의 불일치를 질문 형태로 제기합니다.
+                    답변은 의도 그래프에 환류됩니다.
+                </p>
+            </div>
+
+            <div class="audit-timeline">
+                <div class="audit-item critical">
+                    <div class="audit-header">
+                        <span class="audit-type">반대 가설</span>
+                        <span style="font-size:0.76rem; color:var(--text-bright); font-weight:600;">예비대 조기 투입 관련</span>
+                        <span class="audit-time">10분 전</span>
+                    </div>
+                    <div class="audit-question">
+                        "현재 예비대를 851고지 방면에 투입하겠다는 결심은, 전임 여단장이 '예비대 투입은 1개 중대 이상 손실 이후'로 설정한 조건과 충돌합니다. 현재 2중대 손실률은 35%입니다. 이 조건을 변경하는 근거는 무엇입니까?"
+                    </div>
+                    <div class="audit-context">
+                        <strong>관련 노드:</strong> 예비대 투입 조건 (#14) · 851고지 방어 현황<br>
+                        <strong>출처:</strong> 05.23 지휘관 회의록, 전투상보 #42
+                    </div>
+                    <div class="audit-actions">
+                        <button class="audit-btn primary" onclick="respondAudit(this)">응답 작성</button>
+                        <button class="audit-btn" onclick="deferAudit(this)">보류</button>
+                        <button class="audit-btn" onclick="acceptAudit(this)">감사 수용</button>
+                    </div>
+                </div>
+
+                <div class="audit-item warning">
+                    <div class="audit-header">
+                        <span class="audit-type">누락 변수</span>
+                        <span style="font-size:0.76rem; color:var(--text-bright); font-weight:600;">야간 역습 계획</span>
+                        <span class="audit-time">1시간 전</span>
+                    </div>
+                    <div class="audit-question">
+                        "D+2 야간 역습 계획에서 대항군(OPFOR)의 야간 전차 사격 능력이 충분히 고려되지 않았습니다. KCTC 평가단에 따르면 적군 T-80BV 모사 전차 4대가 야간 사격 자격을 보유하고 있습니다. 이 변수를 반영하면 계획 수정이 필요할 수 있습니다."
+                    </div>
+                    <div class="audit-context">
+                        <strong>관련 노드:</strong> 야간 역습 계획 (#31) · 적군 장비 현황<br>
+                        <strong>출처:</strong> 일일정보판단 05.26, KCTC 적군 정보 브리핑
+                    </div>
+                    <div class="audit-actions">
+                        <button class="audit-btn primary" onclick="respondAudit(this)">응답 작성</button>
+                        <button class="audit-btn" onclick="deferAudit(this)">보류</button>
+                        <button class="audit-btn" onclick="acceptAudit(this)">감사 수용</button>
+                    </div>
+                </div>
+
+                <div class="audit-item info">
+                    <div class="audit-header">
+                        <span class="audit-type">일관성 검증</span>
+                        <span style="font-size:0.76rem; color:var(--text-bright); font-weight:600;">포병 화력 배분</span>
+                        <span class="audit-time">3시간 전</span>
+                    </div>
+                    <div class="audit-question">
+                        "포병 화력을 서쪽 방면(철원 평야)에 70% 배분한 것은, 과거 유사 KCTC 훈련에서 전임 여단장이 동쪽 방면(금학산)에 60%를 배분한 것과 반대입니다. 지형 조건이 다른 것은 확인되었으나, 배분 비율 차이가 큰 편입니다. 추가 근거를 기록해 주시면 의도 그래프에 반영하겠습니다."
+                    </div>
+                    <div class="audit-context">
+                        <strong>관련 노드:</strong> 포병 화력 조정 (#8) · 지형 분석<br>
+                        <strong>출처:</strong> 작전명령 #45, 과거 KCTC 훈련 사례 DB
+                    </div>
+                    <div class="audit-actions">
+                        <button class="audit-btn primary" onclick="respondAudit(this)">응답 작성</button>
+                        <button class="audit-btn" onclick="deferAudit(this)">보류</button>
+                        <button class="audit-btn" onclick="acceptAudit(this)">감사 수용</button>
+                    </div>
+                </div>
+
+                <div class="audit-item ok">
+                    <div class="audit-header">
+                        <span class="audit-type">해결됨</span>
+                        <span style="font-size:0.76rem; color:var(--text-bright); font-weight:600;">공병 장애물 추가 설치</span>
+                        <span class="audit-time">어제</span>
+                    </div>
+                    <div class="audit-question">
+                        "삼각고지 남사면 대전차 지뢰지대 추가 부설은 전임 의도와 일치합니다."
+                    </div>
+                    <div class="audit-context">
+                        <strong>지휘관 응답:</strong> "기존 지뢰지대가 폭우로 유실된 구간을 보완하기 위한 것임."
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ TIMELINE ═══ -->
+        <div class="view" id="view-timeline">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">▤</span>
+                    <h3>결심 이력 타임라인</h3>
+                    <span class="card-badge tag tag-steel">D+1 ~ D+2</span>
+                </div>
+                <div class="timeline-list">
+                    <div class="timeline-entry">
+                        <div class="time-col">
+                            <div class="date">05.26</div>
+                            <div class="time">14:22</div>
+                        </div>
+                        <div class="content-col">
+                            <h4>작전명령 #47 — D+2 방어 계획 수정</h4>
+                            <p>철원 평야 방면 포병 화력 재배치. 예비대 위치 삼각고지 후방에서 851고지 후방으로 변경. 전제: 적 주공 축선이 철원 평야로 확인될 경우.</p>
+                        </div>
+                        <div class="type-col"><span class="tag tag-red">작전명령</span></div>
+                    </div>
+                    <div class="timeline-entry">
+                        <div class="time-col">
+                            <div class="date">05.26</div>
+                            <div class="time">11:30</div>
+                        </div>
+                        <div class="content-col">
+                            <h4>지휘관 회의 — 야간 작전 준비</h4>
+                            <p>"야간에는 방어 태세를 유지하되, 소규모 정찰대(분대급)는 허용한다. 단, 여단 승인 없이 대대 이상 병력 이동은 금지."</p>
+                        </div>
+                        <div class="type-col"><span class="tag tag-olive">회의록</span></div>
+                    </div>
+                    <div class="timeline-entry">
+                        <div class="time-col">
+                            <div class="date">05.25</div>
+                            <div class="time">16:45</div>
+                        </div>
+                        <div class="content-col">
+                            <h4>전투상보 #42 — 851고지 전초 교전</h4>
+                            <p>대항군(OPFOR) 1개 소대 규모 정찰 공격 격퇴. 아군 피해 경미. 지휘관 평가: "적 본대가 아닌 정찰, 방어 태세 유지."</p>
+                        </div>
+                        <div class="type-col"><span class="tag tag-amber">전투상보</span></div>
+                    </div>
+                    <div class="timeline-entry">
+                        <div class="time-col">
+                            <div class="date">05.25</div>
+                            <div class="time">09:00</div>
+                        </div>
+                        <div class="content-col">
+                            <h4>구두지시 — 통신 두절 시 행동 지침 재확인</h4>
+                            <p>"30분 이상 통신이 두절되면 대대장은 의도 그래프에 따라 자율 판단하라. 최우선 목표는 현재 진지 사수. KCTC 평가단 채점 기준 숙지."</p>
+                        </div>
+                        <div class="type-col"><span class="tag tag-steel">구두지시</span></div>
+                    </div>
+                    <div class="timeline-entry">
+                        <div class="time-col">
+                            <div class="date">05.25</div>
+                            <div class="time">07:00</div>
+                        </div>
+                        <div class="content-col">
+                            <h4>작전명령 #46 — 훈련장 내 민간인 통제 계획</h4>
+                            <p>KCTC 훈련장 인근 주민 이동 경로 지정. 43번 도로 우선, 5번 국도 예비. "훈련 중 민간인 안전은 작전 편의보다 우선한다."</p>
+                        </div>
+                        <div class="type-col"><span class="tag tag-red">작전명령</span></div>
+                    </div>
+                    <div class="timeline-entry">
+                        <div class="time-col">
+                            <div class="date">05.23</div>
+                            <div class="time">10:30</div>
+                        </div>
+                        <div class="content-col">
+                            <h4>훈련 전 지휘관 회의 — 예비대 운용 원칙 확정</h4>
+                            <p>"예비대는 1개 중대 이상 손실이 확인된 후에만 투입. 그 이전에는 기존 병력으로 방어. 여단장 승인 필수. 통신 두절 시 대대장 판단."</p>
+                        </div>
+                        <div class="type-col"><span class="tag tag-olive">회의록</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ INTENT INPUT ═══ -->
+        <div class="view" id="view-input">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">▢</span>
+                    <h3>의도 입력</h3>
+                    <span class="card-badge tag tag-steel">sLLM 분석</span>
+                </div>
+                <p style="font-size:0.74rem; color:var(--text-dim); line-height:1.5; margin-bottom:1rem;">
+                    작전명령서, 지휘관 회의록, 전투상보, 구두지시를 입력하면 sLLM이 자동으로 결심·근거·전제·우선순위를 추출하여 의도 그래프에 반영합니다.
+                </p>
+
+                <div class="input-form">
+                    <div class="form-group">
+                        <label>문서 유형</label>
+                        <select id="inputType">
+                            <option value="order">작전명령</option>
+                            <option value="meeting">지휘관 회의록</option>
+                            <option value="report">전투상보</option>
+                            <option value="verbal">구두지시</option>
+                            <option value="radio">무선 교신</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>문서 번호</label>
+                        <input type="text" id="inputId" placeholder="예: 작전명령 #48" />
+                    </div>
+                    <div class="form-group">
+                        <label>일시</label>
+                        <input type="datetime-local" id="inputTime" />
+                    </div>
+                    <div class="form-group">
+                        <label>내용</label>
+                        <textarea id="inputContent" placeholder="작전명령서, 회의록, 또는 구두지시 내용을 입력하세요...&#10;&#10;예: '적 기계화부대가 철원 평야 서측에서 접근 중. 포병 2개 포대를 851고지 방면으로 재배치하고, 예비 1개 중대는 삼각고지 후방에 대기시킨다. 대항군 UAV 활동 증가에 따라 방공 사격 준비 태세를 상향 조정한다.'"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button class="primary" onclick="processInput()">sLLM 분석 및 그래프 반영</button>
+                        <button onclick="clearInput()">초기화</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" id="analysisResult" style="display:none;">
+                <div class="card-header">
+                    <span class="card-icon">▸</span>
+                    <h3>sLLM 분석 결과</h3>
+                    <span class="card-badge tag tag-green">추출 완료</span>
+                </div>
+                <div id="analysisContent"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════
+// Navigation
+// ═══════════════════════════════════════════
+const navItems = document.querySelectorAll('.nav-item');
+const views = document.querySelectorAll('.view');
+const headerTitle = document.getElementById('headerTitle');
+
+const viewTitles = {
+    dashboard: '대시보드',
+    graph: '의도 그래프',
+    coaching: '승계 코칭',
+    audit: '결심 감사',
+    timeline: '결심 이력',
+    input: '의도 입력'
+};
+
+navItems.forEach(item => {
+    item.addEventListener('click', () => {
+        const view = item.dataset.view;
+        if (!view) return;
+        navItems.forEach(n => n.classList.remove('active'));
+        item.classList.add('active');
+        views.forEach(v => v.classList.remove('active'));
+        document.getElementById('view-' + view).classList.add('active');
+        headerTitle.textContent = viewTitles[view] || view;
+        if (view === 'graph') renderGraph();
+    });
+});
+
+// ═══════════════════════════════════════════
+// Intent Graph (SVG)
+// ═══════════════════════════════════════════
+const graphNodes = [
+    { id: 'n1', x: 450, y: 55, w: 190, h: 38, label: '851고지–삼각고지 주저항선', color: '#8b3a3a', priority: '최상',
+      desc: '철원 평야를 내려다보는 핵심 고지대인 851고지와 삼각고지에 주저항선을 구축한다. 종심 방어를 위해 2선 진지를 금학산 일대에 예비한다. 적 기계화부대의 철원 평야 진출을 저지하는 것이 최우선 목표이다.', source: '작전명령 #45, 05.20' },
+    { id: 'n2', x: 180, y: 155, w: 170, h: 38, label: '적 기계화부대 우선 대응', color: '#8b3a3a', priority: '최상',
+      desc: '대항군(OPFOR) 기계화보병여단 규모 공격 확인 시, 모든 화력 자산을 기계화 대응에 우선 배분한다. T-80BV 모사 전차 및 BMP 계열 장갑차 우선 타격. 보병 위협은 2차 우선순위.', source: '지휘관 회의록 05.18' },
+    { id: 'n3', x: 720, y: 155, w: 170, h: 38, label: '통신 두절 시 자율 판단', color: '#8b6914', priority: '최상',
+      desc: '30분 이상 상급과 통신 단절 시, 대대장은 의도 그래프에 근거하여 자율 결심한다. 최우선 목표: 현재 진지 사수. 차순위: 인접 부대 연결선 유지. 진지 이탈은 어떠한 경우에도 불가.', source: '구두지시 05.25' },
+    { id: 'n4', x: 100, y: 280, w: 145, h: 38, label: '예비대 투입 조건', color: '#8b6914', priority: '상',
+      desc: '예비대 투입은 1개 중대 이상 손실(전사·부상·전투력 상실 30% 이상)이 확인된 후에만 가능하다. 투입 전 여단장 승인 필수. 통신 두절 시 대대장이 판단하되, 주저항선 돌파 위기 방면에 우선 투입.', source: '지휘관 회의록 05.23' },
+    { id: 'n5', x: 340, y: 280, w: 155, h: 38, label: '포병 화력 배분', color: '#4a6a82', priority: '상',
+      desc: '포병 화력은 철원 평야(서쪽) 60%, 금학산(동쪽) 30%, 예비 10%로 배분. 적 주공 축선 확인 시 즉시 재배치. 851고지 전방 2~4km를 우선 사격 구역으로 지정.', source: '작전명령 #47, 05.26' },
+    { id: 'n6', x: 580, y: 280, w: 150, h: 38, label: '공병 장애물 계획', color: '#4a5d23', priority: '상',
+      desc: '삼각고지 남사면 대전차 지뢰지대 2중 부설. 철원 평야 진입로에 가설 장애물(철조망, 용치) 설치. 교량 2개소는 예비 폭파 준비 상태 유지.', source: '작전명령 #44, 05.21' },
+    { id: 'n7', x: 800, y: 280, w: 100, h: 38, label: '방공 작전', color: '#4a6a82', priority: '중',
+      desc: '대항군 UAV 탐지 시 아군 UAV 식별 후 즉각 대공 사격. 비화기(휴렉스) 운용 구역과 충돌 방지 사전 조정. 방공 포대는 851고지, 삼각고지에 분산 배치.', source: '작전명령 #43' },
+    { id: 'n8', x: 180, y: 395, w: 145, h: 38, label: '야간 작전 지침', color: '#5c5c4a', priority: '중',
+      desc: '야간 방어 태세 유지. 소규모 정찰대(분대급)만 허용. 대대 이상 병력 이동은 여단장 승인 필수. 야간 역습은 D+2 이후 지휘관 판단.', source: '지휘관 회의록 05.26' },
+    { id: 'n9', x: 500, y: 395, w: 165, h: 38, label: 'D+2 야간 역습 계획', color: '#5c5c4a', priority: '중',
+      desc: 'D+2 야간 역습은 대항군 피로도 최고조 시점(02:00~04:00)을 노린다. 주공: 삼각고지→851고지 방향. 지원 화력: 포병 2개 포대. 역습 후 원 진지 복귀.', source: '작전계획 #12' },
+];
+
+const graphEdges = [
+    { from: 'n1', to: 'n2', label: '근거', color: '#8b3a3a', type: 'solid' },
+    { from: 'n1', to: 'n3', label: '전제', color: '#4a6a82', type: 'dotted' },
+    { from: 'n1', to: 'n5', label: '파생', color: '#3a6b3a', type: 'solid' },
+    { from: 'n2', to: 'n4', label: '우선순위', color: '#8b6914', type: 'dashed' },
+    { from: 'n2', to: 'n5', label: '근거', color: '#8b3a3a', type: 'solid' },
+    { from: 'n3', to: 'n4', label: '전제', color: '#4a6a82', type: 'dotted' },
+    { from: 'n1', to: 'n6', label: '파생', color: '#3a6b3a', type: 'solid' },
+    { from: 'n5', to: 'n7', label: '파생', color: '#3a6b3a', type: 'solid' },
+    { from: 'n3', to: 'n8', label: '파생', color: '#3a6b3a', type: 'solid' },
+    { from: 'n2', to: 'n9', label: '근거', color: '#8b3a3a', type: 'solid' },
+    { from: 'n8', to: 'n9', label: '전제', color: '#4a6a82', type: 'dotted' },
+    { from: 'n6', to: 'n5', label: '제약', color: '#8b6914', type: 'dashed' },
+];
+
+let graphRendered = false;
+
+function renderGraph() {
+    if (graphRendered) return;
+    graphRendered = true;
+
+    const svg = document.getElementById('graphSvg');
+    const nodeMap = {};
+    graphNodes.forEach(n => nodeMap[n.id] = n);
+
+    graphEdges.forEach(e => {
+        const from = nodeMap[e.from];
+        const to = nodeMap[e.to];
+        if (!from || !to) return;
+
+        const x1 = from.x, y1 = from.y + from.h / 2;
+        const x2 = to.x, y2 = to.y - to.h / 2;
+        const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        const dasharray = e.type === 'dashed' ? '5,4' : e.type === 'dotted' ? '2,3' : 'none';
+        path.setAttribute('d', `M${x1},${y1} Q${mx},${y1} ${mx},${my} Q${mx},${y2} ${x2},${y2}`);
+        path.setAttribute('class', 'graph-edge');
+        path.setAttribute('stroke', e.color);
+        if (dasharray !== 'none') path.setAttribute('stroke-dasharray', dasharray);
+        svg.appendChild(path);
+
+        const angle = Math.atan2(y2 - my, x2 - mx);
+        const as = 5;
+        const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+        arrow.setAttribute('points', `${x2},${y2} ${x2 - as * Math.cos(angle - 0.4)},${y2 - as * Math.sin(angle - 0.4)} ${x2 - as * Math.cos(angle + 0.4)},${y2 - as * Math.sin(angle + 0.4)}`);
+        arrow.setAttribute('fill', e.color);
+        arrow.setAttribute('opacity', '0.5');
+        svg.appendChild(arrow);
+
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', mx);
+        text.setAttribute('y', my - 5);
+        text.setAttribute('class', 'graph-edge-label');
+        text.textContent = e.label;
+        svg.appendChild(text);
+    });
+
+    graphNodes.forEach(n => {
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.setAttribute('class', 'graph-node');
+        g.style.cursor = 'pointer';
+
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', n.x - n.w / 2);
+        rect.setAttribute('y', n.y - n.h / 2);
+        rect.setAttribute('width', n.w);
+        rect.setAttribute('height', n.h);
+        rect.setAttribute('fill', '#f8f7f4');
+        rect.setAttribute('stroke', n.color);
+        rect.setAttribute('rx', '4');
+        rect.setAttribute('ry', '4');
+        g.appendChild(rect);
+
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', n.x);
+        text.setAttribute('y', n.y);
+        text.textContent = n.label;
+        g.appendChild(text);
+
+        g.addEventListener('click', () => showNodeDetail(n));
+        svg.appendChild(g);
+    });
+}
+
+function showNodeDetail(node) {
+    document.getElementById('ndTitle').textContent = node.label;
+    document.getElementById('ndMeta').innerHTML = `우선순위: ${node.priority} · 출처: ${node.source}`;
+    document.getElementById('ndDesc').textContent = node.desc;
+    document.getElementById('nodeDetail').classList.add('visible');
+}
+
+function closeNodeDetail() {
+    document.getElementById('nodeDetail').classList.remove('visible');
+}
+
+// ═══════════════════════════════════════════
+// Chat / Coaching
+// ═══════════════════════════════════════════
+const chatResponses = {
+    '전임 여단장은 적 기계화부대 위협을 어떻게 판단했습니까?': {
+        answer: `전임 여단장(대령 김철수)은 대항군(OPFOR) 기계화부대를 **최우선 대응 대상**으로 설정했습니다.
+
+의도 그래프 관련 결심 노드 분석:
+
+**판단 기준:**
+• 대항군 기계화보병 **여단 규모** 확인 시 → 모든 화력 자산을 기계화 대응에 우선 배분
+• T-80BV 모사 전차 및 BMP 장갑차 → **우선 타격 목록 1순위**
+• 보병 위협은 2차 우선순위로 강등
+
+**실행 원칙:**
+1. 기계화부대 탐지 → 즉시 포병 화력 재배치 (철원 평야 60% → 80%)
+2. 대전차 무기 체계(현무, 메티스M)를 851고지·삼각고지에 우선 배치
+3. 공병 장애물(대전차 지뢰지대)을 철원 평야 진입로에 집중 부설
+
+이 판단은 05.18 지휘관 회의록에서 "기갑이 평야를 돌파하면 고지대는 포위된다"는 발언에 근거합니다.`,
+        source: '의도 그래프 노드 #2 · 지휘관 회의록 05.18 · 작전명령 #45'
+    },
+    '통신이 두절되면 하급 제대가 어떻게 행동해야 합니까?': {
+        answer: `전임 여단장은 통신 두절 상황을 명확히 정의하고, 하급 지휘관의 자율 판단 범위를 설정했습니다.
+
+**통신 두절 정의:** 30분 이상 상급 제대와 무선/유선 통신 불가
+
+**자율 판단 지침 (우선순위 순):**
+1. **최우선:** 현재 진지 사수 — 어떠한 경우에도 진지 이탈 불가
+2. **차순위:** 인접 부대와의 연결선 유지
+3. **3순위:** 적 동향 정찰 및 상황 보고 준비
+
+**금지 사항:**
+• 여단 승인 없는 대대 이상 병력 이동
+• 공격 작전 독자 수행
+• 예비대 독자 투입
+
+**통신 복구 시:** 즉시 상황 보고 후 상급 지휘 지침 수신
+
+05.25 구두지시에서 "KCTC 평가단 채점 기준에서 통신 두절 시 자율 판단 능력이 핵심 평가 항목"이라고 재확인했습니다.`,
+        source: '의도 그래프 노드 #3 · 구두지시 05.25 · 작전명령 #43'
+    },
+    '예비대 투입의 조건과 우선순위를 설명해주세요.': {
+        answer: `예비대 운용은 전임 여단장이 가장 엄격한 조건을 설정한 영역입니다.
+
+**투입 조건:**
+• 1개 중대 이상 손실이 **확인된 후**에만 투입 가능
+• 손실 판단 기준: 전사·부상·전투력 상실 합계 30% 이상
+• **여단장 사전 승인 필수** (통신 두절 시 대대장 판단)
+
+**투입 우선순위:**
+1. 주저항선(851고지–삼각고지) 돌파 위기 방면
+2. 인접 부대 연결선 회복
+3. 야간 역습 발판 확보
+
+**금지:**
+• 예방적 예비대 투입 (손실 확인 전)
+• 2개 중대 이상 동시 투입 (여단장 승인 필요)
+
+전임 여단장은 05.23 훈련 전 회의에서 "예비대는 마지막 카드다. KCTC에서 예비대를 일찍 소모한 부대는 항상 D+3 이후에 무너졌다"고 강조했습니다.`,
+        source: '의도 그래프 노드 #14 · 지휘관 회의록 05.23'
+    },
+    '철원 평야 방면 포병 화력 배분 기준은 무엇입니까?': {
+        answer: `전임 여단장은 철원 평야를 **주 포병 화력 배분 구역**으로 설정했습니다.
+
+**기본 배분:**
+• 철원 평야(서쪽): **60%** — 적 기계화부대 주 진출 예상 축선
+• 금학산 일대(동쪽): **30%** — 적 보병 침투 방지
+• 예비: **10%**
+
+**재배치 조건:**
+• 적 주공 축선이 동쪽으로 전환 확인 시 → 동쪽 60%, 서쪽 30%로 전환
+• 여단장 승인 후 재배치 실행
+
+**우선 사격 구역:**
+• 851고지 전방 2~4km (철원 평야 진입로)
+• 삼각고지 남사면 접근로
+
+과거 KCTC 훈련 사례에서 철원 평야에 포병 화력을 집중하지 않은 부대는 기계화부대 돌파를 허용한 사례가 3건 있었습니다.`,
+        source: '의도 그래프 노드 #5 · 작전명령 #47 · KCTC 과거 사례 DB'
+    }
+};
+
+function sendChat() {
+    const input = document.getElementById('chatInput');
+    const msg = input.value.trim();
+    if (!msg) return;
+
+    appendChat('user', msg);
+    input.value = '';
+
+    const typingEl = appendChat('ai', '<div class="typing-dots"><span></span><span></span><span></span></div>');
+
+    setTimeout(() => {
+        let bestAnswer = null;
+        for (const [key, val] of Object.entries(chatResponses)) {
+            if (msg.includes(key.substring(0, 6)) || key.includes(msg.substring(0, 6))) {
+                bestAnswer = val;
+                break;
+            }
+        }
+
+        if (!bestAnswer) {
+            bestAnswer = {
+                answer: `의도 그래프에서 "${msg}" 관련 결심을 검색했습니다.\n\n직접 매칭되는 노드는 없으나, 관련 결심이 존재할 수 있습니다. 의도 그래프 뷰에서 관련 키워드로 검색하시거나, 더 구체적인 질문을 해주시면 전임 지휘관의 판단 근거를 찾아드리겠습니다.\n\n현재 47개 결심 노드가 등록되어 있으며, 주요 영역: 주저항선 방어, 기계화부대 대응, 통신 단절 대응, 예비대 운용, 포병 화력 배분입니다.`,
+                source: '의도 그래프 전체 검색'
+            };
+        }
+
+        typingEl.querySelector('.chat-bubble').innerHTML =
+            bestAnswer.answer.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') +
+            `<div class="source">출처: ${bestAnswer.source}</div>`;
+
+        document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+    }, 1200);
+}
+
+function appendChat(type, content) {
+    const chatMessages = document.getElementById('chatMessages');
+    const div = document.createElement('div');
+    div.className = `chat-msg ${type}`;
+    div.innerHTML = `
+        <div class="chat-avatar">${type === 'ai' ? 'S' : 'C'}</div>
+        <div class="chat-bubble">${content}</div>
+    `;
+    chatMessages.appendChild(div);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    return div;
+}
+
+document.querySelectorAll('.suggested-q').forEach(q => {
+    q.addEventListener('click', () => {
+        document.getElementById('chatInput').value = q.dataset.q;
+        sendChat();
+    });
+});
+
+document.getElementById('chatInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') sendChat();
+});
+
+// ═══════════════════════════════════════════
+// Audit Actions
+// ═══════════════════════════════════════════
+function respondAudit(btn) {
+    showToast('응답 작성 모드가 열립니다. 답변은 의도 그래프에 환류됩니다.');
+}
+
+function deferAudit(btn) {
+    btn.closest('.audit-item').style.opacity = '0.5';
+    showToast('감사가 보류되었습니다.');
+}
+
+function acceptAudit(btn) {
+    const item = btn.closest('.audit-item');
+    item.className = 'audit-item ok';
+    item.querySelector('.audit-type').textContent = '해결됨';
+    item.querySelector('.audit-type').style.background = 'var(--green-dim)';
+    item.querySelector('.audit-type').style.color = 'var(--green-muted)';
+    item.querySelector('.audit-actions').innerHTML = '<span style="font-size:0.68rem; color:var(--green-muted);">감사 수용 — 의도 그래프 업데이트됨</span>';
+    showToast('감사가 수용되었습니다. 관련 노드가 반영됩니다.');
+
+    const badge = document.querySelector('.nav-item[data-view="audit"] .badge');
+    if (badge) {
+        const current = parseInt(badge.textContent);
+        if (current > 1) badge.textContent = current - 1;
+        else badge.remove();
+    }
+}
+
+// ═══════════════════════════════════════════
+// Intent Input
+// ═══════════════════════════════════════════
+function processInput() {
+    const type = document.getElementById('inputType').value;
+    const id = document.getElementById('inputId').value;
+    const content = document.getElementById('inputContent').value.trim();
+
+    if (!content) { showToast('문서 내용을 입력해주세요.'); return; }
+
+    showToast('sLLM이 문서를 분석 중입니다...');
+
+    setTimeout(() => {
+        const resultCard = document.getElementById('analysisResult');
+        resultCard.style.display = 'block';
+
+        const typeLabels = { order: '작전명령', meeting: '지휘관 회의록', report: '전투상보', verbal: '구두지시', radio: '무선 교신' };
+
+        document.getElementById('analysisContent').innerHTML = `
+            <div style="font-size:0.74rem; line-height:1.7;">
+                <div style="padding:0.4rem 0; border-bottom:1px solid var(--border); display:flex; gap:0.5rem;">
+                    <span style="color:var(--text-dim); min-width:90px;">문서 유형:</span>
+                    <span style="color:var(--text-bright);">${typeLabels[type]}</span>
+                </div>
+                <div style="padding:0.4rem 0; border-bottom:1px solid var(--border); display:flex; gap:0.5rem;">
+                    <span style="color:var(--text-dim); min-width:90px;">식별자:</span>
+                    <span style="color:var(--text-bright);">${id || '자동 부여'}</span>
+                </div>
+
+                <h4 style="font-size:0.76rem; color:var(--olive); margin:0.85rem 0 0.4rem;">추출된 결심</h4>
+
+                <div style="background:var(--bg); border:1px solid var(--border); border-radius:3px; padding:0.65rem; margin-bottom:0.4rem;">
+                    <div style="font-weight:600; color:var(--text-bright); margin-bottom:0.2rem;">결심 #1: 포병 화력 재배치</div>
+                    <div style="font-size:0.68rem; color:var(--text-dim);">
+                        근거: 철원 평야 방어 강화 · 우선순위: 상 · 전제: 적 주공 축선 확인 시<br>
+                        관련 기존 노드: 포병 화력 배분 (#5) — 업데이트 제안
+                    </div>
+                </div>
+
+                <div style="background:var(--bg); border:1px solid var(--border); border-radius:3px; padding:0.65rem; margin-bottom:0.4rem;">
+                    <div style="font-weight:600; color:var(--text-bright); margin-bottom:0.2rem;">결심 #2: 방공 태세 상향</div>
+                    <div style="font-size:0.68rem; color:var(--text-dim);">
+                        근거: 대항군 UAV 활동 증가 · 우선순위: 중 · 전제: 아군 UAV 식별 후<br>
+                        관련 기존 노드: 방공 작전 (#7) — 파생 관계 제안
+                    </div>
+                </div>
+
+                <h4 style="font-size:0.76rem; color:var(--green-muted); margin:0.85rem 0 0.4rem;">그래프 반영 상태</h4>
+                <div style="font-size:0.72rem; color:var(--text-dim);">
+                    신규 노드 2건 생성 · 엣지 3건 연결 · 지휘관 승인 대기 중<br>
+                    <span style="color:var(--amber-muted);">지휘관 검토 후 최종 반영됩니다.</span>
+                </div>
+            </div>
+        `;
+
+        resultCard.scrollIntoView({ behavior: 'smooth' });
+    }, 1500);
+}
+
+function clearInput() {
+    document.getElementById('inputId').value = '';
+    document.getElementById('inputContent').value = '';
+    document.getElementById('analysisResult').style.display = 'none';
+}
+
+// ═══════════════════════════════════════════
+// Toast
+// ═══════════════════════════════════════════
+function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+// ═══════════════════════════════════════════
+// Init
+// ═══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+    const now = new Date();
+    const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+    document.getElementById('inputTime').value = local.toISOString().slice(0, 16);
+});
+</script>
+
+</body>
+</html>
