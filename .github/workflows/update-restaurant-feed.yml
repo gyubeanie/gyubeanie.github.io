@@ -1,0 +1,71 @@
+name: Update restaurant feed
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 3 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  update-feed:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check feed URL
+        run: |
+          if [ -z "${{ secrets.MICHELIN_FEED_URL }}" ]; then
+            echo "MICHELIN_FEED_URL is not configured; skipping."
+            exit 0
+          fi
+
+      - name: Download licensed France feed
+        if: ${{ secrets.MICHELIN_FEED_URL != '' }}
+        run: |
+          mkdir -p boussole/data
+          curl --fail --location --silent --show-error \
+            "${{ secrets.MICHELIN_FEED_URL }}" \
+            --output boussole/data/michelin-france.live.json
+
+      - name: Validate feed schema
+        if: ${{ secrets.MICHELIN_FEED_URL != '' }}
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("boussole/data/michelin-france.live.json")
+          payload = json.loads(path.read_text(encoding="utf-8"))
+          restaurants = payload if isinstance(payload, list) else payload.get("restaurants", [])
+          if not restaurants:
+              raise SystemExit("Feed has no restaurants")
+
+          allowed = {"3-stars", "2-stars", "1-star", "bib-gourmand", "selected"}
+          for index, restaurant in enumerate(restaurants):
+              for key in ("name", "distinction", "latitude", "longitude"):
+                  if key not in restaurant:
+                      raise SystemExit(f"Restaurant {index} missing {key}")
+              if restaurant["distinction"] not in allowed:
+                  raise SystemExit(f"Restaurant {index} has bad distinction {restaurant['distinction']!r}")
+              lat = float(restaurant["latitude"])
+              lon = float(restaurant["longitude"])
+              if not (-90 <= lat <= 90 and -180 <= lon <= 180):
+                  raise SystemExit(f"Restaurant {index} has invalid coordinates")
+
+          print(f"Validated {len(restaurants)} restaurants")
+          PY
+
+      - name: Commit feed update
+        if: ${{ secrets.MICHELIN_FEED_URL != '' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add boussole/data/michelin-france.live.json
+          if git diff --cached --quiet; then
+            echo "No feed changes."
+          else
+            git commit -m "Update restaurant feed"
+            git push
+          fi

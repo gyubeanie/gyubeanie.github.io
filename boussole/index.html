@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A France-first compass that points you toward the nearest MICHELIN Guide restaurant matching your filters."
+    />
+    <meta name="theme-color" content="#101010" />
+    <title>Boussole — Michelin Guide Compass</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <nav class="mobile-toolbar" aria-label="Mobile app controls">
+        <button id="mobile-options-toggle" class="button" type="button">
+          Options
+        </button>
+        <button id="mobile-list-toggle" class="button" type="button">
+          Nearby
+        </button>
+      </nav>
+
+      <section class="hero card">
+        <div>
+          <p class="eyebrow">France-first dining compass</p>
+          <h1>Boussole</h1>
+          <p class="lede">
+            Point your phone and follow the arrow to the nearest matching
+            restaurant in your MICHELIN Guide dataset.
+          </p>
+        </div>
+        <div class="hero__badge" aria-label="Prototype status">
+          <span>🇫🇷</span>
+          <strong>France MVP</strong>
+          <small>Sample data</small>
+        </div>
+      </section>
+
+      <section class="card controls" aria-labelledby="controls-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Step 1</p>
+            <h2 id="controls-heading">Choose your position</h2>
+          </div>
+          <span id="data-count" class="pill">Loading…</span>
+        </div>
+
+        <div class="feed-status" id="feed-status">
+          Loading local restaurant data…
+        </div>
+
+        <div class="button-row">
+          <button id="use-location" class="button button--primary" type="button">
+            Use my location
+          </button>
+          <button id="enable-heading" class="button" type="button">
+            Enable live compass
+          </button>
+        </div>
+
+        <div class="quick-locations" aria-label="Example France locations">
+          <button data-location="paris" type="button">Paris</button>
+          <button data-location="lyon" type="button">Lyon</button>
+          <button data-location="marseille" type="button">Marseille</button>
+          <button data-location="bordeaux" type="button">Bordeaux</button>
+          <button data-location="nice" type="button">Nice</button>
+          <button data-location="strasbourg" type="button">Strasbourg</button>
+        </div>
+
+        <details class="manual-entry">
+          <summary>Enter latitude / longitude manually</summary>
+          <form id="manual-form" class="manual-form">
+            <label>
+              Latitude
+              <input
+                id="latitude"
+                inputmode="decimal"
+                name="latitude"
+                placeholder="48.8566"
+                type="number"
+                step="any"
+                min="-90"
+                max="90"
+              />
+            </label>
+            <label>
+              Longitude
+              <input
+                id="longitude"
+                inputmode="decimal"
+                name="longitude"
+                placeholder="2.3522"
+                type="number"
+                step="any"
+                min="-180"
+                max="180"
+              />
+            </label>
+            <button class="button" type="submit">Set position</button>
+          </form>
+        </details>
+
+        <p id="location-status" class="status-message" role="status">
+          Defaulting to central Paris until you choose a position.
+        </p>
+      </section>
+
+      <section class="card filters" aria-labelledby="filters-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Step 2</p>
+            <h2 id="filters-heading">Filter the guide</h2>
+          </div>
+          <button id="reset-filters" class="button button--ghost" type="button">
+            Reset
+          </button>
+        </div>
+
+        <fieldset class="filter-grid">
+          <legend class="sr-only">Restaurant distinctions</legend>
+          <label class="chip chip--3">
+            <input type="checkbox" name="distinction" value="3-stars" checked />
+            <span>3★</span>
+          </label>
+          <label class="chip chip--2">
+            <input type="checkbox" name="distinction" value="2-stars" checked />
+            <span>2★</span>
+          </label>
+          <label class="chip chip--1">
+            <input type="checkbox" name="distinction" value="1-star" checked />
+            <span>1★</span>
+          </label>
+          <label class="chip chip--bib">
+            <input
+              type="checkbox"
+              name="distinction"
+              value="bib-gourmand"
+              checked
+            />
+            <span>Bib Gourmand</span>
+          </label>
+          <label class="chip chip--selected">
+            <input
+              type="checkbox"
+              name="distinction"
+              value="selected"
+              checked
+            />
+            <span>Guide selected</span>
+          </label>
+        </fieldset>
+
+        <label class="toggle-row">
+          <span>
+            <strong>Only sustainable / legacy Green Star tags</strong>
+            <small>
+              Optional field in the data. Keep off for normal nearest search.
+            </small>
+          </span>
+          <input id="green-only" type="checkbox" />
+        </label>
+
+        <label class="toggle-row">
+          <span>
+            <strong>Prefer starred restaurants</strong>
+            <small>
+              Adds a light ranking boost after distance, useful in dense cities.
+            </small>
+          </span>
+          <input id="prefer-stars" type="checkbox" />
+        </label>
+
+        <label class="data-import">
+          <span>
+            <strong>Load complete France JSON</strong>
+            <small>
+              Use a licensed MICHELIN feed or the schema in
+              <code>data/restaurants.france.sample.json</code>.
+            </small>
+          </span>
+          <input id="data-file" type="file" accept="application/json,.json" />
+        </label>
+      </section>
+
+      <section class="compass-layout">
+        <article class="card compass-card" aria-labelledby="compass-heading">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Step 3</p>
+              <h2 id="compass-heading">Follow the arrow</h2>
+            </div>
+            <span id="heading-mode" class="pill">North-up</span>
+          </div>
+
+          <div class="compass" aria-hidden="true">
+            <div class="compass__ring">
+              <span class="compass__point compass__point--n">N</span>
+              <span class="compass__point compass__point--e">E</span>
+              <span class="compass__point compass__point--s">S</span>
+              <span class="compass__point compass__point--w">W</span>
+              <div id="needle" class="needle">
+                <span class="needle__arrow"></span>
+                <span class="needle__tail"></span>
+              </div>
+              <div class="compass__hub"></div>
+            </div>
+          </div>
+
+          <div class="target-panel">
+            <p id="target-label" class="target-panel__label">Nearest match</p>
+            <h3 id="target-name">Finding restaurants…</h3>
+            <p id="target-meta" class="muted">Select a location to begin.</p>
+            <dl class="target-stats">
+              <div>
+                <dt>Distance</dt>
+                <dd id="target-distance">—</dd>
+              </div>
+              <div>
+                <dt>Bearing</dt>
+                <dd id="target-bearing">—</dd>
+              </div>
+              <div>
+                <dt>Matches</dt>
+                <dd id="match-count">—</dd>
+              </div>
+            </dl>
+            <div class="button-row">
+              <a id="directions-link" class="button button--primary" href="#" target="_blank" rel="noreferrer">
+                Open directions
+              </a>
+              <a id="guide-link" class="button" href="#" target="_blank" rel="noreferrer">
+                MICHELIN page
+              </a>
+              <button id="reviews-button" class="button" type="button">
+                Show Google reviews
+              </button>
+              <a id="maps-reviews-link" class="button" href="#" target="_blank" rel="noreferrer">
+                Open reviews
+              </a>
+            </div>
+            <section
+              id="reviews-panel"
+              class="reviews-panel"
+              aria-live="polite"
+              hidden
+            ></section>
+          </div>
+        </article>
+
+        <aside class="card nearby-card" aria-labelledby="nearby-heading">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Nearby</p>
+              <h2 id="nearby-heading">Top matches</h2>
+            </div>
+          </div>
+          <ol id="nearby-list" class="nearby-list"></ol>
+        </aside>
+      </section>
+
+      <section class="card notice" aria-label="Data notice">
+        <strong>Data note</strong>
+        <p>
+          This prototype ships with a small demonstrator dataset, not a complete
+          live MICHELIN Guide feed. For launch, configure a licensed, current
+          France feed in <code>config.js</code> including coordinates,
+          distinction, official URLs, and optional Google place IDs.
+        </p>
+      </section>
+    </main>
+
+    <script src="./config.js"></script>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
