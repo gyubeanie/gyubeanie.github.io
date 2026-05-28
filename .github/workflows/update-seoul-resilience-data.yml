@@ -15,21 +15,26 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Check Seoul Open Data key
+        id: keycheck
+        env:
+          SEOUL_OPEN_DATA_KEY: ${{ secrets.SEOUL_OPEN_DATA_KEY }}
         run: |
-          if [ -z "${{ secrets.SEOUL_OPEN_DATA_KEY }}" ]; then
+          if [ -z "$SEOUL_OPEN_DATA_KEY" ]; then
             echo "SEOUL_OPEN_DATA_KEY is not configured; skipping."
-            exit 0
+            echo "has_key=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_key=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Refresh Seoul resilience snapshot
-        if: ${{ secrets.SEOUL_OPEN_DATA_KEY != '' }}
+        if: ${{ steps.keycheck.outputs.has_key == 'true' }}
         env:
           SEOUL_OPEN_DATA_KEY: ${{ secrets.SEOUL_OPEN_DATA_KEY }}
         run: |
           python .github/scripts/update-seoul-resilience-data.py
 
       - name: Validate snapshot
-        if: ${{ secrets.SEOUL_OPEN_DATA_KEY != '' }}
+        if: ${{ steps.keycheck.outputs.has_key == 'true' }}
         run: |
           python - <<'PY'
           import json
@@ -45,7 +50,7 @@ jobs:
           PY
 
       - name: Commit Seoul resilience update
-        if: ${{ secrets.SEOUL_OPEN_DATA_KEY != '' }}
+        if: ${{ steps.keycheck.outputs.has_key == 'true' }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

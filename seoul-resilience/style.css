@@ -414,6 +414,155 @@ input[type="range"] {
     background-size: 32px 32px;
 }
 
+.svg-map-host {
+    overflow: hidden;
+}
+
+.map-base-vector {
+    background:
+        linear-gradient(rgba(91, 108, 91, 0.09) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(91, 108, 91, 0.09) 1px, transparent 1px),
+        radial-gradient(circle at 48% 42%, rgba(91, 143, 93, 0.12), transparent 28rem),
+        #edf2e8;
+    background-size: 36px 36px, 36px 36px, auto, auto;
+}
+
+.map-base-none {
+    background:
+        linear-gradient(rgba(48, 61, 48, 0.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(48, 61, 48, 0.12) 1px, transparent 1px),
+        #f5f6f0;
+    background-size: 32px 32px;
+}
+
+.map-base-satellite {
+    background:
+        radial-gradient(circle at 20% 20%, rgba(75, 111, 70, 0.34), transparent 18rem),
+        radial-gradient(circle at 72% 60%, rgba(126, 116, 82, 0.24), transparent 22rem),
+        radial-gradient(circle at 45% 35%, rgba(64, 102, 70, 0.18), transparent 26rem),
+        #d9ddca;
+}
+
+.svg-map {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 610px;
+}
+
+.map-bg-rect {
+    fill: transparent;
+}
+
+.han-river {
+    fill: none;
+    stroke: rgba(54, 125, 166, 0.28);
+    stroke-width: 17;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.corridor-line {
+    fill: none;
+    stroke: var(--corridor-color);
+    stroke-width: 4;
+    stroke-dasharray: 10 9;
+    stroke-linecap: round;
+    opacity: 0.8;
+    pointer-events: stroke;
+}
+
+.area-shape {
+    stroke: rgba(38, 54, 39, 0.48);
+    stroke-width: 0.85;
+    vector-effect: non-scaling-stroke;
+    cursor: pointer;
+    transition: fill-opacity 0.15s, stroke-width 0.15s, filter 0.15s;
+}
+
+.area-dong .area-shape {
+    stroke-width: 0.58;
+}
+
+.area-grid .area-shape {
+    stroke-width: 0.42;
+}
+
+.area-shape.good {
+    fill: rgba(79, 154, 85, 0.58);
+}
+
+.area-shape.watch {
+    fill: rgba(197, 141, 35, 0.58);
+}
+
+.area-shape.vulnerable {
+    fill: rgba(196, 83, 75, 0.6);
+}
+
+.area-shape:hover,
+.area-shape:focus {
+    stroke: #07130b;
+    stroke-width: 2.4;
+    fill-opacity: 0.86;
+    outline: none;
+}
+
+.area-shape.selected {
+    stroke: #07130b;
+    stroke-width: 3;
+    filter: drop-shadow(0 0 5px rgba(7, 19, 11, 0.24));
+}
+
+.gu-boundary {
+    fill: none;
+    stroke: rgba(7, 19, 11, 0.58);
+    stroke-width: 1.35;
+    vector-effect: non-scaling-stroke;
+    pointer-events: none;
+}
+
+.svg-asset {
+    cursor: default;
+}
+
+.svg-asset circle {
+    stroke: rgba(255, 255, 255, 0.9);
+    stroke-width: 2;
+    filter: drop-shadow(0 4px 8px rgba(32, 45, 35, 0.22));
+}
+
+.svg-asset text {
+    font-family: var(--mono);
+    font-size: 8px;
+    font-weight: 800;
+    fill: #061006;
+    pointer-events: none;
+}
+
+.svg-asset.asset-food circle { fill: #d6a348; }
+.svg-asset.asset-water circle { fill: #6ea5c8; }
+.svg-asset.asset-civil circle { fill: #75b87a; }
+.svg-asset.asset-medical circle { fill: #d05e57; }
+
+.svg-tooltip {
+    position: absolute;
+    z-index: 50;
+    max-width: 260px;
+    padding: 0.48rem 0.6rem;
+    border: 1px solid rgba(54, 70, 54, 0.22);
+    background: rgba(255, 255, 251, 0.97);
+    color: var(--text);
+    box-shadow: 0 8px 24px rgba(32, 45, 35, 0.16);
+    font-size: 0.75rem;
+    line-height: 1.45;
+    pointer-events: none;
+}
+
+.svg-tooltip strong {
+    color: var(--text-strong);
+}
+
 .map-loading {
     position: absolute;
     inset: 0;
@@ -470,50 +619,6 @@ input[type="range"] {
 .map-error small {
     color: var(--text-muted);
 }
-
-.leaflet-container {
-    background: #edf2e8;
-    font-family: var(--sans);
-}
-
-.leaflet-control-attribution {
-    background: rgba(255, 255, 255, 0.86) !important;
-    color: rgba(45, 55, 48, 0.66) !important;
-    font-size: 10px !important;
-}
-
-.leaflet-tooltip.resilience-tooltip {
-    border: 1px solid rgba(154, 209, 127, 0.35);
-    background: rgba(255, 255, 251, 0.96);
-    color: var(--text-strong);
-    box-shadow: 0 8px 24px rgba(32, 45, 35, 0.16);
-    font-size: 0.75rem;
-}
-
-.leaflet-popup-content-wrapper,
-.leaflet-popup-tip {
-    background: rgba(255, 255, 251, 0.98);
-    color: var(--text);
-    border: 1px solid var(--border);
-}
-
-.asset-marker {
-    display: grid;
-    place-items: center;
-    width: 25px;
-    height: 25px;
-    color: #061006;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 0 0 4px rgba(154, 209, 127, 0.08), 0 8px 20px rgba(0, 0, 0, 0.32);
-    font-family: var(--mono);
-    font-size: 0.62rem;
-    font-weight: 800;
-}
-
-.asset-food { background: #d6a348; }
-.asset-water { background: #6ea5c8; }
-.asset-civil { background: #75b87a; }
-.asset-medical { background: #d05e57; }
 
 .inspector-panel {
     display: grid;

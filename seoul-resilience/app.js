@@ -1,3 +1,5 @@
+const NS = "http://www.w3.org/2000/svg";
+
 const DOMAIN_ORDER = ["food", "power", "water", "mobility", "civil"];
 
 const DOMAINS = {
@@ -5,7 +7,6 @@ const DOMAINS = {
         label: "식량·생활물류",
         title: "식량·생활물류 대비상태",
         short: "식",
-        description: "식품·생활필수품 보급 접근성과 물류 차질 민감도",
         actions: [
             "임시 보급거점 사전지정 및 권역별 재고 분산 검토",
             "주요 보급축 차단 시 우회수송 계획과 임시 하역지점 검토",
@@ -16,7 +17,6 @@ const DOMAINS = {
         label: "전력수요 압박",
         title: "전력수요 압박 대비상태",
         short: "전",
-        description: "폭염·핵심시설 가동 조건에서 전력수요 압박에 대한 완충 여력",
         actions: [
             "대피·급수·응급시설의 비상전원 지속시간 확인",
             "폭염 시 냉방 피크 대응을 위한 수요관리 우선순위 검토",
@@ -27,7 +27,6 @@ const DOMAINS = {
         label: "급수·비상급수",
         title: "급수·비상급수 대비상태",
         short: "수",
-        description: "상시 급수수요 증가와 비상급수 접근성에 대한 방호 여력",
         actions: [
             "비상급수 거점 접근권역과 실제 수용수요 재검토",
             "폭염·정전 동시 상황에서 급수시설 가동 우선순위 확인",
@@ -38,7 +37,6 @@ const DOMAINS = {
         label: "이동·보급 접근성",
         title: "이동·보급 접근성 대비상태",
         short: "이",
-        description: "핵심 생활유지기능을 연결하는 이동·수송 네트워크의 지속성",
         actions: [
             "보급·응급 이동축의 우회경로 및 교량 의존도 점검",
             "호우 시 도로속도 저하를 반영한 권역별 도착시간 재산정",
@@ -49,7 +47,6 @@ const DOMAINS = {
         label: "민방위·응급기반",
         title: "민방위·응급기반 대비상태",
         short: "민",
-        description: "대피·응급·공공시설 기반의 인구 수요 대비 수용 여력",
         actions: [
             "대피시설·응급시설 밀도와 취약 인구 수요의 불일치 확인",
             "공공시설의 임시 대피·급수·냉방 전환계획 검토",
@@ -59,31 +56,11 @@ const DOMAINS = {
 };
 
 const DISTRICT_NAMES = {
-    "11110": "종로구",
-    "11140": "중구",
-    "11170": "용산구",
-    "11200": "성동구",
-    "11215": "광진구",
-    "11230": "동대문구",
-    "11260": "중랑구",
-    "11290": "성북구",
-    "11305": "강북구",
-    "11320": "도봉구",
-    "11350": "노원구",
-    "11380": "은평구",
-    "11410": "서대문구",
-    "11440": "마포구",
-    "11470": "양천구",
-    "11500": "강서구",
-    "11530": "구로구",
-    "11545": "금천구",
-    "11560": "영등포구",
-    "11590": "동작구",
-    "11620": "관악구",
-    "11650": "서초구",
-    "11680": "강남구",
-    "11710": "송파구",
-    "11740": "강동구"
+    "11110": "종로구", "11140": "중구", "11170": "용산구", "11200": "성동구", "11215": "광진구",
+    "11230": "동대문구", "11260": "중랑구", "11290": "성북구", "11305": "강북구", "11320": "도봉구",
+    "11350": "노원구", "11380": "은평구", "11410": "서대문구", "11440": "마포구", "11470": "양천구",
+    "11500": "강서구", "11530": "구로구", "11545": "금천구", "11560": "영등포구", "11590": "동작구",
+    "11620": "관악구", "11650": "서초구", "11680": "강남구", "11710": "송파구", "11740": "강동구"
 };
 
 const VALUE_LABELS = {
@@ -116,21 +93,9 @@ const ASSETS = [
 ];
 
 const CORRIDORS = [
-    {
-        name: "한강 남북 연계축",
-        coords: [[37.556, 126.82], [37.544, 126.92], [37.522, 127.02], [37.518, 127.13]],
-        color: "#8eb680"
-    },
-    {
-        name: "서남-동북 보급축",
-        coords: [[37.468, 126.88], [37.514, 126.96], [37.566, 127.02], [37.64, 127.07]],
-        color: "#d6a348"
-    },
-    {
-        name: "도심-동남 응급축",
-        coords: [[37.57, 126.98], [37.54, 127.04], [37.505, 127.11], [37.49, 127.16]],
-        color: "#6ea5c8"
-    }
+    { name: "한강 남북 연계축", coords: [[37.556, 126.82], [37.544, 126.92], [37.522, 127.02], [37.518, 127.13]], color: "#5a8d50" },
+    { name: "서남-동북 보급축", coords: [[37.468, 126.88], [37.514, 126.96], [37.566, 127.02], [37.64, 127.07]], color: "#b47a13" },
+    { name: "도심-동남 응급축", coords: [[37.57, 126.98], [37.54, 127.04], [37.505, 127.11], [37.49, 127.16]], color: "#327da6" }
 ];
 
 const state = {
@@ -139,26 +104,23 @@ const state = {
     base: "vector",
     scenario: { ...PRESETS.compound },
     overlays: { assets: true, corridors: true },
-    selected: null
+    selectedId: null
 };
 
-let map;
-let dongData;
-let guData;
+let dongData = null;
+let guData = null;
 let gridCells = [];
-let activeBaseLayer = null;
-let activeLayer = null;
-let highlightedLayer = null;
-let selectedLayer = null;
-let layers = {};
 let liveData = null;
+let bounds = null;
+let svg = null;
+let tooltip = null;
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => Array.from(document.querySelectorAll(selector));
 
 document.addEventListener("DOMContentLoaded", () => {
     init().catch((error) => {
-        console.error("Seoul resilience dashboard failed to initialize:", error);
+        console.error("Seoul resilience dashboard failed:", error);
         showMapError(error);
     });
 });
@@ -171,12 +133,7 @@ async function init() {
         minute: "2-digit"
     }).format(new Date());
 
-    if (!window.L) {
-        throw new Error("Leaflet map library did not load. Check the CDN/network connection.");
-    }
-
     bindControls();
-    initMap();
 
     const [neighborhoods, municipalities, liveSnapshot] = await Promise.all([
         fetchRequiredJSON("./data/seoul_neighborhoods_geo_simple.json"),
@@ -187,22 +144,19 @@ async function init() {
     liveData = liveSnapshot;
     dongData = prepareGeoJSON(neighborhoods, "dong");
     guData = prepareGeoJSON(municipalities, "gu");
+    bounds = computeBounds(guData.features);
     gridCells = buildGridCells(guData);
 
-    buildMapLayers();
-    setScale("dong");
-    applyPreset("compound", { silent: true });
     renderLiveFeed();
-    updateDashboard();
+    renderMapShell();
+    renderAll();
     selectFirstPriority();
     document.querySelector(".map-loading")?.remove();
 }
 
 async function fetchRequiredJSON(url) {
     const response = await fetch(url, { cache: "no-store" });
-    if (!response.ok) {
-        throw new Error(`${url} returned HTTP ${response.status}`);
-    }
+    if (!response.ok) throw new Error(`${url} returned HTTP ${response.status}`);
     return response.json();
 }
 
@@ -216,331 +170,83 @@ async function fetchOptionalJSON(url) {
     }
 }
 
-function showMapError(error) {
-    const loader = document.querySelector(".map-loading");
-    if (!loader) return;
-    loader.innerHTML = `
-        <div class="map-error">
-            <strong>지도 초기화 실패</strong>
-            지도 라이브러리 또는 경계자료를 불러오지 못했습니다.<br>
-            <small>${escapeHTML(error?.message || "Unknown error")}</small>
-        </div>
-    `;
-}
-
-function escapeHTML(value) {
-    return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll("\"", "&quot;")
-        .replaceAll("'", "&#039;");
-}
-
 function bindControls() {
     $("#domainTabs").addEventListener("click", (event) => {
         const button = event.target.closest("[data-domain]");
         if (!button) return;
         state.domain = button.dataset.domain;
         $$(".domain-tab").forEach((tab) => tab.classList.toggle("active", tab === button));
-        updateDashboard();
+        renderAll();
     });
 
     $$(".stress-control input").forEach((input) => {
         input.addEventListener("input", () => {
             state.scenario[input.dataset.scenario] = Number(input.value);
             setPresetActive(null);
-            updateScenarioLabels();
-            updateDashboard();
+            renderAll();
         });
     });
 
-    $$(".preset-btn").forEach((button) => {
-        button.addEventListener("click", () => applyPreset(button.dataset.preset));
-    });
+    $$(".preset-btn").forEach((button) => button.addEventListener("click", () => applyPreset(button.dataset.preset)));
 
     $("#scaleControls").addEventListener("click", (event) => {
         const button = event.target.closest("[data-scale]");
         if (!button) return;
-        setScale(button.dataset.scale);
+        state.scale = button.dataset.scale;
+        state.selectedId = null;
         $$("#scaleControls button").forEach((btn) => btn.classList.toggle("active", btn === button));
-        updateDashboard();
+        $("#activeScaleLabel").textContent = state.scale === "dong" ? "행정동" : state.scale === "gu" ? "자치구" : "작전격자";
+        renderAll();
         selectFirstPriority();
     });
 
     $("#baseControls").addEventListener("click", (event) => {
         const button = event.target.closest("[data-base]");
         if (!button) return;
-        setBase(button.dataset.base);
+        state.base = button.dataset.base;
         $$("#baseControls button").forEach((btn) => btn.classList.toggle("active", btn === button));
+        updateMapBaseClass();
     });
 
     $$(".layer-toggles input[type='checkbox']").forEach((input) => {
         input.addEventListener("change", () => {
             state.overlays[input.dataset.overlay] = input.checked;
-            updateOverlayVisibility();
+            renderMap();
         });
     });
 }
 
-function initMap() {
-    map = L.map("map", {
-        zoomControl: true,
-        attributionControl: true,
-        preferCanvas: true
-    }).setView([37.5665, 126.9780], 11);
+function applyPreset(name) {
+    state.scenario = { ...PRESETS[name] };
+    setPresetActive(name);
+    renderAll();
+}
 
-    map.zoomControl.setPosition("bottomright");
-
-    layers = {
-        bases: {
-            none: null,
-            vector: L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-                maxZoom: 19,
-                attribution: "&copy; OpenStreetMap &copy; CARTO"
-            }),
-            satellite: L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
-                maxZoom: 19,
-                attribution: "Tiles &copy; Esri"
-            })
-        },
-        dong: null,
-        gu: null,
-        grid: L.layerGroup(),
-        assets: L.layerGroup(),
-        corridors: L.layerGroup()
-    };
+function setPresetActive(name) {
+    $$(".preset-btn").forEach((button) => button.classList.toggle("active", button.dataset.preset === name));
 }
 
 function prepareGeoJSON(data, type) {
-    data.features.forEach((feature) => {
-        feature.properties.__type = type;
-        feature.properties.__code = type === "dong" ? feature.properties.EMD_CD : feature.properties.SIG_CD;
-        feature.properties.__districtCode = type === "dong" ? feature.properties.EMD_CD.slice(0, 5) : feature.properties.SIG_CD;
-        feature.properties.__name = getFeatureName(feature, type);
-        feature.properties.__districtName = DISTRICT_NAMES[feature.properties.__districtCode] || feature.properties.SIG_ENG_NM || "서울";
-        feature.properties.__center = geometryCenter(feature.geometry);
+    data.features.forEach((feature, index) => {
+        const props = feature.properties;
+        props.__type = type;
+        props.__code = type === "dong" ? props.EMD_CD : props.SIG_CD;
+        props.__id = `${type}-${props.__code || index}`;
+        props.__districtCode = type === "dong" ? String(props.EMD_CD).slice(0, 5) : props.SIG_CD;
+        props.__name = type === "gu" ? (DISTRICT_NAMES[props.SIG_CD] || props.SIG_ENG_NM || props.SIG_CD) : (props.EMD_ENG_NM || props.EMD_CD);
+        props.__districtName = DISTRICT_NAMES[props.__districtCode] || props.SIG_ENG_NM || "서울";
+        props.__center = geometryCenter(feature.geometry);
     });
     return data;
 }
 
-function getFeatureName(feature, type) {
-    const props = feature.properties;
-    if (type === "gu") {
-        return DISTRICT_NAMES[props.SIG_CD] || props.SIG_ENG_NM || props.SIG_CD;
-    }
-    const english = props.EMD_ENG_NM || props.EMD_CD;
-    return `${english}`;
-}
-
-function buildMapLayers() {
-    layers.dong = L.geoJSON(dongData, {
-        style: (feature) => featureStyle(feature),
-        onEachFeature: onEachFeature
-    });
-
-    layers.gu = L.geoJSON(guData, {
-        style: (feature) => featureStyle(feature, { weight: 1.2, opacity: 0.78 }),
-        onEachFeature: onEachFeature
-    });
-
-    buildGridLayer();
-    buildAssetLayer();
-    buildCorridorLayer();
-
-    setBase("vector");
-    updateOverlayVisibility();
-    map.fitBounds(layers.gu.getBounds(), { padding: [18, 18] });
-}
-
-function buildGridLayer() {
-    layers.grid.clearLayers();
-    gridCells.forEach((cell) => {
-        const rectangle = L.rectangle(cell.bounds, {
-            ...shapeStyleForMetrics(calculateMetrics(cell))
-        });
-        rectangle.__cell = cell;
-        rectangle.bindTooltip(() => tooltipHTML(cell), {
-            className: "resilience-tooltip",
-            direction: "top",
-            sticky: true
-        });
-        rectangle.on({
-            mouseover: () => highlightShape(rectangle),
-            mouseout: () => resetHighlight(rectangle),
-            click: () => selectArea({ type: "grid", data: cell, layer: rectangle })
-        });
-        layers.grid.addLayer(rectangle);
-    });
-}
-
-function buildAssetLayer() {
-    ASSETS.forEach((asset) => {
-        const marker = L.marker([asset.lat, asset.lng], {
-            icon: L.divIcon({
-                className: "",
-                html: `<div class="asset-marker asset-${asset.type}">${asset.code.split("-")[0]}</div>`,
-                iconSize: [25, 25],
-                iconAnchor: [12, 12]
-            })
-        }).bindTooltip(`<strong>${asset.name}</strong><br>${asset.code} · 권역집계/모의`, {
-            className: "resilience-tooltip",
-            direction: "top"
-        });
-        layers.assets.addLayer(marker);
-    });
-}
-
-function buildCorridorLayer() {
-    CORRIDORS.forEach((corridor) => {
-        const line = L.polyline(corridor.coords, {
-            color: corridor.color,
-            weight: 2.2,
-            opacity: 0.82,
-            dashArray: "7 7"
-        }).bindTooltip(`<strong>${corridor.name}</strong><br>이동·보급축 모의`, {
-            className: "resilience-tooltip",
-            direction: "top"
-        });
-        layers.corridors.addLayer(line);
-    });
-}
-
-function setScale(scale) {
-    state.scale = scale;
-    $("#activeScaleLabel").textContent = scale === "dong" ? "행정동" : scale === "gu" ? "자치구" : "작전격자";
-
-    if (activeLayer) map.removeLayer(activeLayer);
-    selectedLayer = null;
-    highlightedLayer = null;
-
-    if (scale === "dong") activeLayer = layers.dong;
-    if (scale === "gu") activeLayer = layers.gu;
-    if (scale === "grid") activeLayer = layers.grid;
-
-    activeLayer.addTo(map);
-    restyleActiveLayer();
-}
-
-function setBase(base) {
-    state.base = base;
-    if (activeBaseLayer) {
-        map.removeLayer(activeBaseLayer);
-        activeBaseLayer = null;
-    }
-    const next = layers.bases[base];
-    if (next) {
-        next.addTo(map);
-        activeBaseLayer = next;
-        if (activeLayer) activeLayer.bringToFront();
-        layers.corridors.bringToFront();
-        layers.assets.bringToFront();
-    }
-}
-
-function updateOverlayVisibility() {
-    if (state.overlays.assets) {
-        if (!map.hasLayer(layers.assets)) layers.assets.addTo(map);
-    } else if (map.hasLayer(layers.assets)) {
-        map.removeLayer(layers.assets);
-    }
-
-    if (state.overlays.corridors) {
-        if (!map.hasLayer(layers.corridors)) layers.corridors.addTo(map);
-    } else if (map.hasLayer(layers.corridors)) {
-        map.removeLayer(layers.corridors);
-    }
-
-    if (activeLayer) activeLayer.bringToFront();
-    if (map.hasLayer(layers.corridors)) layers.corridors.bringToFront();
-    if (map.hasLayer(layers.assets)) layers.assets.bringToFront();
-}
-
-function onEachFeature(feature, layer) {
-    layer.bindTooltip(() => tooltipHTML(feature), {
-        className: "resilience-tooltip",
-        direction: "top",
-        sticky: true
-    });
-
-    layer.on({
-        mouseover: () => highlightShape(layer),
-        mouseout: () => resetHighlight(layer),
-        click: () => selectArea({ type: feature.properties.__type, data: feature, layer })
-    });
-}
-
-function highlightShape(layer) {
-    highlightedLayer = layer;
-    layer.setStyle({
-        weight: 2.1,
-        color: "#f4f1c9",
-        fillOpacity: 0.76
-    });
-    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) layer.bringToFront();
-}
-
-function resetHighlight(layer) {
-    if (layer === selectedLayer) return;
-    if (state.scale === "grid") {
-        const metrics = calculateMetrics(layer.__cell);
-        layer.setStyle(shapeStyleForMetrics(metrics));
-    } else if (activeLayer) {
-        activeLayer.resetStyle(layer);
-    }
-}
-
-function restyleActiveLayer() {
-    if (!activeLayer) return;
-    if (state.scale === "grid") {
-        layers.grid.eachLayer((layer) => {
-            layer.setStyle(shapeStyleForMetrics(calculateMetrics(layer.__cell)));
-        });
-    } else {
-        activeLayer.setStyle((feature) => featureStyle(feature));
-    }
-    if (selectedLayer) {
-        selectedLayer.setStyle(selectedStyle());
-        selectedLayer.bringToFront();
-    }
-}
-
-function featureStyle(feature, overrides = {}) {
-    return {
-        ...shapeStyleForMetrics(calculateMetrics(feature)),
-        weight: overrides.weight ?? 0.72,
-        opacity: overrides.opacity ?? 0.62
-    };
-}
-
-function shapeStyleForMetrics(metrics) {
-    const status = classify(metrics[state.domain].score);
-    return {
-        color: "rgba(208, 226, 199, 0.46)",
-        weight: 0.72,
-        opacity: 0.62,
-        fillColor: status.color,
-        fillOpacity: 0.58
-    };
-}
-
-function selectedStyle() {
-    return {
-        color: "#f4f1c9",
-        weight: 2.4,
-        opacity: 0.95,
-        fillOpacity: 0.78
-    };
-}
-
-function updateDashboard() {
-    if (!dongData || !guData) return;
+function renderAll() {
     updateScenarioLabels();
     $("#mapTitle").textContent = DOMAINS[state.domain].title;
-    restyleActiveLayer();
+    renderMap();
     updateCounts();
     updatePriorityTable();
-    if (state.selected) renderInspector(state.selected);
+    renderSelectedInspector();
 }
 
 function updateScenarioLabels() {
@@ -552,123 +258,197 @@ function updateScenarioLabels() {
     });
 }
 
-function renderLiveFeed() {
-    if (!liveData) {
-        $("#liveFeedStatus").textContent = "미수신";
-        $("#rainFeedValue").textContent = "--";
-        $("#riverFeedValue").textContent = "--";
-        $("#liveFeedTime").textContent = "seoul-live.json 파일을 찾을 수 없습니다.";
+function renderMapShell() {
+    const mapEl = $("#map");
+    mapEl.innerHTML = "";
+    mapEl.classList.add("svg-map-host");
+    updateMapBaseClass();
+
+    tooltip = document.createElement("div");
+    tooltip.className = "svg-tooltip";
+    tooltip.hidden = true;
+
+    svg = document.createElementNS(NS, "svg");
+    svg.setAttribute("class", "svg-map");
+    svg.setAttribute("viewBox", "0 0 1000 760");
+    svg.setAttribute("role", "img");
+    svg.setAttribute("aria-label", "서울 대비상태 SVG 지도");
+
+    mapEl.appendChild(svg);
+    mapEl.appendChild(tooltip);
+}
+
+function updateMapBaseClass() {
+    const mapEl = $("#map");
+    if (!mapEl) return;
+    mapEl.classList.toggle("map-base-none", state.base === "none");
+    mapEl.classList.toggle("map-base-vector", state.base === "vector");
+    mapEl.classList.toggle("map-base-satellite", state.base === "satellite");
+}
+
+function renderMap() {
+    if (!svg || !dongData || !guData) return;
+    svg.replaceChildren();
+
+    const bg = el("rect", { x: 0, y: 0, width: 1000, height: 760, class: "map-bg-rect" });
+    svg.appendChild(bg);
+
+    drawRiver();
+    if (state.overlays.corridors) drawCorridors();
+
+    const group = el("g", { class: `area-layer area-${state.scale}` });
+    const items = currentItems();
+    items.forEach((item) => group.appendChild(drawArea(item)));
+    svg.appendChild(group);
+
+    if (state.scale === "dong") drawGuBoundaries();
+    if (state.overlays.assets) drawAssets();
+}
+
+function drawRiver() {
+    const river = [[37.575, 126.78], [37.555, 126.86], [37.538, 126.94], [37.522, 127.02], [37.515, 127.10], [37.505, 127.18]];
+    svg.appendChild(el("path", { d: linePath(river), class: "han-river" }));
+}
+
+function drawCorridors() {
+    const group = el("g", { class: "corridor-layer" });
+    CORRIDORS.forEach((corridor) => {
+        const path = el("path", {
+            d: linePath(corridor.coords),
+            class: "corridor-line",
+            style: `--corridor-color:${corridor.color}`
+        });
+        path.addEventListener("mousemove", (event) => showTooltip(event, `<strong>${corridor.name}</strong><br>이동·보급축 모의`));
+        path.addEventListener("mouseleave", hideTooltip);
+        group.appendChild(path);
+    });
+    svg.appendChild(group);
+}
+
+function drawAssets() {
+    const group = el("g", { class: "asset-layer" });
+    ASSETS.forEach((asset) => {
+        const p = project({ lat: asset.lat, lng: asset.lng });
+        const marker = el("g", { class: `svg-asset asset-${asset.type}`, transform: `translate(${p.x},${p.y})` });
+        marker.appendChild(el("circle", { r: 10 }));
+        const text = el("text", { "text-anchor": "middle", y: 3 });
+        text.textContent = asset.code.split("-")[0];
+        marker.appendChild(text);
+        marker.addEventListener("mousemove", (event) => showTooltip(event, `<strong>${asset.name}</strong><br>${asset.code} · 권역집계/모의`));
+        marker.addEventListener("mouseleave", hideTooltip);
+        group.appendChild(marker);
+    });
+    svg.appendChild(group);
+}
+
+function drawGuBoundaries() {
+    const group = el("g", { class: "gu-boundary-layer" });
+    guData.features.forEach((feature) => {
+        group.appendChild(el("path", { d: geometryPath(feature.geometry), class: "gu-boundary" }));
+    });
+    svg.appendChild(group);
+}
+
+function drawArea(item) {
+    const metrics = calculateMetrics(item);
+    const status = classify(metrics[state.domain].score);
+    const selected = state.selectedId === getItemId(item);
+    let shape;
+
+    if (item.geometry) {
+        shape = el("path", { d: geometryPath(item.geometry) });
+    } else {
+        const [sw, ne] = item.bounds;
+        const p1 = project({ lat: sw[0], lng: sw[1] });
+        const p2 = project({ lat: ne[0], lng: ne[1] });
+        shape = el("rect", {
+            x: Math.min(p1.x, p2.x),
+            y: Math.min(p1.y, p2.y),
+            width: Math.abs(p2.x - p1.x),
+            height: Math.abs(p2.y - p1.y)
+        });
+    }
+
+    shape.setAttribute("class", `area-shape ${status.key} ${selected ? "selected" : ""}`);
+    shape.setAttribute("tabindex", "0");
+    shape.setAttribute("role", "button");
+    shape.setAttribute("aria-label", `${displayName(item)} ${DOMAINS[state.domain].label} ${status.label}`);
+    shape.addEventListener("click", () => selectItem(item));
+    shape.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            selectItem(item);
+        }
+    });
+    shape.addEventListener("mousemove", (event) => showTooltip(event, tooltipHTML(item)));
+    shape.addEventListener("mouseleave", hideTooltip);
+    return shape;
+}
+
+function showTooltip(event, html) {
+    if (!tooltip) return;
+    tooltip.innerHTML = html;
+    tooltip.hidden = false;
+    const host = $("#map").getBoundingClientRect();
+    tooltip.style.left = `${event.clientX - host.left + 12}px`;
+    tooltip.style.top = `${event.clientY - host.top + 12}px`;
+}
+
+function hideTooltip() {
+    if (tooltip) tooltip.hidden = true;
+}
+
+function selectItem(item) {
+    state.selectedId = getItemId(item);
+    renderMap();
+    renderSelectedInspector();
+}
+
+function selectFirstPriority() {
+    const first = currentItems()
+        .map((item) => ({ item, score: calculateMetrics(item)[state.domain].score }))
+        .sort((a, b) => a.score - b.score)[0];
+    if (first) selectItem(first.item);
+}
+
+function renderSelectedInspector() {
+    const item = currentItems().find((candidate) => getItemId(candidate) === state.selectedId);
+    if (!item) {
+        $("#selectedName").textContent = "지역 선택 대기";
+        $("#selectedMeta").textContent = "지도에서 행정동·자치구·격자를 선택하십시오.";
+        $("#domainReadiness").innerHTML = "";
+        $("#driversList").innerHTML = "<li>선택 지역의 기능별 대비상태가 표시됩니다.</li>";
+        $("#actionsList").innerHTML = "<li>취약 기능을 선택하면 검토 항목이 갱신됩니다.</li>";
         return;
     }
 
-    const rainfall = liveData.services?.rainfall || {};
-    const river = liveData.services?.river_stage || {};
-    const rainSummary = rainfall.summary || {};
-    const riverSummary = river.summary || {};
-    const okCount = [rainfall.ok, river.ok].filter(Boolean).length;
-
-    $("#liveFeedStatus").textContent = liveData.is_live ? `수신 ${okCount}/2` : "대기";
-    $("#rainFeedValue").textContent = rainfall.ok
-        ? `${rainSummary.station_count ?? 0}개소 · 최대 ${formatValue(rainSummary.max_mm, "mm")}`
-        : "자료대기";
-    $("#riverFeedValue").textContent = river.ok
-        ? `${riverSummary.station_count ?? 0}개소 · 최고 ${formatValue(riverSummary.max_level_m, "m")}`
-        : "자료대기";
-    $("#liveFeedTime").textContent = liveData.generated_at
-        ? `최근 스냅샷: ${formatTimestamp(liveData.generated_at)} · 키 비공개`
-        : "GitHub Actions 자료 갱신 대기 중";
-
-    if (liveData.generated_at) {
-        $("#timestamp").textContent = formatTimestamp(liveData.generated_at, { compact: true });
-    }
-}
-
-function formatValue(value, suffix) {
-    if (value === null || value === undefined || Number.isNaN(Number(value))) return `--${suffix}`;
-    return `${Number(value).toLocaleString("ko-KR", { maximumFractionDigits: 2 })}${suffix}`;
-}
-
-function formatTimestamp(value, options = {}) {
-    const date = new Date(value);
-    if (Number.isNaN(date.getTime())) return String(value);
-    return new Intl.DateTimeFormat("ko-KR", {
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        ...(options.compact ? {} : { timeZoneName: "short" })
-    }).format(date);
-}
-
-function applyPreset(name, options = {}) {
-    state.scenario = { ...PRESETS[name] };
-    if (!options.silent) setPresetActive(name);
-    updateScenarioLabels();
-    updateDashboard();
-}
-
-function setPresetActive(name) {
-    $$(".preset-btn").forEach((button) => {
-        button.classList.toggle("active", button.dataset.preset === name);
-    });
-}
-
-function selectArea(selection) {
-    if (selectedLayer && selectedLayer !== selection.layer) {
-        resetHighlight(selectedLayer);
-    }
-    selectedLayer = selection.layer;
-    selectedLayer.setStyle(selectedStyle());
-    selectedLayer.bringToFront();
-    state.selected = selection;
-    renderInspector(selection);
-}
-
-function renderInspector(selection) {
-    const data = selection.data;
-    const metrics = calculateMetrics(data);
-    const name = displayName(data);
-    const districtName = displayDistrict(data);
-    const typeLabel = selection.type === "dong" ? "행정동/법정동" : selection.type === "gu" ? "자치구" : "작전격자";
-    const code = data.properties?.__code || data.id;
-
-    $("#selectedName").textContent = name;
-    $("#selectedMeta").textContent = `${typeLabel} · ${districtName}${code ? ` · ${code}` : ""}`;
+    const metrics = calculateMetrics(item);
+    $("#selectedName").textContent = displayName(item);
+    $("#selectedMeta").textContent = `${state.scale === "dong" ? "행정동/법정동" : state.scale === "gu" ? "자치구" : "작전격자"} · ${displayDistrict(item)} · ${getItemId(item)}`;
 
     $("#domainReadiness").innerHTML = DOMAIN_ORDER.map((key) => {
-        const item = metrics[key];
-        const status = classify(item.score);
+        const metric = metrics[key];
+        const status = classify(metric.score);
         return `
             <div class="readiness-card">
                 <div class="readiness-row">
                     <span class="readiness-name">${DOMAINS[key].label}</span>
                     <span class="status-pill ${status.className}">${status.label}</span>
                 </div>
-                <div class="bar-track" aria-label="${DOMAINS[key].label} 모형값">
-                    <div class="bar-fill ${status.className}" style="width:${item.score}%"></div>
-                </div>
-            </div>
-        `;
+                <div class="bar-track"><div class="bar-fill ${status.className}" style="width:${metric.score}%"></div></div>
+            </div>`;
     }).join("");
 
-    const active = metrics[state.domain];
-    $("#driversList").innerHTML = active.drivers.map((driver) => `<li>${driver}</li>`).join("");
-
-    const vulnerableDomains = DOMAIN_ORDER
-        .filter((key) => classify(metrics[key].score).key === "vulnerable")
-        .slice(0, 2);
-    const activeActions = vulnerableDomains.length
-        ? vulnerableDomains.flatMap((key) => DOMAINS[key].actions.slice(0, 2))
-        : DOMAINS[state.domain].actions;
-    $("#actionsList").innerHTML = activeActions.slice(0, 4).map((action) => `<li>${action}</li>`).join("");
+    $("#driversList").innerHTML = metrics[state.domain].drivers.map((driver) => `<li>${driver}</li>`).join("");
+    const vulnerable = DOMAIN_ORDER.filter((key) => classify(metrics[key].score).key === "vulnerable").slice(0, 2);
+    const actions = vulnerable.length ? vulnerable.flatMap((key) => DOMAINS[key].actions.slice(0, 2)) : DOMAINS[state.domain].actions;
+    $("#actionsList").innerHTML = actions.slice(0, 4).map((action) => `<li>${action}</li>`).join("");
 }
 
 function updateCounts() {
-    const items = currentItems();
     const counts = { good: 0, watch: 0, vulnerable: 0 };
-    items.forEach((item) => {
-        const status = classify(calculateMetrics(item)[state.domain].score).key;
-        counts[status] += 1;
+    currentItems().forEach((item) => {
+        counts[classify(calculateMetrics(item)[state.domain].score).key] += 1;
     });
     $("#goodCount").textContent = counts.good;
     $("#watchCount").textContent = counts.watch;
@@ -704,50 +484,49 @@ function updatePriorityTable() {
                         }).join("")}
                     </div>
                 </td>
-            </tr>
-        `;
+            </tr>`;
     }).join("");
 
-    $$("#priorityRows tr").forEach((tr, index) => {
-        tr.addEventListener("click", () => selectItem(rows[index].item));
-    });
+    $$("#priorityRows tr").forEach((tr, index) => tr.addEventListener("click", () => selectItem(rows[index].item)));
 }
 
-function selectFirstPriority() {
-    const first = currentItems()
-        .map((item) => ({ item, score: calculateMetrics(item)[state.domain].score }))
-        .sort((a, b) => a.score - b.score)[0];
-    if (first) selectItem(first.item, { fit: false });
-}
-
-function selectItem(item, options = {}) {
-    if (state.scale === "grid") {
-        let targetLayer = null;
-        layers.grid.eachLayer((layer) => {
-            if (layer.__cell === item) targetLayer = layer;
-        });
-        if (targetLayer) {
-            selectArea({ type: "grid", data: item, layer: targetLayer });
-            if (options.fit !== false) map.fitBounds(targetLayer.getBounds(), { maxZoom: 13, padding: [50, 50] });
-        }
+function renderLiveFeed() {
+    if (!liveData) {
+        $("#liveFeedStatus").textContent = "미수신";
+        $("#rainFeedValue").textContent = "--";
+        $("#riverFeedValue").textContent = "--";
+        $("#liveFeedTime").textContent = "seoul-live.json 파일을 찾을 수 없습니다.";
         return;
     }
+    const rainfall = liveData.services?.rainfall || {};
+    const river = liveData.services?.river_stage || {};
+    const rainSummary = rainfall.summary || {};
+    const riverSummary = river.summary || {};
+    const okCount = [rainfall.ok, river.ok].filter(Boolean).length;
 
-    const layerGroup = state.scale === "gu" ? layers.gu : layers.dong;
-    let targetLayer = null;
-    layerGroup.eachLayer((layer) => {
-        if (layer.feature === item) targetLayer = layer;
-    });
-    if (targetLayer) {
-        selectArea({ type: item.properties.__type, data: item, layer: targetLayer });
-        if (options.fit !== false) map.fitBounds(targetLayer.getBounds(), { maxZoom: state.scale === "gu" ? 12 : 14, padding: [50, 50] });
-    }
+    $("#liveFeedStatus").textContent = liveData.is_live ? `수신 ${okCount}/2` : "대기";
+    $("#rainFeedValue").textContent = rainfall.ok ? `${rainSummary.station_count ?? 0}개소 · 최대 ${formatValue(rainSummary.max_mm, "mm")}` : "자료대기";
+    $("#riverFeedValue").textContent = river.ok ? `${riverSummary.station_count ?? 0}개소 · 최고 ${formatValue(riverSummary.max_level_m, "m")}` : "자료대기";
+    $("#liveFeedTime").textContent = liveData.generated_at ? `최근 스냅샷: ${formatTimestamp(liveData.generated_at)} · 키 비공개` : "GitHub Actions 자료 갱신 대기 중";
+    if (liveData.generated_at) $("#timestamp").textContent = formatTimestamp(liveData.generated_at, { compact: true });
 }
 
 function currentItems() {
     if (state.scale === "gu") return guData.features;
     if (state.scale === "grid") return gridCells;
     return dongData.features;
+}
+
+function getItemId(item) {
+    return item.properties?.__id || item.id;
+}
+
+function displayName(item) {
+    return item.properties?.__name || item.name;
+}
+
+function displayDistrict(item) {
+    return item.properties?.__districtName || item.districtName;
 }
 
 function calculateMetrics(item) {
@@ -763,81 +542,34 @@ function calculateMetrics(item) {
     const redundancy = 25 + hash01(`${code}:redundancy`) * 55;
     const floodSensitivity = floodProxy(center, code);
     const heatSensitivity = heatProxy(center, code);
-
     const foodAccess = proximity(center, ASSETS.filter((a) => a.type === "food"), 13);
     const waterAccess = proximity(center, ASSETS.filter((a) => a.type === "water"), 12);
     const civilAccess = proximity(center, ASSETS.filter((a) => a.type === "civil" || a.type === "medical"), 10);
     const corridorAccess = corridorProximity(center);
-
     const stress = state.scenario;
 
-    const foodScore = clamp(
-        32 + foodAccess * 0.48 + corridorAccess * 0.2 + localBuffer * 0.16
-        - density * 0.16
-        - stress.logistics * 13
-        - stress.road * 9
-        - stress.rain * 5
-    );
-
-    const powerScore = clamp(
-        70 + localBuffer * 0.22 + redundancy * 0.28
-        - criticalLoad * 0.18
-        - density * 0.11
-        - heatSensitivity * 0.16
-        - stress.powerDemand * 14
-        - stress.heat * 9
-        - stress.rain * 3
-    );
-
-    const waterScore = clamp(
-        36 + waterAccess * 0.44 + localBuffer * 0.22 + redundancy * 0.15
-        - density * 0.11
-        - floodSensitivity * 0.1
-        - stress.waterDemand * 12
-        - stress.heat * 6
-        - stress.rain * 5
-    );
-
-    const mobilityScore = clamp(
-        35 + corridorAccess * 0.5 + redundancy * 0.28
-        - floodSensitivity * 0.17
-        - riverCrossingProxy(center) * 0.13
-        - stress.road * 16
-        - stress.rain * 10
-        - stress.logistics * 5
-    );
-
-    const civilScore = clamp(
-        34 + shelterDensity * 0.38 + civilAccess * 0.32 + localBuffer * 0.14
-        - density * 0.12
-        - stress.heat * 5
-        - stress.rain * 5
-        - stress.powerDemand * 4
-        - stress.waterDemand * 4
-    );
-
     return {
-        food: metric(foodScore, [
+        food: metric(32 + foodAccess * 0.48 + corridorAccess * 0.2 + localBuffer * 0.16 - density * 0.16 - stress.logistics * 13 - stress.road * 9 - stress.rain * 5, [
             `보급거점 접근성 ${band(foodAccess)} · 생활물류 차질 ${VALUE_LABELS.logistics[stress.logistics]}`,
             `도로 지연 ${VALUE_LABELS.road[stress.road]} 조건에서 권역 보급축 의존도 반영`,
             `인구·수요 압력 모의값 ${band(density)}`
         ]),
-        power: metric(powerScore, [
+        power: metric(70 + localBuffer * 0.22 + redundancy * 0.28 - criticalLoad * 0.18 - density * 0.11 - heatSensitivity * 0.16 - stress.powerDemand * 14 - stress.heat * 9 - stress.rain * 3, [
             `폭염 강도 ${VALUE_LABELS.heat[stress.heat]} · 전력수요 ${VALUE_LABELS.powerDemand[stress.powerDemand]}`,
             `핵심시설 전력 의존도 모의값 ${band(criticalLoad)}`,
             `지역 완충·중복성 모의값 ${band(redundancy)}`
         ]),
-        water: metric(waterScore, [
+        water: metric(36 + waterAccess * 0.44 + localBuffer * 0.22 + redundancy * 0.15 - density * 0.11 - floodSensitivity * 0.1 - stress.waterDemand * 12 - stress.heat * 6 - stress.rain * 5, [
             `비상급수 권역 접근성 ${band(waterAccess)} · 급수수요 ${VALUE_LABELS.waterDemand[stress.waterDemand]}`,
             `호우·침수 민감도 모의값 ${band(floodSensitivity)}`,
             `폭염 조건의 급수수요 상승분 반영`
         ]),
-        mobility: metric(mobilityScore, [
+        mobility: metric(35 + corridorAccess * 0.5 + redundancy * 0.28 - floodSensitivity * 0.17 - riverCrossingProxy(center) * 0.13 - stress.road * 16 - stress.rain * 10 - stress.logistics * 5, [
             `이동·보급축 접근성 ${band(corridorAccess)} · 도로 지연 ${VALUE_LABELS.road[stress.road]}`,
             `집중호우에 따른 속도저하 및 우회수송 부담 반영`,
             `하천횡단·저지대 의존도 모의값 ${band(riverCrossingProxy(center))}`
         ]),
-        civil: metric(civilScore, [
+        civil: metric(34 + shelterDensity * 0.38 + civilAccess * 0.32 + localBuffer * 0.14 - density * 0.12 - stress.heat * 5 - stress.rain * 5 - stress.powerDemand * 4 - stress.waterDemand * 4, [
             `민방위·응급 권역 접근성 ${band(civilAccess)} · 대피수요 압력 ${band(density)}`,
             `대피·급수·응급시설의 동시가동 부담 반영`,
             `시설 밀도 모의값 ${band(shelterDensity)}`
@@ -846,56 +578,72 @@ function calculateMetrics(item) {
 }
 
 function metric(score, drivers) {
-    return {
-        score: Math.round(clamp(score)),
-        drivers
-    };
+    return { score: Math.round(clamp(score)), drivers };
 }
 
 function classify(score) {
-    if (score >= 66) {
-        return { key: "good", label: "양호", className: "status-good", color: "#75b87a" };
-    }
-    if (score >= 43) {
-        return { key: "watch", label: "주의", className: "status-watch", color: "#d6a348" };
-    }
-    return { key: "vulnerable", label: "취약", className: "status-vulnerable", color: "#d05e57" };
+    if (score >= 66) return { key: "good", label: "양호", className: "status-good", color: "#4f9a55" };
+    if (score >= 43) return { key: "watch", label: "주의", className: "status-watch", color: "#c58d23" };
+    return { key: "vulnerable", label: "취약", className: "status-vulnerable", color: "#c4534b" };
 }
 
 function tooltipHTML(item) {
     const metrics = calculateMetrics(item);
     const status = classify(metrics[state.domain].score);
-    return `
-        <strong>${displayName(item)}</strong><br>
-        ${displayDistrict(item)} · ${DOMAINS[state.domain].label}<br>
-        <span class="${status.className}">${status.label}</span>
-    `;
+    return `<strong>${displayName(item)}</strong><br>${displayDistrict(item)} · ${DOMAINS[state.domain].label}<br><span class="${status.className}">${status.label}</span>`;
 }
 
-function displayName(item) {
-    if (item.properties) return item.properties.__name;
-    return item.name;
+function geometryPath(geometry) {
+    if (geometry.type === "Polygon") return polygonPath(geometry.coordinates);
+    if (geometry.type === "MultiPolygon") return geometry.coordinates.map(polygonPath).join(" ");
+    return "";
 }
 
-function displayDistrict(item) {
-    if (item.properties) return item.properties.__districtName;
-    return item.districtName;
+function polygonPath(polygon) {
+    return polygon.map((ring) => ring.map(([lng, lat], index) => {
+        const p = project({ lat, lng });
+        return `${index === 0 ? "M" : "L"}${p.x.toFixed(2)},${p.y.toFixed(2)}`;
+    }).join(" ") + " Z").join(" ");
+}
+
+function linePath(coords) {
+    return coords.map(([lat, lng], index) => {
+        const p = project({ lat, lng });
+        return `${index === 0 ? "M" : "L"}${p.x.toFixed(2)},${p.y.toFixed(2)}`;
+    }).join(" ");
+}
+
+function project(point) {
+    const pad = 42;
+    const w = 1000 - pad * 2;
+    const h = 760 - pad * 2;
+    return {
+        x: pad + ((point.lng - bounds.minLng) / (bounds.maxLng - bounds.minLng)) * w,
+        y: pad + ((bounds.maxLat - point.lat) / (bounds.maxLat - bounds.minLat)) * h
+    };
+}
+
+function computeBounds(features) {
+    const coords = [];
+    features.forEach((feature) => collectCoords(feature.geometry.coordinates, coords));
+    return coords.reduce((acc, [lng, lat]) => ({
+        minLng: Math.min(acc.minLng, lng),
+        maxLng: Math.max(acc.maxLng, lng),
+        minLat: Math.min(acc.minLat, lat),
+        maxLat: Math.max(acc.maxLat, lat)
+    }), { minLng: Infinity, maxLng: -Infinity, minLat: Infinity, maxLat: -Infinity });
 }
 
 function geometryCenter(geometry) {
     const coords = [];
     collectCoords(geometry.coordinates, coords);
-    let minLng = Infinity;
-    let maxLng = -Infinity;
-    let minLat = Infinity;
-    let maxLat = -Infinity;
-    coords.forEach(([lng, lat]) => {
-        minLng = Math.min(minLng, lng);
-        maxLng = Math.max(maxLng, lng);
-        minLat = Math.min(minLat, lat);
-        maxLat = Math.max(maxLat, lat);
-    });
-    return { lng: (minLng + maxLng) / 2, lat: (minLat + maxLat) / 2 };
+    const b = coords.reduce((acc, [lng, lat]) => ({
+        minLng: Math.min(acc.minLng, lng),
+        maxLng: Math.max(acc.maxLng, lng),
+        minLat: Math.min(acc.minLat, lat),
+        maxLat: Math.max(acc.maxLat, lat)
+    }), { minLng: Infinity, maxLng: -Infinity, minLat: Infinity, maxLat: -Infinity });
+    return { lng: (b.minLng + b.maxLng) / 2, lat: (b.minLat + b.maxLat) / 2 };
 }
 
 function collectCoords(input, output) {
@@ -908,18 +656,13 @@ function collectCoords(input, output) {
 
 function buildGridCells(boundaryGeoJSON) {
     const cells = [];
-    const lngMin = 126.76;
-    const lngMax = 127.20;
-    const latMin = 37.42;
-    const latMax = 37.71;
-    const stepLng = 0.025;
-    const stepLat = 0.018;
+    const lngMin = 126.76, lngMax = 127.20, latMin = 37.42, latMax = 37.71;
+    const stepLng = 0.025, stepLat = 0.018;
     let id = 1;
-
     for (let lat = latMin; lat < latMax; lat += stepLat) {
         for (let lng = lngMin; lng < lngMax; lng += stepLng) {
             const center = { lat: lat + stepLat / 2, lng: lng + stepLng / 2 };
-            const district = findDistrictForPoint(center, boundaryGeoJSON);
+            const district = boundaryGeoJSON.features.find((feature) => pointInGeometry(center, feature.geometry));
             if (!district) continue;
             cells.push({
                 id: `GRID-${String(id).padStart(3, "0")}`,
@@ -935,10 +678,6 @@ function buildGridCells(boundaryGeoJSON) {
     return cells;
 }
 
-function findDistrictForPoint(center, geoJSON) {
-    return geoJSON.features.find((feature) => pointInGeometry(center, feature.geometry));
-}
-
 function pointInGeometry(point, geometry) {
     if (geometry.type === "Polygon") return pointInPolygon(point, geometry.coordinates);
     if (geometry.type === "MultiPolygon") return geometry.coordinates.some((poly) => pointInPolygon(point, poly));
@@ -951,10 +690,7 @@ function pointInPolygon(point, polygon) {
     const x = point.lng;
     const y = point.lat;
     for (let i = 0, j = outer.length - 1; i < outer.length; j = i++) {
-        const xi = outer[i][0];
-        const yi = outer[i][1];
-        const xj = outer[j][0];
-        const yj = outer[j][1];
+        const xi = outer[i][0], yi = outer[i][1], xj = outer[j][0], yj = outer[j][1];
         const intersects = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / ((yj - yi) || 1e-12) + xi);
         if (intersects) inside = !inside;
     }
@@ -977,23 +713,19 @@ function distanceKm(a, b) {
     const dLng = (b.lng - a.lng) * rad;
     const lat1 = a.lat * rad;
     const lat2 = b.lat * rad;
-    const sinDLat = Math.sin(dLat / 2);
-    const sinDLng = Math.sin(dLng / 2);
-    const h = sinDLat * sinDLat + Math.cos(lat1) * Math.cos(lat2) * sinDLng * sinDLng;
+    const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
     return 6371 * 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
 }
 
 function riverCrossingProxy(center) {
-    const hanLat = 37.525;
-    const nearHan = clamp(100 - Math.abs(center.lat - hanLat) * 1450);
+    const nearHan = clamp(100 - Math.abs(center.lat - 37.525) * 1450);
     const westEast = center.lng > 126.94 && center.lng < 127.12 ? 20 : 0;
     return clamp(nearHan + westEast);
 }
 
 function floodProxy(center, code) {
-    const nearHan = riverCrossingProxy(center);
     const lowland = center.lat < 37.55 ? 16 : 0;
-    return clamp(nearHan * 0.55 + lowland + hash01(`${code}:flood`) * 36);
+    return clamp(riverCrossingProxy(center) * 0.55 + lowland + hash01(`${code}:flood`) * 36);
 }
 
 function heatProxy(center, code) {
@@ -1003,9 +735,8 @@ function heatProxy(center, code) {
 
 function hash01(value) {
     let hash = 2166136261;
-    const string = String(value);
-    for (let i = 0; i < string.length; i += 1) {
-        hash ^= string.charCodeAt(i);
+    for (let i = 0; i < String(value).length; i += 1) {
+        hash ^= String(value).charCodeAt(i);
         hash = Math.imul(hash, 16777619);
     }
     return (hash >>> 0) / 4294967295;
@@ -1019,4 +750,47 @@ function band(value) {
     if (value >= 68) return "높음";
     if (value >= 38) return "중간";
     return "낮음";
+}
+
+function formatValue(value, suffix) {
+    if (value === null || value === undefined || Number.isNaN(Number(value))) return `--${suffix}`;
+    return `${Number(value).toLocaleString("ko-KR", { maximumFractionDigits: 2 })}${suffix}`;
+}
+
+function formatTimestamp(value, options = {}) {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return String(value);
+    return new Intl.DateTimeFormat("ko-KR", {
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        ...(options.compact ? {} : { timeZoneName: "short" })
+    }).format(date);
+}
+
+function showMapError(error) {
+    const loader = document.querySelector(".map-loading") || $("#map");
+    if (!loader) return;
+    loader.innerHTML = `
+        <div class="map-error">
+            <strong>지도 초기화 실패</strong>
+            경계자료 또는 앱 스크립트를 불러오지 못했습니다.<br>
+            <small>${escapeHTML(error?.message || "Unknown error")}</small>
+        </div>`;
+}
+
+function escapeHTML(value) {
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll("\"", "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+function el(name, attrs = {}) {
+    const node = document.createElementNS(NS, name);
+    Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, value));
+    return node;
 }
