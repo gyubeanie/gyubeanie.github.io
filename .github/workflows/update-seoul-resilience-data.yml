@@ -1,0 +1,58 @@
+name: Update Seoul resilience data
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 * * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  update-seoul-resilience:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check Seoul Open Data key
+        run: |
+          if [ -z "${{ secrets.SEOUL_OPEN_DATA_KEY }}" ]; then
+            echo "SEOUL_OPEN_DATA_KEY is not configured; skipping."
+            exit 0
+          fi
+
+      - name: Refresh Seoul resilience snapshot
+        if: ${{ secrets.SEOUL_OPEN_DATA_KEY != '' }}
+        env:
+          SEOUL_OPEN_DATA_KEY: ${{ secrets.SEOUL_OPEN_DATA_KEY }}
+        run: |
+          python .github/scripts/update-seoul-resilience-data.py
+
+      - name: Validate snapshot
+        if: ${{ secrets.SEOUL_OPEN_DATA_KEY != '' }}
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("seoul-resilience/data/seoul-live.json")
+          payload = json.loads(path.read_text(encoding="utf-8"))
+          assert payload["schema_version"] == 1
+          assert payload["source"]["key_redacted"] is True
+          assert "rainfall" in payload["services"]
+          assert "river_stage" in payload["services"]
+          print(f"Validated {path} generated at {payload['generated_at']}")
+          PY
+
+      - name: Commit Seoul resilience update
+        if: ${{ secrets.SEOUL_OPEN_DATA_KEY != '' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add seoul-resilience/data/seoul-live.json
+          if git diff --cached --quiet; then
+            echo "No Seoul resilience data changes."
+          else
+            git commit -m "Update Seoul resilience data"
+            git push
+          fi

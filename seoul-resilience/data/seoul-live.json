@@ -1,0 +1,39 @@
+{
+  "generated_at": null,
+  "schema_version": 1,
+  "is_live": false,
+  "source": {
+    "provider": "서울 열린데이터광장",
+    "access_pattern": "GitHub Actions scheduled static JSON snapshot",
+    "key_redacted": true
+  },
+  "services": {
+    "rainfall": {
+      "ok": false,
+      "service": "ListRainfallService",
+      "message": "GitHub Actions refresh pending.",
+      "summary": {
+        "station_count": 0,
+        "value_count": 0,
+        "max_mm": null,
+        "mean_mm": null,
+        "max_station": null
+      },
+      "rows": []
+    },
+    "river_stage": {
+      "ok": false,
+      "service": "ListRiverStageService",
+      "message": "GitHub Actions refresh pending.",
+      "summary": {
+        "station_count": 0,
+        "level_count": 0,
+        "max_level_m": null,
+        "mean_level_m": null,
+        "max_bank_ratio": null,
+        "max_ratio_station": null
+      },
+      "rows": []
+    }
+  }
+}
