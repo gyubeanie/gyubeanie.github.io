@@ -3,27 +3,27 @@
 }
 
 :root {
-    --bg: #070a09;
-    --bg-grid: rgba(92, 113, 94, 0.08);
-    --surface: rgba(14, 18, 16, 0.94);
-    --surface-2: rgba(19, 25, 22, 0.94);
-    --surface-3: rgba(28, 35, 31, 0.9);
-    --border: rgba(137, 153, 137, 0.19);
-    --border-strong: rgba(173, 194, 166, 0.36);
-    --text: #dce4d8;
-    --text-strong: #f7fff0;
-    --text-muted: #879184;
-    --text-dim: #586156;
-    --green: #75b87a;
-    --green-soft: rgba(117, 184, 122, 0.16);
-    --amber: #d6a348;
-    --amber-soft: rgba(214, 163, 72, 0.16);
-    --red: #d05e57;
-    --red-soft: rgba(208, 94, 87, 0.16);
-    --blue: #6ea5c8;
-    --blue-soft: rgba(110, 165, 200, 0.14);
-    --accent: #9ad17f;
-    --shadow: 0 16px 60px rgba(0, 0, 0, 0.34);
+    --bg: #eef1e8;
+    --bg-grid: rgba(67, 88, 67, 0.08);
+    --surface: rgba(255, 255, 251, 0.96);
+    --surface-2: rgba(247, 249, 241, 0.96);
+    --surface-3: rgba(236, 241, 226, 0.94);
+    --border: rgba(54, 70, 54, 0.2);
+    --border-strong: rgba(42, 91, 51, 0.42);
+    --text: #253028;
+    --text-strong: #07130b;
+    --text-muted: #5d6b60;
+    --text-dim: #7d887d;
+    --green: #4f9a55;
+    --green-soft: rgba(79, 154, 85, 0.16);
+    --amber: #c58d23;
+    --amber-soft: rgba(197, 141, 35, 0.16);
+    --red: #c4534b;
+    --red-soft: rgba(196, 83, 75, 0.15);
+    --blue: #327da6;
+    --blue-soft: rgba(50, 125, 166, 0.14);
+    --accent: #2f6f3c;
+    --shadow: 0 14px 36px rgba(32, 45, 35, 0.12);
     --mono: "SF Mono", "Cascadia Mono", "Roboto Mono", Menlo, Consolas, monospace;
     --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
 }
@@ -33,10 +33,10 @@ body {
     margin: 0;
     min-height: 100%;
     background:
-        linear-gradient(rgba(120, 150, 120, 0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(120, 150, 120, 0.025) 1px, transparent 1px),
-        radial-gradient(circle at top left, rgba(69, 120, 74, 0.16), transparent 30rem),
-        radial-gradient(circle at 75% 10%, rgba(83, 108, 99, 0.14), transparent 26rem),
+        linear-gradient(rgba(72, 91, 72, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(72, 91, 72, 0.045) 1px, transparent 1px),
+        radial-gradient(circle at top left, rgba(119, 163, 117, 0.22), transparent 30rem),
+        radial-gradient(circle at 75% 10%, rgba(161, 171, 146, 0.24), transparent 26rem),
         var(--bg);
     background-size: 44px 44px, 44px 44px, auto, auto, auto;
     color: var(--text);
@@ -66,7 +66,7 @@ button {
     min-height: 126px;
     padding: 1rem 1rem 1.15rem;
     border: 1px solid var(--border);
-    background: linear-gradient(180deg, rgba(16, 21, 18, 0.96), rgba(9, 12, 10, 0.92));
+    background: linear-gradient(180deg, rgba(255, 255, 251, 0.98), rgba(244, 247, 238, 0.94));
     box-shadow: var(--shadow);
 }
 
@@ -117,7 +117,7 @@ button {
     min-width: 92px;
     padding: 0.68rem 0.75rem;
     border: 1px solid var(--border);
-    background: rgba(0, 0, 0, 0.25);
+    background: rgba(255, 255, 255, 0.64);
 }
 
 .status-label {
@@ -146,7 +146,7 @@ button {
 .domain-tab {
     min-height: 54px;
     border: 1px solid var(--border);
-    background: rgba(14, 18, 16, 0.78);
+    background: rgba(255, 255, 251, 0.78);
     color: var(--text-muted);
     cursor: pointer;
     text-align: left;
@@ -165,7 +165,7 @@ button {
 .domain-tab:hover,
 .domain-tab.active {
     border-color: var(--border-strong);
-    background: linear-gradient(180deg, rgba(35, 47, 39, 0.96), rgba(16, 21, 18, 0.92));
+    background: linear-gradient(180deg, rgba(234, 244, 224, 0.98), rgba(248, 250, 244, 0.96));
     color: var(--text-strong);
 }
 
@@ -219,7 +219,7 @@ button {
 
 .live-feed-card {
     border: 1px solid rgba(110, 165, 200, 0.26);
-    background: linear-gradient(180deg, rgba(110, 165, 200, 0.075), rgba(0, 0, 0, 0.18));
+    background: linear-gradient(180deg, rgba(50, 125, 166, 0.08), rgba(255, 255, 255, 0.48));
     padding: 0.75rem;
 }
 
@@ -241,7 +241,7 @@ button {
 .feed-head strong {
     border: 1px solid rgba(110, 165, 200, 0.36);
     background: rgba(110, 165, 200, 0.12);
-    color: #a9d7f1;
+    color: #1d5f82;
     padding: 0.16rem 0.38rem;
     font-family: var(--mono);
     font-size: 0.62rem;
@@ -255,7 +255,7 @@ button {
 
 .feed-grid div {
     border: 1px solid rgba(255, 255, 255, 0.065);
-    background: rgba(0, 0, 0, 0.17);
+    background: rgba(255, 255, 255, 0.58);
     padding: 0.52rem;
 }
 
@@ -290,7 +290,7 @@ button {
 .preset-btn,
 .segmented button {
     border: 1px solid var(--border);
-    background: rgba(255, 255, 255, 0.026);
+    background: rgba(255, 255, 255, 0.56);
     color: var(--text-muted);
     cursor: pointer;
     padding: 0.55rem 0.5rem;
@@ -302,8 +302,8 @@ button {
 .preset-btn:hover,
 .segmented button.active,
 .segmented button:hover {
-    border-color: rgba(154, 209, 127, 0.42);
-    background: rgba(154, 209, 127, 0.09);
+    border-color: rgba(47, 111, 60, 0.36);
+    background: rgba(81, 148, 86, 0.13);
     color: var(--text-strong);
 }
 
@@ -339,7 +339,7 @@ input[type="range"] {
 
 .control-group {
     padding-top: 0.85rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid rgba(54, 70, 54, 0.12);
 }
 
 .control-title {
@@ -379,7 +379,7 @@ input[type="range"] {
     gap: 1rem;
     padding: 0.9rem 1rem 0.75rem;
     border-bottom: 1px solid var(--border);
-    background: rgba(0, 0, 0, 0.18);
+    background: rgba(255, 255, 255, 0.54);
 }
 
 .map-summary {
@@ -410,7 +410,7 @@ input[type="range"] {
     background:
         linear-gradient(rgba(133, 160, 133, 0.08) 1px, transparent 1px),
         linear-gradient(90deg, rgba(133, 160, 133, 0.08) 1px, transparent 1px),
-        #090d0b;
+        #edf2e8;
     background-size: 32px 32px;
 }
 
@@ -432,7 +432,7 @@ input[type="range"] {
     padding: 0.58rem 0.85rem;
     border-top: 1px solid var(--border);
     color: var(--text-muted);
-    background: rgba(0, 0, 0, 0.23);
+    background: rgba(255, 255, 255, 0.68);
     font-size: 0.72rem;
 }
 
@@ -448,30 +448,51 @@ input[type="range"] {
 .legend-good { background: var(--green); }
 .legend-watch { background: var(--amber); }
 .legend-vulnerable { background: var(--red); }
-.legend-selected { background: transparent; outline: 2px solid #f4f1c9; }
+.legend-selected { background: transparent; outline: 2px solid #1c2f20; }
+
+.map-error {
+    max-width: 520px;
+    padding: 1rem 1.15rem;
+    border: 1px solid rgba(196, 83, 75, 0.35);
+    background: rgba(255, 255, 255, 0.82);
+    color: #8d2f29;
+    line-height: 1.55;
+    text-align: left;
+    box-shadow: var(--shadow);
+}
+
+.map-error strong {
+    display: block;
+    margin-bottom: 0.35rem;
+    color: #6f211d;
+}
+
+.map-error small {
+    color: var(--text-muted);
+}
 
 .leaflet-container {
-    background: #090d0b;
+    background: #edf2e8;
     font-family: var(--sans);
 }
 
 .leaflet-control-attribution {
-    background: rgba(5, 7, 6, 0.75) !important;
-    color: rgba(220, 228, 216, 0.56) !important;
+    background: rgba(255, 255, 255, 0.86) !important;
+    color: rgba(45, 55, 48, 0.66) !important;
     font-size: 10px !important;
 }
 
 .leaflet-tooltip.resilience-tooltip {
     border: 1px solid rgba(154, 209, 127, 0.35);
-    background: rgba(8, 11, 9, 0.92);
+    background: rgba(255, 255, 251, 0.96);
     color: var(--text-strong);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+    box-shadow: 0 8px 24px rgba(32, 45, 35, 0.16);
     font-size: 0.75rem;
 }
 
 .leaflet-popup-content-wrapper,
 .leaflet-popup-tip {
-    background: rgba(8, 11, 9, 0.96);
+    background: rgba(255, 255, 251, 0.98);
     color: var(--text);
     border: 1px solid var(--border);
 }
@@ -507,7 +528,7 @@ input[type="range"] {
 
 .readiness-card {
     border: 1px solid var(--border);
-    background: rgba(255, 255, 255, 0.025);
+    background: rgba(255, 255, 255, 0.58);
     padding: 0.62rem;
 }
 
@@ -538,23 +559,23 @@ input[type="range"] {
 }
 
 .status-good {
-    color: #9fe4a2;
+    color: #2f7d39;
     background: var(--green-soft);
 }
 
 .status-watch {
-    color: #f3c877;
+    color: #9b6900;
     background: var(--amber-soft);
 }
 
 .status-vulnerable {
-    color: #f39a92;
+    color: #9b2e27;
     background: var(--red-soft);
 }
 
 .bar-track {
     height: 0.42rem;
-    background: rgba(255, 255, 255, 0.07);
+    background: rgba(42, 58, 42, 0.1);
     overflow: hidden;
 }
 
@@ -574,7 +595,7 @@ input[type="range"] {
 
 .judgement-box {
     border: 1px solid var(--border);
-    background: rgba(0, 0, 0, 0.18);
+    background: rgba(255, 255, 255, 0.54);
     padding: 0.75rem;
 }
 
@@ -596,7 +617,7 @@ input[type="range"] {
 .priority-table-wrap {
     max-height: 310px;
     overflow: auto;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(54, 70, 54, 0.12);
 }
 
 .priority-table {
@@ -608,7 +629,7 @@ input[type="range"] {
 .priority-table th,
 .priority-table td {
     padding: 0.62rem 0.6rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+    border-bottom: 1px solid rgba(54, 70, 54, 0.1);
     text-align: left;
     color: var(--text-muted);
     vertical-align: middle;
@@ -618,7 +639,7 @@ input[type="range"] {
     position: sticky;
     top: 0;
     z-index: 1;
-    background: #101512;
+    background: #f1f4eb;
     color: var(--text-dim);
     font-family: var(--mono);
     font-size: 0.62rem;
@@ -636,7 +657,7 @@ input[type="range"] {
 }
 
 .priority-table tr:hover td {
-    background: rgba(154, 209, 127, 0.055);
+    background: rgba(81, 148, 86, 0.08);
 }
 
 .mini-statuses {
@@ -676,7 +697,7 @@ input[type="range"] {
 
 .source-tags span {
     border: 1px solid var(--border);
-    background: rgba(255, 255, 255, 0.025);
+    background: rgba(255, 255, 255, 0.58);
     color: var(--text-muted);
     padding: 0.25rem 0.4rem;
     font-family: var(--mono);

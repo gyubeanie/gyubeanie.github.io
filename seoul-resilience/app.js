@@ -136,7 +136,7 @@ const CORRIDORS = [
 const state = {
     domain: "food",
     scale: "dong",
-    base: "none",
+    base: "vector",
     scenario: { ...PRESETS.compound },
     overlays: { assets: true, corridors: true },
     selected: null
@@ -156,7 +156,12 @@ let liveData = null;
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => Array.from(document.querySelectorAll(selector));
 
-document.addEventListener("DOMContentLoaded", init);
+document.addEventListener("DOMContentLoaded", () => {
+    init().catch((error) => {
+        console.error("Seoul resilience dashboard failed to initialize:", error);
+        showMapError(error);
+    });
+});
 
 async function init() {
     $("#timestamp").textContent = new Intl.DateTimeFormat("ko-KR", {
@@ -166,12 +171,16 @@ async function init() {
         minute: "2-digit"
     }).format(new Date());
 
+    if (!window.L) {
+        throw new Error("Leaflet map library did not load. Check the CDN/network connection.");
+    }
+
     bindControls();
     initMap();
 
     const [neighborhoods, municipalities, liveSnapshot] = await Promise.all([
-        fetch("./data/seoul_neighborhoods_geo_simple.json").then((r) => r.json()),
-        fetch("./data/seoul_municipalities_geo_simple.json").then((r) => r.json()),
+        fetchRequiredJSON("./data/seoul_neighborhoods_geo_simple.json"),
+        fetchRequiredJSON("./data/seoul_municipalities_geo_simple.json"),
         fetchOptionalJSON("./data/seoul-live.json")
     ]);
 
@@ -189,6 +198,14 @@ async function init() {
     document.querySelector(".map-loading")?.remove();
 }
 
+async function fetchRequiredJSON(url) {
+    const response = await fetch(url, { cache: "no-store" });
+    if (!response.ok) {
+        throw new Error(`${url} returned HTTP ${response.status}`);
+    }
+    return response.json();
+}
+
 async function fetchOptionalJSON(url) {
     try {
         const response = await fetch(url, { cache: "no-store" });
@@ -197,6 +214,27 @@ async function fetchOptionalJSON(url) {
     } catch {
         return null;
     }
+}
+
+function showMapError(error) {
+    const loader = document.querySelector(".map-loading");
+    if (!loader) return;
+    loader.innerHTML = `
+        <div class="map-error">
+            <strong>지도 초기화 실패</strong>
+            지도 라이브러리 또는 경계자료를 불러오지 못했습니다.<br>
+            <small>${escapeHTML(error?.message || "Unknown error")}</small>
+        </div>
+    `;
+}
+
+function escapeHTML(value) {
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll("\"", "&quot;")
+        .replaceAll("'", "&#039;");
 }
 
 function bindControls() {
@@ -257,7 +295,7 @@ function initMap() {
     layers = {
         bases: {
             none: null,
-            vector: L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+            vector: L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
                 maxZoom: 19,
                 attribution: "&copy; OpenStreetMap &copy; CARTO"
             }),
@@ -310,7 +348,7 @@ function buildMapLayers() {
     buildAssetLayer();
     buildCorridorLayer();
 
-    setBase("none");
+    setBase("vector");
     updateOverlayVisibility();
     map.fitBounds(layers.gu.getBounds(), { padding: [18, 18] });
 }
