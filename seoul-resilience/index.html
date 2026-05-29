@@ -14,7 +14,7 @@
             <div class="title-block">
                 <p class="eyebrow">MVP · 2050 복합 기후 스트레스 모형 · 자료연계 전</p>
                 <h1>서울 핵심기능 방호·회복력 상황판</h1>
-                <p class="subtitle">식량·전력·급수·이동·민방위 기반기능의 행정동 단위 대비상태를 시각화합니다.</p>
+                <p class="subtitle">식량·전력·급수·이동·민방위 기반기능의 법정동 단위 대비상태를 시각화합니다.</p>
             </div>
             <div class="status-strip" aria-label="대시보드 상태">
                 <div>
@@ -23,7 +23,7 @@
                 </div>
                 <div>
                     <span class="status-label">공간단위</span>
-                    <strong id="activeScaleLabel">행정동</strong>
+                    <strong id="activeScaleLabel">법정동</strong>
                 </div>
                 <div>
                     <span class="status-label">갱신</span>
@@ -61,7 +61,7 @@
                 <div class="live-feed-card" id="liveFeedCard">
                     <div class="feed-head">
                         <span>SEOUL API SNAPSHOT</span>
-                        <strong id="liveFeedStatus">대기</strong>
+                        <strong id="liveFeedStatus">설정 필요</strong>
                     </div>
                     <div class="feed-grid">
                         <div>
@@ -73,7 +73,7 @@
                             <strong id="riverFeedValue">--</strong>
                         </div>
                     </div>
-                    <p id="liveFeedTime">GitHub Actions 자료 갱신 대기 중</p>
+                    <p id="liveFeedTime">GitHub 저장소 Secret 설정 후 Actions를 실행해야 합니다.</p>
                 </div>
 
                 <div class="preset-row" aria-label="시나리오 프리셋">
@@ -131,7 +131,7 @@
                 <div class="control-group">
                     <p class="control-title">공간 단위</p>
                     <div class="segmented" id="scaleControls">
-                        <button class="active" data-scale="dong">행정동</button>
+                        <button class="active" data-scale="dong">법정동</button>
                         <button data-scale="gu">자치구</button>
                         <button data-scale="grid">작전격자</button>
                     </div>
@@ -180,7 +180,7 @@
                 <div class="panel-heading">
                     <p class="section-kicker">INSPECTOR</p>
                     <h2 id="selectedName">지역 선택 대기</h2>
-                    <p id="selectedMeta">지도에서 행정동·자치구·격자를 선택하십시오.</p>
+                    <p id="selectedMeta">지도에서 법정동·자치구·격자를 선택하십시오.</p>
                 </div>
 
                 <div class="domain-readiness" id="domainReadiness"></div>
@@ -229,7 +229,7 @@
                 </div>
                 <div class="method-copy">
                     <p>
-                        이 버전은 공공 API 연계 전 시각 프로토타입입니다. 행정동·자치구 경계는 정적 GeoJSON을 사용하고,
+                        이 버전은 공공 API 연계 전 시각 프로토타입입니다. 법정동·자치구 경계는 정적 GeoJSON을 사용하고,
                         대비상태는 거리·수요·교통지연·복합기후 스트레스에 기반한 모의 지표로 계산합니다.
                     </p>
                     <p>

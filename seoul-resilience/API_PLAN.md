@@ -11,6 +11,13 @@ Current pattern:
 3. The workflow writes `seoul-resilience/data/seoul-live.json`.
 4. The browser app reads the redacted static JSON snapshot only.
 
+Activation checklist:
+
+1. Add `SEOUL_OPEN_DATA_KEY` in GitHub repository Settings -> Secrets and variables -> Actions.
+2. Open Actions -> "Update Seoul resilience data" -> "Run workflow" once.
+3. Confirm that `seoul-resilience/data/seoul-live.json` receives a bot commit with a non-null `generated_at`.
+4. Keep the hourly schedule enabled for GitHub Pages refreshes.
+
 Initial Seoul Open Data services:
 
 - `ListRainfallService`: rainfall signal for flood/logistics stress context.

@@ -18,6 +18,13 @@ v0.2 static-refresh structure:
 4. Normalize and aggregate rainfall/river status into `seoul-live.json`.
 5. Commit/publish redacted static JSON snapshots for GitHub Pages.
 
+Current GitHub connection:
+
+- The repository remote is `https://github.com/gyubeanie/gyubeanie.github.io.git`.
+- The dashboard route is `/seoul-resilience/`.
+- The hourly workflow is already present at `.github/workflows/update-seoul-resilience-data.yml`.
+- The live card will show "설정 필요" until `SEOUL_OPEN_DATA_KEY` is added under repository Settings -> Secrets and variables -> Actions -> Repository secrets, then the workflow is run once from the Actions tab.
+
 Target data families:
 
 - Seoul Open Data Plaza: water supply, emergency water, traffic speeds, logistics and market data, real-time city data.

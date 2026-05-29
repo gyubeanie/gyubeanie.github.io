@@ -10,7 +10,7 @@ const DOMAINS = {
         actions: [
             "임시 보급거점 사전지정 및 권역별 재고 분산 검토",
             "주요 보급축 차단 시 우회수송 계획과 임시 하역지점 검토",
-            "취약 행정동 대상 생활필수품 긴급배분 기준 정교화"
+            "취약 법정동 대상 생활필수품 긴급배분 기준 정교화"
         ]
     },
     power: {
@@ -155,9 +155,16 @@ async function init() {
 }
 
 async function fetchRequiredJSON(url) {
-    const response = await fetch(url, { cache: "no-store" });
-    if (!response.ok) throw new Error(`${url} returned HTTP ${response.status}`);
-    return response.json();
+    try {
+        const response = await fetch(url, { cache: "no-store" });
+        if (!response.ok) throw new Error(`${url} returned HTTP ${response.status}`);
+        return response.json();
+    } catch (error) {
+        if (location.protocol === "file:") {
+            throw new Error(`${url} 파일을 직접 열 수 없습니다. GitHub Pages 또는 로컬 HTTP 서버에서 실행해 주세요.`);
+        }
+        throw error;
+    }
 }
 
 async function fetchOptionalJSON(url) {
@@ -195,7 +202,7 @@ function bindControls() {
         state.scale = button.dataset.scale;
         state.selectedId = null;
         $$("#scaleControls button").forEach((btn) => btn.classList.toggle("active", btn === button));
-        $("#activeScaleLabel").textContent = state.scale === "dong" ? "행정동" : state.scale === "gu" ? "자치구" : "작전격자";
+        $("#activeScaleLabel").textContent = state.scale === "dong" ? "법정동" : state.scale === "gu" ? "자치구" : "작전격자";
         renderAll();
         selectFirstPriority();
     });
@@ -233,8 +240,10 @@ function prepareGeoJSON(data, type) {
         props.__code = type === "dong" ? props.EMD_CD : props.SIG_CD;
         props.__id = `${type}-${props.__code || index}`;
         props.__districtCode = type === "dong" ? String(props.EMD_CD).slice(0, 5) : props.SIG_CD;
-        props.__name = type === "gu" ? (DISTRICT_NAMES[props.SIG_CD] || props.SIG_ENG_NM || props.SIG_CD) : (props.EMD_ENG_NM || props.EMD_CD);
-        props.__districtName = DISTRICT_NAMES[props.__districtCode] || props.SIG_ENG_NM || "서울";
+        props.__name = type === "gu"
+            ? (props.SIG_KOR_NM || DISTRICT_NAMES[props.SIG_CD] || props.SIG_ENG_NM || props.SIG_CD)
+            : (props.EMD_KOR_NM || props.EMD_ENG_NM || props.EMD_CD);
+        props.__districtName = DISTRICT_NAMES[props.__districtCode] || props.SIG_KOR_NM || props.SIG_ENG_NM || "서울";
         props.__center = geometryCenter(feature.geometry);
     });
     return data;
@@ -415,7 +424,7 @@ function renderSelectedInspector() {
     const item = currentItems().find((candidate) => getItemId(candidate) === state.selectedId);
     if (!item) {
         $("#selectedName").textContent = "지역 선택 대기";
-        $("#selectedMeta").textContent = "지도에서 행정동·자치구·격자를 선택하십시오.";
+        $("#selectedMeta").textContent = "지도에서 법정동·자치구·격자를 선택하십시오.";
         $("#domainReadiness").innerHTML = "";
         $("#driversList").innerHTML = "<li>선택 지역의 기능별 대비상태가 표시됩니다.</li>";
         $("#actionsList").innerHTML = "<li>취약 기능을 선택하면 검토 항목이 갱신됩니다.</li>";
@@ -424,7 +433,7 @@ function renderSelectedInspector() {
 
     const metrics = calculateMetrics(item);
     $("#selectedName").textContent = displayName(item);
-    $("#selectedMeta").textContent = `${state.scale === "dong" ? "행정동/법정동" : state.scale === "gu" ? "자치구" : "작전격자"} · ${displayDistrict(item)} · ${getItemId(item)}`;
+    $("#selectedMeta").textContent = `${state.scale === "dong" ? "법정동" : state.scale === "gu" ? "자치구" : "작전격자"} · ${displayDistrict(item)} · ${getItemId(item)}`;
 
     $("#domainReadiness").innerHTML = DOMAIN_ORDER.map((key) => {
         const metric = metrics[key];
@@ -504,10 +513,12 @@ function renderLiveFeed() {
     const riverSummary = river.summary || {};
     const okCount = [rainfall.ok, river.ok].filter(Boolean).length;
 
-    $("#liveFeedStatus").textContent = liveData.is_live ? `수신 ${okCount}/2` : "대기";
+    $("#liveFeedStatus").textContent = liveData.is_live ? `수신 ${okCount}/2` : "설정 필요";
     $("#rainFeedValue").textContent = rainfall.ok ? `${rainSummary.station_count ?? 0}개소 · 최대 ${formatValue(rainSummary.max_mm, "mm")}` : "자료대기";
     $("#riverFeedValue").textContent = river.ok ? `${riverSummary.station_count ?? 0}개소 · 최고 ${formatValue(riverSummary.max_level_m, "m")}` : "자료대기";
-    $("#liveFeedTime").textContent = liveData.generated_at ? `최근 스냅샷: ${formatTimestamp(liveData.generated_at)} · 키 비공개` : "GitHub Actions 자료 갱신 대기 중";
+    $("#liveFeedTime").textContent = liveData.generated_at
+        ? `최근 스냅샷: ${formatTimestamp(liveData.generated_at)} · 키 비공개`
+        : "GitHub 저장소 Secret SEOUL_OPEN_DATA_KEY 설정 후 Actions를 실행해야 합니다.";
     if (liveData.generated_at) $("#timestamp").textContent = formatTimestamp(liveData.generated_at, { compact: true });
 }
 
@@ -775,7 +786,7 @@ function showMapError(error) {
     loader.innerHTML = `
         <div class="map-error">
             <strong>지도 초기화 실패</strong>
-            경계자료 또는 앱 스크립트를 불러오지 못했습니다.<br>
+            경계자료 또는 앱 스크립트를 불러오지 못했습니다. 이 앱은 GitHub Pages 같은 HTTP 환경에서 실행해야 합니다.<br>
             <small>${escapeHTML(error?.message || "Unknown error")}</small>
         </div>`;
 }
