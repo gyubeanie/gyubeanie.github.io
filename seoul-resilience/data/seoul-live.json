@@ -1,7 +1,7 @@
 {
-  "generated_at": null,
+  "generated_at": "2026-05-29T05:40:28+00:00",
   "schema_version": 1,
-  "is_live": false,
+  "is_live": true,
   "source": {
     "provider": "서울 열린데이터광장",
     "access_pattern": "GitHub Actions scheduled static JSON snapshot",
@@ -11,7 +11,8 @@
     "rainfall": {
       "ok": false,
       "service": "ListRainfallService",
-      "message": "Repository secret SEOUL_OPEN_DATA_KEY is not configured or the workflow has not run yet.",
+      "error": "URLError: <urlopen error [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)>",
+      "elapsed_ms": 1054,
       "summary": {
         "station_count": 0,
         "value_count": 0,
@@ -24,7 +25,8 @@
     "river_stage": {
       "ok": false,
       "service": "ListRiverStageService",
-      "message": "Repository secret SEOUL_OPEN_DATA_KEY is not configured or the workflow has not run yet.",
+      "error": "URLError: <urlopen error [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)>",
+      "elapsed_ms": 1228,
       "summary": {
         "station_count": 0,
         "level_count": 0,
