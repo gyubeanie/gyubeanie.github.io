@@ -89,7 +89,7 @@ h1 {
 
 .top-stats {
   display: grid;
-  grid-template-columns: repeat(2, minmax(58px, 1fr));
+  grid-template-columns: minmax(58px, auto) minmax(86px, auto);
   gap: 8px;
   text-align: right;
 }
@@ -103,6 +103,10 @@ h1 {
   margin-top: 2px;
   font-size: 1.12rem;
   line-height: 1;
+}
+
+#scoreLabel {
+  font-size: clamp(0.86rem, 2.8vw, 1.06rem);
 }
 
 .game-layout {
@@ -387,7 +391,7 @@ input[type="range"] {
   }
 
   .top-stats {
-    grid-template-columns: repeat(2, minmax(44px, auto));
+    grid-template-columns: minmax(44px, auto) minmax(78px, auto);
     gap: 6px;
   }
 

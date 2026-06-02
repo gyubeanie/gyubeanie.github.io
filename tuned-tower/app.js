@@ -23,18 +23,160 @@ const els = {
   testButtons: Array.from(document.querySelectorAll("[data-test]")),
 };
 
-const BASE_OMEGA = 5.4;
-const BUILDING_DAMPING = 0.018;
-const MAX_LEVELS = 7;
+const LEVELS = [
+  {
+    name: "Riverside Office",
+    heightM: 180,
+    floors: 42,
+    visualHeight: 0.6,
+    widthRatio: 0.22,
+    taper: 0.1,
+    chamberPlacement: 0.72,
+    modalMassT: 14000,
+    naturalHz: 0.34,
+    buildingDamping: 0.028,
+    tests: 6,
+    accuracyPoints: 900,
+    noise: 0,
+    gust: 0.92,
+    quake: 0.82,
+    massRange: [80, 520],
+    target: { massT: 180, tuningRatio: 1.04, dampingRatio: 0.12 },
+    tolerance: { massT: 130, tuningRatio: 0.12, dampingRatio: 0.09 },
+  },
+  {
+    name: "Harbor Spire",
+    heightM: 245,
+    floors: 58,
+    visualHeight: 0.66,
+    widthRatio: 0.19,
+    taper: 0.16,
+    chamberPlacement: 0.78,
+    modalMassT: 19000,
+    naturalHz: 0.28,
+    buildingDamping: 0.024,
+    tests: 6,
+    accuracyPoints: 1000,
+    noise: 0.012,
+    gust: 1,
+    quake: 0.9,
+    massRange: [120, 760],
+    target: { massT: 420, tuningRatio: 0.96, dampingRatio: 0.17 },
+    tolerance: { massT: 120, tuningRatio: 0.1, dampingRatio: 0.08 },
+  },
+  {
+    name: "Tapered Crown",
+    heightM: 320,
+    floors: 74,
+    visualHeight: 0.71,
+    widthRatio: 0.17,
+    taper: 0.24,
+    chamberPlacement: 0.84,
+    modalMassT: 25000,
+    naturalHz: 0.23,
+    buildingDamping: 0.021,
+    tests: 5,
+    accuracyPoints: 1125,
+    noise: 0.018,
+    gust: 1.08,
+    quake: 1,
+    massRange: [180, 920],
+    target: { massT: 360, tuningRatio: 1.09, dampingRatio: 0.09 },
+    tolerance: { massT: 105, tuningRatio: 0.085, dampingRatio: 0.07 },
+  },
+  {
+    name: "Needle Tower",
+    heightM: 410,
+    floors: 92,
+    visualHeight: 0.76,
+    widthRatio: 0.145,
+    taper: 0.12,
+    chamberPlacement: 0.9,
+    modalMassT: 30000,
+    naturalHz: 0.18,
+    buildingDamping: 0.018,
+    tests: 5,
+    accuracyPoints: 1250,
+    noise: 0.024,
+    gust: 1.18,
+    quake: 1.06,
+    massRange: [250, 1200],
+    target: { massT: 760, tuningRatio: 1.01, dampingRatio: 0.21 },
+    tolerance: { massT: 95, tuningRatio: 0.075, dampingRatio: 0.06 },
+  },
+  {
+    name: "Sky Garden",
+    heightM: 475,
+    floors: 104,
+    visualHeight: 0.8,
+    widthRatio: 0.16,
+    taper: 0.3,
+    chamberPlacement: 0.68,
+    modalMassT: 38000,
+    naturalHz: 0.155,
+    buildingDamping: 0.017,
+    tests: 4,
+    accuracyPoints: 1400,
+    noise: 0.03,
+    gust: 1.28,
+    quake: 1.13,
+    massRange: [280, 1400],
+    target: { massT: 520, tuningRatio: 0.91, dampingRatio: 0.14 },
+    tolerance: { massT: 85, tuningRatio: 0.065, dampingRatio: 0.052 },
+  },
+  {
+    name: "Monsoon Core",
+    heightM: 560,
+    floors: 118,
+    visualHeight: 0.83,
+    widthRatio: 0.135,
+    taper: 0.2,
+    chamberPlacement: 0.86,
+    modalMassT: 43000,
+    naturalHz: 0.128,
+    buildingDamping: 0.015,
+    tests: 4,
+    accuracyPoints: 1550,
+    noise: 0.038,
+    gust: 1.4,
+    quake: 1.2,
+    massRange: [350, 1600],
+    target: { massT: 1120, tuningRatio: 1.12, dampingRatio: 0.08 },
+    tolerance: { massT: 75, tuningRatio: 0.055, dampingRatio: 0.045 },
+  },
+  {
+    name: "Supertall Crown",
+    heightM: 640,
+    floors: 132,
+    visualHeight: 0.86,
+    widthRatio: 0.125,
+    taper: 0.28,
+    chamberPlacement: 0.93,
+    modalMassT: 48000,
+    naturalHz: 0.108,
+    buildingDamping: 0.014,
+    tests: 3,
+    accuracyPoints: 1750,
+    noise: 0.046,
+    gust: 1.52,
+    quake: 1.32,
+    massRange: [420, 1700],
+    target: { massT: 930, tuningRatio: 0.97, dampingRatio: 0.24 },
+    tolerance: { massT: 65, tuningRatio: 0.045, dampingRatio: 0.038 },
+  },
+];
+
+const TEST_BONUS = 45;
+const MAX_LEVELS = LEVELS.length;
 const FIXED_DT = 1 / 120;
 const HISTORY_SECONDS = 7;
 const HISTORY_SIZE = Math.round(HISTORY_SECONDS / FIXED_DT);
+const VISUAL_TIME_SCALE = 3.2;
 
 const game = {
-  level: 1,
+  levelIndex: 0,
   score: 0,
-  testsLeft: 6,
-  target: createTarget(1),
+  testsLeft: LEVELS[0].tests,
   activeTest: "Ready",
   lastResult: null,
   isResolved: false,
@@ -55,21 +197,16 @@ let dpr = 1;
 let lastFrame = performance.now();
 let accumulator = 0;
 
-function createTarget(level) {
-  const seed = Math.sin(level * 81.91) * 10000;
-  const random = seed - Math.floor(seed);
-  const random2 = Math.sin(level * 43.17 + 4.2) * 10000 % 1;
-  const random3 = Math.sin(level * 19.71 + 8.9) * 10000 % 1;
-  const r1 = Math.abs(random);
-  const r2 = Math.abs(random2);
-  const r3 = Math.abs(random3);
-  const spread = Math.min(1, 0.52 + level * 0.08);
+function currentLevel() {
+  return LEVELS[game.levelIndex];
+}
 
-  return {
-    massRatio: roundTo(0.035 + spread * (0.095 - 0.035) * r1, 0.001),
-    tuningRatio: roundTo(0.82 + spread * (1.18 - 0.82) * r2, 0.01),
-    dampingRatio: roundTo(0.05 + spread * (0.28 - 0.05) * r3, 0.01),
-  };
+function campaignMaxScore() {
+  return LEVELS.reduce((total, level) => total + maxLevelScore(level), 0);
+}
+
+function maxLevelScore(level) {
+  return level.accuracyPoints + level.tests * TEST_BONUS;
 }
 
 function roundTo(value, step) {
@@ -89,47 +226,67 @@ function resetMotion() {
   updateHud();
 }
 
+function configureLevelControls() {
+  const level = currentLevel();
+  const [minMass, maxMass] = level.massRange;
+  els.massSlider.min = String(minMass);
+  els.massSlider.max = String(maxMass);
+  els.massSlider.step = "10";
+  els.massSlider.value = String(roundTo((minMass + maxMass) / 2, 10));
+  els.tuningSlider.min = "0.70";
+  els.tuningSlider.max = "1.30";
+  els.tuningSlider.step = "0.01";
+  els.tuningSlider.value = "1.00";
+  els.dampingSlider.min = "3";
+  els.dampingSlider.max = "30";
+  els.dampingSlider.step = "1";
+  els.dampingSlider.value = "15";
+  updateSliders();
+}
+
 function runTest(type) {
   if (game.testsLeft <= 0 || game.isResolved) return;
+  const level = currentLevel();
   game.testsLeft -= 1;
   resetMotion();
 
   if (type === "gust") {
-    sim.v = 1.05 + game.level * 0.06;
-    sim.x = 0.02;
+    sim.v = level.gust * (0.82 + level.heightM / 850);
+    sim.x = 0.018 * level.gust;
     game.activeTest = "Wind gust";
-    els.clue.textContent = "Watch how quickly sway fades";
+    els.clue.textContent = "Decay speed is the mass and damping clue";
   } else if (type === "quake") {
-    sim.v = -0.45;
-    sim.x = -0.08;
-    sim.y = 0.04;
+    sim.v = -0.34 * level.quake;
+    sim.x = -0.075 * level.quake;
+    sim.y = 0.035;
     game.activeTest = "Quake pulse";
-    els.clue.textContent = "Compare tower and ball phase";
+    els.clue.textContent = "Tower-ball phase reveals tuning";
   } else {
     sim.forcing = 1;
     game.activeTest = "Steady vibration";
-    els.clue.textContent = "A tuned ball cancels repeated sway";
+    els.clue.textContent = "A matched damper flattens the trace";
   }
 
   updateHud();
 }
 
 function stepSimulation(dt) {
-  const p = game.target;
-  const mu = p.massRatio;
-  const omega = BASE_OMEGA;
-  const wd = BASE_OMEGA * p.tuningRatio;
-  const zetaB = BUILDING_DAMPING;
+  const level = currentLevel();
+  const p = level.target;
+  const mu = clamp(p.massT / level.modalMassT, 0.003, 0.055);
+  const omega = 2 * Math.PI * level.naturalHz * VISUAL_TIME_SCALE;
+  const wd = omega * p.tuningRatio;
+  const zetaB = level.buildingDamping;
   const zetaD = p.dampingRatio;
   const rel = sim.x - sim.y;
   const relVel = sim.v - sim.u;
-  const wind = gustForce(sim.t) + vibrationForce(sim.t) * sim.forcing;
+  const force = gustForce(sim.t) + vibrationForce(sim.t) * sim.forcing + noiseForce(sim.t);
 
   const springBuilding = -(omega * omega) * sim.x;
   const dampBuilding = -2 * zetaB * omega * sim.v;
   const damperSpring = -mu * (wd * wd) * rel;
   const damperDamping = -mu * 2 * zetaD * wd * relVel;
-  const ax = springBuilding + dampBuilding + damperSpring + damperDamping + wind;
+  const ax = springBuilding + dampBuilding + damperSpring + damperDamping + force;
   const ay = (wd * wd) * rel + 2 * zetaD * wd * relVel;
 
   sim.v += ax * dt;
@@ -138,8 +295,8 @@ function stepSimulation(dt) {
   sim.y += sim.u * dt;
   sim.t += dt;
 
-  sim.x = clamp(sim.x, -1.4, 1.4);
-  sim.y = clamp(sim.y, -1.7, 1.7);
+  sim.x = clamp(sim.x, -1.45, 1.45);
+  sim.y = clamp(sim.y, -1.8, 1.8);
   sim.v = clamp(sim.v, -8, 8);
   sim.u = clamp(sim.u, -9, 9);
   sim.peak = Math.max(sim.peak, Math.abs(sim.x));
@@ -149,12 +306,21 @@ function stepSimulation(dt) {
 
 function gustForce(t) {
   if (game.activeTest !== "Wind gust") return 0;
-  return Math.exp(-t * 1.6) * Math.sin(t * 7.5) * 0.32;
+  const level = currentLevel();
+  return Math.exp(-t * 1.45) * Math.sin(t * 6.4) * 0.28 * level.gust;
 }
 
 function vibrationForce(t) {
   if (game.activeTest !== "Steady vibration") return 0;
-  return Math.sin(t * BASE_OMEGA * 1.03) * 0.24;
+  const level = currentLevel();
+  const omega = 2 * Math.PI * level.naturalHz * VISUAL_TIME_SCALE;
+  return Math.sin(t * omega * 1.02) * 0.21 * level.gust;
+}
+
+function noiseForce(t) {
+  const level = currentLevel();
+  if (!level.noise || game.activeTest === "Ready") return 0;
+  return level.noise * (Math.sin(t * 9.7 + 1.1) + 0.55 * Math.sin(t * 15.1 + 2.4));
 }
 
 function clamp(value, min, max) {
@@ -163,25 +329,36 @@ function clamp(value, min, max) {
 
 function getGuess() {
   return {
-    massRatio: Number(els.massSlider.value) / 100,
+    massT: Number(els.massSlider.value),
     tuningRatio: Number(els.tuningSlider.value),
     dampingRatio: Number(els.dampingSlider.value) / 100,
   };
 }
 
-function scoreGuess(guess, target) {
-  const massError = Math.abs(guess.massRatio - target.massRatio) / 0.1;
-  const tuningError = Math.abs(guess.tuningRatio - target.tuningRatio) / 0.5;
-  const dampingError = Math.abs(guess.dampingRatio - target.dampingRatio) / 0.33;
+function scoreGuess(guess, level) {
+  const target = level.target;
+  const massError = Math.abs(guess.massT - target.massT) / level.tolerance.massT;
+  const tuningError = Math.abs(guess.tuningRatio - target.tuningRatio) / level.tolerance.tuningRatio;
+  const dampingError = Math.abs(guess.dampingRatio - target.dampingRatio) / level.tolerance.dampingRatio;
   const weighted = massError * 0.34 + tuningError * 0.42 + dampingError * 0.24;
   const accuracy = clamp(1 - weighted, 0, 1);
+  const accuracyPoints = Math.round(level.accuracyPoints * accuracy);
+  const testPoints = game.testsLeft * TEST_BONUS;
+  const maxPoints = maxLevelScore(level);
+  const points = accuracyPoints + testPoints;
+  const percent = points / maxPoints;
 
   return {
-    points: Math.round(accuracy * 1000 + game.testsLeft * 35),
+    points,
+    maxPoints,
+    percent,
     accuracy,
-    massError,
-    tuningError,
-    dampingError,
+    accuracyPoints,
+    testPoints,
+    maxAccuracyPoints: level.accuracyPoints,
+    maxTestPoints: level.tests * TEST_BONUS,
+    stars: percent >= 0.9 ? 3 : percent >= 0.7 ? 2 : percent >= 0.5 ? 1 : 0,
+    errors: { massError, tuningError, dampingError },
   };
 }
 
@@ -192,55 +369,79 @@ function submitGuess(event) {
     return;
   }
 
+  const level = currentLevel();
   const guess = getGuess();
-  const result = scoreGuess(guess, game.target);
+  const result = scoreGuess(guess, level);
   game.score += result.points;
   game.lastResult = result;
   game.isResolved = true;
-  els.form.querySelector(".primary-button").textContent = game.level >= MAX_LEVELS ? "Restart game" : "Next level";
-  els.feedback.className = `feedback ${result.accuracy > 0.78 ? "good" : result.accuracy > 0.5 ? "warn" : "bad"}`;
-  els.feedback.textContent = buildResultText(guess, game.target, result);
+  els.form.querySelector(".primary-button").textContent = game.levelIndex >= MAX_LEVELS - 1 ? "Restart game" : "Next level";
+  els.feedback.className = `feedback ${result.percent > 0.78 ? "good" : result.percent > 0.5 ? "warn" : "bad"}`;
+  els.feedback.textContent = buildResultText(level, result);
+  els.objective.textContent = `${level.name}: ${result.points}/${result.maxPoints}`;
+  els.clue.textContent = buildMissText(result);
   updateHud();
 }
 
-function buildResultText(guess, target, result) {
-  const lead = result.accuracy > 0.78 ? "Strong match." : result.accuracy > 0.5 ? "Close read." : "Rough estimate.";
-  return `${lead} Actual ball: ${(target.massRatio * 100).toFixed(1)}% mass, ${target.tuningRatio.toFixed(2)}x tuning, ${(target.dampingRatio * 100).toFixed(0)}% damping. +${result.points} points.`;
+function buildResultText(level, result) {
+  const target = level.target;
+  const percent = Math.round(result.percent * 100);
+  const starText = result.stars === 1 ? "1 star" : `${result.stars} stars`;
+  return `${starText}. Level score ${result.points}/${result.maxPoints} (${percent}%). Accuracy ${result.accuracyPoints}/${result.maxAccuracyPoints}; test bonus ${result.testPoints}/${result.maxTestPoints}. Actual ball: ${target.massT} t, ${target.tuningRatio.toFixed(2)}x tuning, ${Math.round(target.dampingRatio * 100)}% damping.`;
+}
+
+function buildMissText(result) {
+  const errors = [
+    ["Mass", result.errors.massError],
+    ["Tuning", result.errors.tuningError],
+    ["Damping", result.errors.dampingError],
+  ].sort((a, b) => b[1] - a[1]);
+
+  if (result.percent >= 0.9) return "Excellent read across all three parameters";
+  if (errors[0][1] < 0.55) return "Close on all three parameters";
+  return `${errors[0][0]} was the biggest miss`;
 }
 
 function nextLevel() {
-  if (game.level >= MAX_LEVELS) {
-    game.level = 1;
+  if (game.levelIndex >= MAX_LEVELS - 1) {
+    game.levelIndex = 0;
     game.score = 0;
   } else {
-    game.level += 1;
+    game.levelIndex += 1;
   }
 
-  game.testsLeft = Math.max(3, 7 - Math.floor(game.level / 2));
-  game.target = createTarget(game.level);
+  loadCurrentLevel();
+}
+
+function loadCurrentLevel() {
+  const level = currentLevel();
+  game.testsLeft = level.tests;
   game.lastResult = null;
   game.isResolved = false;
   els.form.querySelector(".primary-button").textContent = "Submit guess";
   els.feedback.className = "feedback";
-  els.feedback.textContent = "New hidden steel ball installed. Run tests, then submit your estimate.";
-  els.objective.textContent = `Level ${game.level}: identify mass, tuning, and damping`;
-  els.clue.textContent = "Run a test and watch the response";
+  els.feedback.textContent = "Run tests, submit a final estimate, and maximize the level score.";
+  els.objective.textContent = `Level ${game.levelIndex + 1}: ${level.heightM} m, ${level.floors} floors`;
+  els.clue.textContent = `Damper chamber at ${Math.round(level.chamberPlacement * 100)}% height`;
+  configureLevelControls();
   resetMotion();
-  updateSliders();
+  updateHud();
 }
 
 function updateSliders() {
-  els.massOutput.textContent = `${Number(els.massSlider.value).toFixed(1)}%`;
+  els.massOutput.textContent = `${Number(els.massSlider.value).toFixed(0)} t`;
   els.tuningOutput.textContent = `${Number(els.tuningSlider.value).toFixed(2)}x`;
   els.dampingOutput.textContent = `${Number(els.dampingSlider.value).toFixed(0)}%`;
 }
 
 function updateHud() {
-  els.level.textContent = String(game.level);
-  els.score.textContent = String(game.score);
+  const level = currentLevel();
+  const peakMeters = sim.peak * (1.2 + level.heightM / 145);
+  els.level.textContent = `${game.levelIndex + 1}/${MAX_LEVELS}`;
+  els.score.textContent = `${game.score}/${campaignMaxScore()}`;
   els.tests.textContent = String(game.testsLeft);
   els.test.textContent = game.activeTest;
-  els.peak.textContent = `Peak sway ${sim.peak.toFixed(2)} m`;
+  els.peak.textContent = `Peak sway ${peakMeters.toFixed(2)} m`;
   els.testButtons.forEach((button) => {
     button.disabled = game.testsLeft <= 0 || game.isResolved;
   });
@@ -288,16 +489,19 @@ function drawGround(width, height) {
 }
 
 function drawTower(width, height) {
+  const level = currentLevel();
   const baseY = height - 28;
-  const towerHeight = Math.min(height * 0.78, width < 520 ? height * 0.74 : height * 0.82);
-  const floors = 16;
-  const towerWidth = clamp(width * 0.2, 72, 138);
+  const fitRatio = width < 520 ? Math.min(level.visualHeight, 0.79) : level.visualHeight;
+  const towerHeight = Math.min(height * fitRatio, height - 56);
+  const floors = level.floors;
+  const towerWidth = clamp(width * level.widthRatio, 58, 148);
   const centerX = width * (width > 760 ? 0.48 : 0.5);
-  const swayScale = clamp(width * 0.115, 38, 108);
+  const swayScale = clamp(width * (0.08 + level.visualHeight * 0.055), 36, 122);
   const topSway = sim.x * swayScale;
   const ballSway = sim.y * swayScale;
   const topY = baseY - towerHeight;
-  const floorH = towerHeight / floors;
+  const floorBands = Math.min(34, Math.max(14, Math.round(floors / 3)));
+  const floorH = towerHeight / floorBands;
 
   ctx.save();
   ctx.lineJoin = "round";
@@ -307,12 +511,13 @@ function drawTower(width, height) {
 
   const leftBase = centerX - towerWidth / 2;
   const rightBase = centerX + towerWidth / 2;
-  const leftTop = centerX - towerWidth * 0.38 + topSway;
-  const rightTop = centerX + towerWidth * 0.38 + topSway;
+  const topWidth = towerWidth * clamp(1 - level.taper, 0.55, 0.92);
+  const leftTop = centerX - topWidth / 2 + topSway;
+  const rightTop = centerX + topWidth / 2 + topSway;
 
   const towerGradient = ctx.createLinearGradient(0, topY, 0, baseY);
   towerGradient.addColorStop(0, "#d5ddd5");
-  towerGradient.addColorStop(0.48, "#9cad9f");
+  towerGradient.addColorStop(0.5, "#9cad9f");
   towerGradient.addColorStop(1, "#627267");
   ctx.fillStyle = towerGradient;
   ctx.beginPath();
@@ -326,49 +531,53 @@ function drawTower(width, height) {
   ctx.shadowBlur = 0;
   ctx.strokeStyle = "rgba(19, 31, 26, 0.42)";
   ctx.lineWidth = 2;
-  for (let floor = 1; floor < floors; floor += 1) {
-    const ratio = floor / floors;
+  for (let floor = 1; floor < floorBands; floor += 1) {
+    const ratio = floor / floorBands;
     const y = baseY - floorH * floor;
     const sway = topSway * ratio * ratio;
-    const w = towerWidth * (1 - ratio * 0.2);
+    const w = towerWidth - (towerWidth - topWidth) * ratio;
     ctx.beginPath();
     ctx.moveTo(centerX - w / 2 + sway, y);
     ctx.lineTo(centerX + w / 2 + sway, y);
     ctx.stroke();
   }
 
-  drawWindows(centerX, topY, baseY, towerWidth, topSway, floors);
-  drawDamper(centerX, topY, towerWidth, topSway, ballSway);
+  drawWindows(centerX, topY, baseY, towerWidth, topWidth, topSway, floorBands);
+  drawDamper(centerX, topY, baseY, towerHeight, towerWidth, topSway, ballSway);
   ctx.restore();
 }
 
-function drawWindows(centerX, topY, baseY, towerWidth, topSway, floors) {
-  const floorH = (baseY - topY) / floors;
-  const lit = Math.floor((performance.now() * 0.002) % floors);
+function drawWindows(centerX, topY, baseY, towerWidth, topWidth, topSway, floorBands) {
+  const floorH = (baseY - topY) / floorBands;
+  const lit = Math.floor((performance.now() * 0.002) % floorBands);
 
-  for (let floor = 3; floor < floors - 2; floor += 1) {
-    const ratio = floor / floors;
+  for (let floor = 3; floor < floorBands - 2; floor += 1) {
+    const ratio = floor / floorBands;
     const y = baseY - floorH * floor + floorH * 0.28;
     const sway = topSway * ratio * ratio;
-    const rowWidth = towerWidth * (0.72 - ratio * 0.08);
-    const cols = 4;
+    const rowWidth = (towerWidth - (towerWidth - topWidth) * ratio) * 0.72;
+    const cols = rowWidth > 86 ? 4 : 3;
     const gap = rowWidth / cols;
     for (let col = 0; col < cols; col += 1) {
       const x = centerX - rowWidth / 2 + col * gap + gap * 0.25 + sway;
       ctx.fillStyle = floor === lit || (floor + col) % 5 === 0 ? "rgba(240, 185, 90, 0.74)" : "rgba(27, 54, 61, 0.62)";
-      ctx.fillRect(x, y, gap * 0.5, Math.max(3, floorH * 0.22));
+      ctx.fillRect(x, y, gap * 0.5, Math.max(3, floorH * 0.2));
     }
   }
 }
 
-function drawDamper(centerX, topY, towerWidth, topSway, ballSway) {
-  const chamberY = topY + 32;
-  const chamberH = 72;
-  const chamberW = towerWidth * 0.72;
-  const anchorX = centerX + topSway;
-  const ballX = centerX + ballSway;
+function drawDamper(centerX, topY, baseY, towerHeight, towerWidth, topSway, ballSway) {
+  const level = currentLevel();
+  const chamberCenterY = baseY - towerHeight * level.chamberPlacement;
+  const chamberH = clamp(towerHeight * 0.11, 52, 84);
+  const chamberY = clamp(chamberCenterY - chamberH / 2, topY + 12, baseY - chamberH - 20);
+  const chamberW = towerWidth * clamp(0.78 - level.taper * 0.35, 0.54, 0.76);
+  const ratioFromBase = (baseY - chamberCenterY) / towerHeight;
+  const chamberSway = topSway * ratioFromBase * ratioFromBase;
+  const anchorX = centerX + chamberSway;
+  const ballX = centerX + ballSway * ratioFromBase;
   const ballY = chamberY + chamberH * 0.66;
-  const radius = clamp(towerWidth * (0.085 + game.target.massRatio * 0.55), 9, 18);
+  const radius = clamp(towerWidth * 0.13, 8, 17);
 
   ctx.fillStyle = "rgba(12, 19, 17, 0.52)";
   ctx.fillRect(anchorX - chamberW / 2, chamberY, chamberW, chamberH);
@@ -470,6 +679,5 @@ els.reset.addEventListener("click", resetMotion);
 window.addEventListener("resize", resizeCanvas);
 
 resizeCanvas();
-updateSliders();
-updateHud();
+loadCurrentLevel();
 requestAnimationFrame(frame);
