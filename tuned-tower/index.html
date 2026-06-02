@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tuned Tower</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Dampened skyscraper puzzle</p>
+          <h1>Tuned Tower</h1>
+        </div>
+        <div class="top-stats" aria-label="Game progress">
+          <div>
+            <span>Level</span>
+            <strong id="levelLabel">1</strong>
+          </div>
+          <div>
+            <span>Score</span>
+            <strong id="scoreLabel">0</strong>
+          </div>
+        </div>
+      </header>
+
+      <main class="game-layout">
+        <section class="stage" aria-label="Animated skyscraper simulation">
+          <canvas id="simCanvas"></canvas>
+          <div class="stage-hud stage-hud-left" aria-live="polite">
+            <span id="testLabel">Ready</span>
+            <strong id="peakLabel">Peak sway 0.00 m</strong>
+          </div>
+          <div class="stage-hud stage-hud-right">
+            <span>Tests left</span>
+            <strong id="testsLabel">6</strong>
+          </div>
+        </section>
+
+        <section class="control-dock" aria-label="Puzzle controls">
+          <div class="tool-row" role="group" aria-label="Disturbance tests">
+            <button class="tool-button" type="button" data-test="gust" aria-label="Run wind gust test">
+              <span class="tool-icon wind-icon" aria-hidden="true"></span>
+              Wind
+            </button>
+            <button class="tool-button" type="button" data-test="quake" aria-label="Run quake pulse test">
+              <span class="tool-icon quake-icon" aria-hidden="true"></span>
+              Quake
+            </button>
+            <button class="tool-button" type="button" data-test="vibe" aria-label="Run steady vibration test">
+              <span class="tool-icon vibe-icon" aria-hidden="true"></span>
+              Vibe
+            </button>
+          </div>
+
+          <div class="round-summary">
+            <div>
+              <span>Objective</span>
+              <strong id="objectiveLabel">Infer the hidden steel ball</strong>
+            </div>
+            <div>
+              <span>Clue</span>
+              <strong id="clueLabel">Run a test and watch the response</strong>
+            </div>
+          </div>
+
+          <form id="guessForm" class="guess-form">
+            <label class="slider-group">
+              <span class="slider-label">
+                <span>Ball mass</span>
+                <output id="massOutput" for="massSlider">6.0%</output>
+              </span>
+              <input id="massSlider" type="range" min="2" max="12" step="0.1" value="6">
+            </label>
+
+            <label class="slider-group">
+              <span class="slider-label">
+                <span>Tuning</span>
+                <output id="tuningOutput" for="tuningSlider">1.00x</output>
+              </span>
+              <input id="tuningSlider" type="range" min="0.75" max="1.25" step="0.01" value="1">
+            </label>
+
+            <label class="slider-group">
+              <span class="slider-label">
+                <span>Damping</span>
+                <output id="dampingOutput" for="dampingSlider">12%</output>
+              </span>
+              <input id="dampingSlider" type="range" min="2" max="35" step="1" value="12">
+            </label>
+
+            <div class="action-row">
+              <button id="resetButton" class="secondary-button" type="button">Reset motion</button>
+              <button class="primary-button" type="submit">Submit guess</button>
+            </div>
+          </form>
+
+          <p id="feedback" class="feedback" aria-live="polite">
+            Use the tests to estimate the damper, then submit your steel-ball parameters.
+          </p>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
