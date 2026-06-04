@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nemotron Korea Personas</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="home-link" href="/" aria-label="Back to gyubeanie home">gyubeanie</a>
+      <div class="title-block">
+        <p class="eyebrow">Dataset workbench</p>
+        <h1>Nemotron Korea Personas</h1>
+        <p class="subtitle">Browse the public NVIDIA Nemotron-Personas-Korea dataset snapshot with exact province and district counts, Seoul-first filters, and sampled persona rows.</p>
+      </div>
+      <a class="source-link" id="sourceLink" href="https://huggingface.co/datasets/nvidia/Nemotron-Personas-Korea" target="_blank" rel="noreferrer">Hugging Face</a>
+    </header>
+
+    <section class="toolbar" aria-label="Dataset filters">
+      <label>
+        Province
+        <select id="provinceSelect"></select>
+      </label>
+      <label>
+        District
+        <select id="districtSelect"></select>
+      </label>
+      <label>
+        Sex
+        <select id="sexSelect"></select>
+      </label>
+      <label>
+        Min age
+        <input id="minAgeInput" type="number" min="19" max="99" placeholder="19">
+      </label>
+      <label>
+        Max age
+        <input id="maxAgeInput" type="number" min="19" max="99" placeholder="99">
+      </label>
+      <label class="search-field">
+        Search sample
+        <input id="searchInput" type="search" placeholder="occupation, persona, district">
+      </label>
+      <button id="clearButton" type="button">Clear</button>
+    </section>
+
+    <section class="metric-grid" aria-label="Dataset summary">
+      <div class="metric-card">
+        <span>Dataset rows</span>
+        <strong id="totalRows">--</strong>
+      </div>
+      <div class="metric-card">
+        <span id="provinceRowsLabel">Province rows</span>
+        <strong id="provinceRows">--</strong>
+      </div>
+      <div class="metric-card">
+        <span>Province share</span>
+        <strong id="provinceShare">--</strong>
+      </div>
+      <div class="metric-card">
+        <span>Visible sample</span>
+        <strong id="visibleSample">--</strong>
+      </div>
+    </section>
+
+    <main class="dashboard-grid">
+      <section class="chart-panel wide" aria-label="Province distribution">
+        <div class="panel-heading">
+          <div>
+            <p class="section-kicker">Exact</p>
+            <h2>Province distribution</h2>
+          </div>
+          <span id="statsMode" class="status-pill">loading</span>
+        </div>
+        <div id="provinceChart" class="bar-list"></div>
+      </section>
+
+      <section class="chart-panel wide" aria-label="District distribution">
+        <div class="panel-heading">
+          <div>
+            <p class="section-kicker">Exact</p>
+            <h2 id="districtTitle">District distribution</h2>
+          </div>
+          <span id="districtCount" class="status-pill">--</span>
+        </div>
+        <div id="districtChart" class="bar-list"></div>
+      </section>
+
+      <section class="chart-panel" aria-label="Sex distribution">
+        <div class="panel-heading">
+          <div>
+            <p class="section-kicker">Sample</p>
+            <h2>Sex</h2>
+          </div>
+        </div>
+        <div id="sexChart" class="bar-list"></div>
+      </section>
+
+      <section class="chart-panel" aria-label="Age distribution">
+        <div class="panel-heading">
+          <div>
+            <p class="section-kicker">Sample</p>
+            <h2>Age</h2>
+          </div>
+        </div>
+        <div id="ageChart" class="bar-list"></div>
+      </section>
+
+      <section class="chart-panel" aria-label="Housing distribution">
+        <div class="panel-heading">
+          <div>
+            <p class="section-kicker">Sample</p>
+            <h2>Housing</h2>
+          </div>
+        </div>
+        <div id="housingChart" class="bar-list"></div>
+      </section>
+
+      <section class="chart-panel" aria-label="Education distribution">
+        <div class="panel-heading">
+          <div>
+            <p class="section-kicker">Sample</p>
+            <h2>Education</h2>
+          </div>
+        </div>
+        <div id="educationChart" class="bar-list"></div>
+      </section>
+    </main>
+
+    <section class="persona-panel" aria-label="Persona browser">
+      <div class="panel-heading">
+        <div>
+          <p class="section-kicker">Sample browser</p>
+          <h2>Persona rows</h2>
+          <p id="sampleNote">Loading snapshot...</p>
+        </div>
+        <div class="pager">
+          <button id="prevButton" type="button">Prev</button>
+          <button id="nextButton" type="button">Next</button>
+        </div>
+      </div>
+      <div id="personaRows" class="persona-grid"></div>
+    </section>
+
+    <section class="method-panel">
+      <p><strong>Reading note:</strong> province and district charts come from Hugging Face Dataset Viewer statistics for the full 1,000,000-row dataset. Sex, age, housing, education, and persona rows use an evenly spaced static sample so the app works on GitHub Pages without a server.</p>
+      <p id="generatedAt">Snapshot metadata loading...</p>
+    </section>
+  </div>
+</body>
+</html>
