@@ -418,9 +418,10 @@ function formatNumber(value) {
 }
 
 function formatPercent(value) {
+  const minimumFractionDigits = value > 0 && value < 0.01 ? 2 : 0;
   return `${new Intl.NumberFormat('en', {
-    maximumFractionDigits: 1,
-    minimumFractionDigits: value > 0 && value < 0.01 ? 2 : 0
+    maximumFractionDigits: Math.max(1, minimumFractionDigits),
+    minimumFractionDigits
   }).format(Number(value || 0) * 100)}%`;
 }
 
