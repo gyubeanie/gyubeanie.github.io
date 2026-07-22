@@ -1,6 +1,10 @@
 name: Update KPX public snapshots
 
 on:
+  push:
+    paths:
+      - "scripts/update-kpx-snapshots.mjs"
+      - ".github/workflows/update-kpx-snapshots.yml"
   schedule:
     - cron: "*/5 * * * *"
   workflow_dispatch:
