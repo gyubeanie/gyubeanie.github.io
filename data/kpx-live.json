@@ -1,26 +1,26 @@
 {
   "schemaVersion": 1,
   "kind": "kpx-generation",
-  "fetchedAt": "2026-07-31T18:41:15.498Z",
+  "fetchedAt": "2026-07-31T20:08:26.816Z",
   "sourceUrl": "https://www.kpx.or.kr/powerSource.es?device=chart&mid=a10404030000",
   "payload": {
-    "asOf": "2026-08-01 03:35",
-    "generationMw": 63200,
+    "asOf": "2026-08-01 05:05",
+    "generationMw": 62746,
     "reportedMarketDemandMw": null,
     "estimatedTotalDemandMw": null,
-    "pumpedStorageLoadMw": 718,
-    "carbonIntensity": 441,
-    "emissionsTonnesPerHour": 27858,
-    "renewableShare": 7.173815550077643,
-    "knownLowCarbonShare": 36.766860074692644,
+    "pumpedStorageLoadMw": 1257,
+    "carbonIntensity": 436,
+    "emissionsTonnesPerHour": 27374,
+    "renewableShare": 7.4813919305016015,
+    "knownLowCarbonShare": 37.10404177850729,
     "sources": [
       {
         "key": "coal",
         "label": "Coal",
         "labelKo": "석탄",
         "color": "#8a6d5e",
-        "mw": 26679,
-        "share": 42.2141730853353,
+        "mw": 26049,
+        "share": 41.51548521153297,
         "factor": 820
       },
       {
@@ -28,8 +28,8 @@
         "label": "Nuclear",
         "labelKo": "원자력",
         "color": "#ccff3e",
-        "mw": 21956,
-        "share": 34.74005790949315,
+        "mw": 21970,
+        "share": 35.01458293080294,
         "factor": 12
       },
       {
@@ -37,8 +37,8 @@
         "label": "Gas",
         "labelKo": "가스",
         "color": "#ff8552",
-        "mw": 9801,
-        "share": 15.508287040917008,
+        "mw": 9803,
+        "share": 15.622474394031752,
         "factor": 490
       },
       {
@@ -46,8 +46,8 @@
         "label": "Other renewables",
         "labelKo": "기타 신재생",
         "color": "#58d2a0",
-        "mw": 3253,
-        "share": 5.147013384878157,
+        "mw": 3383,
+        "share": 5.391933082797251,
         "factor": 230
       },
       {
@@ -55,18 +55,9 @@
         "label": "Wind",
         "labelKo": "풍력",
         "color": "#58c8ff",
-        "mw": 1028,
-        "share": 1.6270107237115885,
+        "mw": 1033,
+        "share": 1.6455194911336684,
         "factor": 11
-      },
-      {
-        "key": "hydro",
-        "label": "Hydro",
-        "labelKo": "수력",
-        "color": "#4f7dff",
-        "mw": 253,
-        "share": 0.3997914414878968,
-        "factor": 24
       },
       {
         "key": "oil",
@@ -74,8 +65,26 @@
         "labelKo": "유류",
         "color": "#b596ff",
         "mw": 230,
-        "share": 0.36366641417691886,
+        "share": 0.366065533130726,
         "factor": 650
+      },
+      {
+        "key": "hydro",
+        "label": "Hydro",
+        "labelKo": "수력",
+        "color": "#4f7dff",
+        "mw": 229,
+        "share": 0.3647220242386914,
+        "factor": 24
+      },
+      {
+        "key": "solar",
+        "label": "Solar",
+        "labelKo": "태양광",
+        "color": "#ffd75a",
+        "mw": 50,
+        "share": 0.07921733233199199,
+        "factor": 48
       }
     ],
     "emissionsHistory": [
@@ -386,6 +395,132 @@
         "attributedGenerationMw": 63200,
         "carbonIntensity": 441,
         "emissionsTonnesPerHour": 27858
+      },
+      {
+        "asOf": "2026-08-01 03:40",
+        "generationMw": 63103,
+        "attributedGenerationMw": 63103,
+        "carbonIntensity": 441,
+        "emissionsTonnesPerHour": 27836
+      },
+      {
+        "asOf": "2026-08-01 03:45",
+        "generationMw": 63051,
+        "attributedGenerationMw": 63051,
+        "carbonIntensity": 440,
+        "emissionsTonnesPerHour": 27734
+      },
+      {
+        "asOf": "2026-08-01 03:50",
+        "generationMw": 63035,
+        "attributedGenerationMw": 63035,
+        "carbonIntensity": 439,
+        "emissionsTonnesPerHour": 27696
+      },
+      {
+        "asOf": "2026-08-01 03:55",
+        "generationMw": 62981,
+        "attributedGenerationMw": 62981,
+        "carbonIntensity": 439,
+        "emissionsTonnesPerHour": 27644
+      },
+      {
+        "asOf": "2026-08-01 04:00",
+        "generationMw": 62828,
+        "attributedGenerationMw": 62828,
+        "carbonIntensity": 437,
+        "emissionsTonnesPerHour": 27473
+      },
+      {
+        "asOf": "2026-08-01 04:05",
+        "generationMw": 62799,
+        "attributedGenerationMw": 62799,
+        "carbonIntensity": 437,
+        "emissionsTonnesPerHour": 27442
+      },
+      {
+        "asOf": "2026-08-01 04:10",
+        "generationMw": 63137,
+        "attributedGenerationMw": 63137,
+        "carbonIntensity": 438,
+        "emissionsTonnesPerHour": 27677
+      },
+      {
+        "asOf": "2026-08-01 04:15",
+        "generationMw": 63167,
+        "attributedGenerationMw": 63167,
+        "carbonIntensity": 439,
+        "emissionsTonnesPerHour": 27755
+      },
+      {
+        "asOf": "2026-08-01 04:20",
+        "generationMw": 63117,
+        "attributedGenerationMw": 63117,
+        "carbonIntensity": 439,
+        "emissionsTonnesPerHour": 27701
+      },
+      {
+        "asOf": "2026-08-01 04:25",
+        "generationMw": 62996,
+        "attributedGenerationMw": 62996,
+        "carbonIntensity": 438,
+        "emissionsTonnesPerHour": 27574
+      },
+      {
+        "asOf": "2026-08-01 04:30",
+        "generationMw": 63049,
+        "attributedGenerationMw": 63049,
+        "carbonIntensity": 438,
+        "emissionsTonnesPerHour": 27608
+      },
+      {
+        "asOf": "2026-08-01 04:35",
+        "generationMw": 63089,
+        "attributedGenerationMw": 63089,
+        "carbonIntensity": 438,
+        "emissionsTonnesPerHour": 27660
+      },
+      {
+        "asOf": "2026-08-01 04:40",
+        "generationMw": 63105,
+        "attributedGenerationMw": 63105,
+        "carbonIntensity": 438,
+        "emissionsTonnesPerHour": 27650
+      },
+      {
+        "asOf": "2026-08-01 04:45",
+        "generationMw": 62881,
+        "attributedGenerationMw": 62881,
+        "carbonIntensity": 437,
+        "emissionsTonnesPerHour": 27503
+      },
+      {
+        "asOf": "2026-08-01 04:50",
+        "generationMw": 62973,
+        "attributedGenerationMw": 62973,
+        "carbonIntensity": 437,
+        "emissionsTonnesPerHour": 27543
+      },
+      {
+        "asOf": "2026-08-01 04:55",
+        "generationMw": 62936,
+        "attributedGenerationMw": 62936,
+        "carbonIntensity": 437,
+        "emissionsTonnesPerHour": 27503
+      },
+      {
+        "asOf": "2026-08-01 05:00",
+        "generationMw": 62959,
+        "attributedGenerationMw": 62959,
+        "carbonIntensity": 437,
+        "emissionsTonnesPerHour": 27512
+      },
+      {
+        "asOf": "2026-08-01 05:05",
+        "generationMw": 62746,
+        "attributedGenerationMw": 62746,
+        "carbonIntensity": 436,
+        "emissionsTonnesPerHour": 27374
       }
     ]
   }
