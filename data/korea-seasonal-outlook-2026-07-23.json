@@ -1,0 +1,245 @@
+{
+  "schemaVersion": "korea-seasonal-outlook-v1",
+  "checkedAt": "2026-08-09T09:00:00+09:00",
+  "issuedAt": "2026-07-23T11:00:00+09:00",
+  "nextIssueAt": "2026-08-24T11:00:00+09:00",
+  "forecastPeriod": "August to October 2026",
+  "national": [
+    {
+      "id": "aug",
+      "label": "August",
+      "temperature": {
+        "probabilities": [10, 30, 60],
+        "normalRange": "24.6 to 25.6 C",
+        "summary": "Above normal",
+        "detail": "High sea temperatures in the North Pacific may strengthen high pressure near Korea. Temperature swings can still be large."
+      },
+      "precipitation": {
+        "probabilities": [30, 50, 20],
+        "normalRange": "225.3 to 346.7 mm",
+        "summary": "Near normal",
+        "detail": "The monthly total is most likely near normal, with localized heavy rain still possible where air flows converge."
+      }
+    },
+    {
+      "id": "sep",
+      "label": "September",
+      "temperature": {
+        "probabilities": [20, 30, 50],
+        "normalRange": "20.2 to 20.8 C",
+        "summary": "Above normal",
+        "detail": "High North Pacific sea temperatures favor high pressure near Korea, although temperature variability may remain large."
+      },
+      "precipitation": {
+        "probabilities": [40, 40, 20],
+        "normalRange": "84.2 to 202.3 mm",
+        "summary": "Below or near normal",
+        "detail": "Below-normal and near-normal rainfall are tied as the leading categories."
+      }
+    },
+    {
+      "id": "oct",
+      "label": "October",
+      "temperature": {
+        "probabilities": [20, 30, 50],
+        "normalRange": "13.9 to 14.7 C",
+        "summary": "Above normal",
+        "detail": "High Indian Ocean temperatures may help strengthen high pressure near Korea, with continued temperature variability."
+      },
+      "precipitation": {
+        "probabilities": [20, 40, 40],
+        "normalRange": "37.0 to 64.3 mm",
+        "summary": "Near or above normal",
+        "detail": "Near-normal and above-normal rainfall are tied as the leading categories."
+      }
+    }
+  ],
+  "regions": [
+    {
+      "id": "seoul",
+      "name": "Seoul, Incheon and Gyeonggi",
+      "koreanName": "서울ㆍ인천ㆍ경기도",
+      "months": [
+        { "month": "aug", "temperatureNormal": "24.9 to 25.9 C", "temperature": [10, 30, 60], "precipitationNormal": "173.5 to 331.1 mm", "precipitation": [30, 50, 20] },
+        { "month": "sep", "temperatureNormal": "20.5 to 21.1 C", "temperature": [20, 30, 50], "precipitationNormal": "56.0 to 181.8 mm", "precipitation": [40, 40, 20] },
+        { "month": "oct", "temperatureNormal": "13.6 to 14.6 C", "temperature": [20, 30, 50], "precipitationNormal": "28.5 to 63.1 mm", "precipitation": [20, 40, 40] }
+      ]
+    },
+    {
+      "id": "gangwon-west",
+      "name": "Gangwon Yeongseo",
+      "koreanName": "강원도 영서",
+      "months": [
+        { "month": "aug", "temperatureNormal": "23.2 to 24.2 C", "temperature": [10, 30, 60], "precipitationNormal": "201.4 to 382.4 mm", "precipitation": [30, 50, 20] },
+        { "month": "sep", "temperatureNormal": "18.1 to 18.9 C", "temperature": [20, 30, 50], "precipitationNormal": "81.4 to 173.7 mm", "precipitation": [40, 40, 20] },
+        { "month": "oct", "temperatureNormal": "11.1 to 12.3 C", "temperature": [20, 30, 50], "precipitationNormal": "30.2 to 67.4 mm", "precipitation": [20, 40, 40] }
+      ]
+    },
+    {
+      "id": "gangwon-east",
+      "name": "Gangwon Yeongdong",
+      "koreanName": "강원도 영동",
+      "months": [
+        { "month": "aug", "temperatureNormal": "22.9 to 24.1 C", "temperature": [20, 30, 50], "precipitationNormal": "218.5 to 317.4 mm", "precipitation": [30, 50, 20] },
+        { "month": "sep", "temperatureNormal": "18.6 to 19.2 C", "temperature": [20, 30, 50], "precipitationNormal": "132.9 to 235.1 mm", "precipitation": [40, 40, 20] },
+        { "month": "oct", "temperatureNormal": "13.3 to 14.1 C", "temperature": [20, 30, 50], "precipitationNormal": "42.7 to 96.7 mm", "precipitation": [20, 40, 40] }
+      ]
+    },
+    {
+      "id": "daejeon",
+      "name": "Daejeon, Sejong and Chungnam",
+      "koreanName": "대전ㆍ세종ㆍ충청남도",
+      "months": [
+        { "month": "aug", "temperatureNormal": "25.0 to 26.0 C", "temperature": [10, 30, 60], "precipitationNormal": "203.7 to 332.4 mm", "precipitation": [30, 50, 20] },
+        { "month": "sep", "temperatureNormal": "20.3 to 20.9 C", "temperature": [20, 30, 50], "precipitationNormal": "74.6 to 186.5 mm", "precipitation": [40, 40, 20] },
+        { "month": "oct", "temperatureNormal": "13.5 to 14.5 C", "temperature": [20, 30, 50], "precipitationNormal": "27.8 to 74.8 mm", "precipitation": [20, 40, 40] }
+      ]
+    },
+    {
+      "id": "chungbuk",
+      "name": "Chungbuk",
+      "koreanName": "충청북도",
+      "months": [
+        { "month": "aug", "temperatureNormal": "24.2 to 25.2 C", "temperature": [10, 30, 60], "precipitationNormal": "218.2 to 323.6 mm", "precipitation": [30, 50, 20] },
+        { "month": "sep", "temperatureNormal": "19.2 to 20.0 C", "temperature": [20, 30, 50], "precipitationNormal": "82.9 to 169.2 mm", "precipitation": [40, 40, 20] },
+        { "month": "oct", "temperatureNormal": "12.4 to 13.4 C", "temperature": [20, 30, 50], "precipitationNormal": "28.9 to 63.5 mm", "precipitation": [20, 40, 40] }
+      ]
+    },
+    {
+      "id": "gwangju",
+      "name": "Gwangju and Jeonnam",
+      "koreanName": "광주ㆍ전라남도",
+      "months": [
+        { "month": "aug", "temperatureNormal": "25.5 to 26.5 C", "temperature": [10, 30, 60], "precipitationNormal": "192.2 to 322.0 mm", "precipitation": [40, 40, 20] },
+        { "month": "sep", "temperatureNormal": "21.7 to 22.3 C", "temperature": [20, 30, 50], "precipitationNormal": "78.9 to 220.1 mm", "precipitation": [40, 40, 20] },
+        { "month": "oct", "temperatureNormal": "15.8 to 16.6 C", "temperature": [20, 30, 50], "precipitationNormal": "34.7 to 64.0 mm", "precipitation": [20, 40, 40] }
+      ]
+    },
+    {
+      "id": "jeonbuk",
+      "name": "Jeonbuk",
+      "koreanName": "전북자치도",
+      "months": [
+        { "month": "aug", "temperatureNormal": "24.9 to 25.9 C", "temperature": [10, 30, 60], "precipitationNormal": "209.3 to 374.4 mm", "precipitation": [30, 50, 20] },
+        { "month": "sep", "temperatureNormal": "20.2 to 21.0 C", "temperature": [20, 30, 50], "precipitationNormal": "77.5 to 186.1 mm", "precipitation": [40, 40, 20] },
+        { "month": "oct", "temperatureNormal": "13.6 to 14.6 C", "temperature": [20, 30, 50], "precipitationNormal": "34.1 to 64.4 mm", "precipitation": [20, 40, 40] }
+      ]
+    },
+    {
+      "id": "busan",
+      "name": "Busan, Ulsan and Gyeongnam",
+      "koreanName": "부산ㆍ울산ㆍ경상남도",
+      "months": [
+        { "month": "aug", "temperatureNormal": "25.2 to 26.4 C", "temperature": [10, 30, 60], "precipitationNormal": "162.3 to 323.2 mm", "precipitation": [40, 40, 20] },
+        { "month": "sep", "temperatureNormal": "21.2 to 21.8 C", "temperature": [20, 30, 50], "precipitationNormal": "109.6 to 238.3 mm", "precipitation": [40, 40, 20] },
+        { "month": "oct", "temperatureNormal": "15.4 to 16.2 C", "temperature": [20, 30, 50], "precipitationNormal": "38.3 to 94.9 mm", "precipitation": [20, 40, 40] }
+      ]
+    },
+    {
+      "id": "daegu",
+      "name": "Daegu and Gyeongbuk",
+      "koreanName": "대구ㆍ경상북도",
+      "months": [
+        { "month": "aug", "temperatureNormal": "24.3 to 25.5 C", "temperature": [10, 30, 60], "precipitationNormal": "180.2 to 295.0 mm", "precipitation": [30, 50, 20] },
+        { "month": "sep", "temperatureNormal": "19.8 to 20.4 C", "temperature": [20, 30, 50], "precipitationNormal": "86.8 to 172.9 mm", "precipitation": [40, 40, 20] },
+        { "month": "oct", "temperatureNormal": "13.7 to 14.5 C", "temperature": [20, 30, 50], "precipitationNormal": "31.1 to 65.0 mm", "precipitation": [20, 40, 40] }
+      ]
+    },
+    {
+      "id": "jeju",
+      "name": "Jeju",
+      "koreanName": "제주도",
+      "months": [
+        { "month": "aug", "temperatureNormal": "26.3 to 27.3 C", "temperature": [10, 30, 60], "precipitationNormal": "206.7 to 314.6 mm", "precipitation": [40, 40, 20] },
+        { "month": "sep", "temperatureNormal": "23.1 to 23.7 C", "temperature": [20, 30, 50], "precipitationNormal": "115.1 to 235.2 mm", "precipitation": [40, 40, 20] },
+        { "month": "oct", "temperatureNormal": "18.4 to 19.0 C", "temperature": [20, 30, 50], "precipitationNormal": "51.8 to 103.7 mm", "precipitation": [20, 40, 40] }
+      ]
+    }
+  ],
+  "ocean": {
+    "observed": {
+      "period": "12 to 18 July 2026",
+      "temperature": 24.6,
+      "anomaly": 1.4
+    },
+    "seas": [
+      {
+        "id": "yellow",
+        "name": "Yellow Sea",
+        "koreanName": "서해",
+        "months": [
+          { "month": "aug", "normalRange": "24.1 to 24.9 C", "probabilities": [10, 40, 50] },
+          { "month": "sep", "normalRange": "22.3 to 22.9 C", "probabilities": [10, 40, 50] },
+          { "month": "oct", "normalRange": "18.9 to 19.3 C", "probabilities": [10, 30, 60] }
+        ]
+      },
+      {
+        "id": "south",
+        "name": "South Sea",
+        "koreanName": "남해",
+        "months": [
+          { "month": "aug", "normalRange": "25.1 to 25.9 C", "probabilities": [10, 40, 50] },
+          { "month": "sep", "normalRange": "24.0 to 24.4 C", "probabilities": [10, 40, 50] },
+          { "month": "oct", "normalRange": "21.6 to 22.0 C", "probabilities": [10, 30, 60] }
+        ]
+      },
+      {
+        "id": "east",
+        "name": "East Sea",
+        "koreanName": "동해",
+        "months": [
+          { "month": "aug", "normalRange": "22.6 to 23.6 C", "probabilities": [10, 30, 60] },
+          { "month": "sep", "normalRange": "21.4 to 22.0 C", "probabilities": [10, 30, 60] },
+          { "month": "oct", "normalRange": "18.9 to 19.5 C", "probabilities": [10, 30, 60] }
+        ]
+      }
+    ]
+  },
+  "enso": {
+    "observedPeriod": "12 to 18 July 2026",
+    "nino34Temperature": 29.3,
+    "nino34WeeklyAnomaly": 2.1,
+    "movingAveragePeriod": "April to June 2026",
+    "movingAverageAnomaly": 0.9,
+    "kmaOutlook": "Sea temperatures are likely to keep rising and develop into a strong El Nino during August to October.",
+    "apcc": {
+      "issuedAt": "2026-07-15",
+      "forecastPeriod": "August 2026 to January 2027",
+      "elNinoProbability": 100,
+      "augustNino34": 2.61,
+      "decemberNino34": 3.41,
+      "baseline": "1993 to 2016"
+    }
+  },
+  "watchNotes": [
+    "August has a 60% chance of more unusually hot days than normal.",
+    "Localized heavy rain remains possible in August even though the monthly total most likely falls near normal.",
+    "Weak meteorological drought may affect parts of Jeonnam and Gyeongsang by late August, then parts of Gyeongsang by late September and October."
+  ],
+  "sources": [
+    {
+      "id": "kma-three-month",
+      "agency": "Korea Meteorological Administration",
+      "title": "Three-month outlook, August to October 2026",
+      "issued": "23 July 2026",
+      "usedFor": "National and regional temperature, precipitation, drought and sea outlooks",
+      "url": "https://www.weather.go.kr/w/repositary/xml/fct/mon/fct_mon3_108_20260723.pdf"
+    },
+    {
+      "id": "kma-enso",
+      "agency": "Korea Meteorological Administration",
+      "title": "El Nino and La Nina outlook",
+      "issued": "23 July 2026",
+      "usedFor": "Observed Nino3.4 and Korea-adjacent sea temperatures, plus KMA ENSO outlook",
+      "url": "https://www.weather.go.kr/w/climate/prediction/el-la.do"
+    },
+    {
+      "id": "apcc-outlook",
+      "agency": "APEC Climate Center",
+      "title": "Climate outlook, August 2026 to January 2027",
+      "issued": "15 July 2026",
+      "usedFor": "Multi-model El Nino probability and Nino3.4 context",
+      "url": "https://apcc21.org/file/download?id=bf2974b9-8006-11f1-8198-29add755a992"
+    }
+  ]
+}
