@@ -1,26 +1,26 @@
 {
   "schemaVersion": 1,
   "kind": "kpx-generation",
-  "fetchedAt": "2026-08-11T08:33:09.713Z",
+  "fetchedAt": "2026-08-11T09:34:35.705Z",
   "sourceUrl": "https://www.kpx.or.kr/powerSource.es?device=chart&mid=a10404030000",
   "payload": {
-    "asOf": "2026-08-11 17:30",
-    "generationMw": 92498,
+    "asOf": "2026-08-11 18:30",
+    "generationMw": 89141,
     "reportedMarketDemandMw": null,
     "estimatedTotalDemandMw": null,
     "pumpedStorageLoadMw": 0,
-    "carbonIntensity": 421,
-    "emissionsTonnesPerHour": 38842,
-    "renewableShare": 15.756408053265186,
-    "knownLowCarbonShare": 35.426141971171695,
+    "carbonIntensity": 448,
+    "emissionsTonnesPerHour": 39631,
+    "renewableShare": 9.921251010052481,
+    "knownLowCarbonShare": 30.007266456574115,
     "sources": [
       {
         "key": "coal",
         "label": "Coal",
         "labelKo": "석탄",
         "color": "#8a6d5e",
-        "mw": 30273,
-        "share": 32.727677967141425,
+        "mw": 30439,
+        "share": 34.147361978245435,
         "factor": 820
       },
       {
@@ -28,8 +28,8 @@
         "label": "Gas",
         "labelKo": "가스",
         "color": "#ff8552",
-        "mw": 24903,
-        "share": 26.922439979995914,
+        "mw": 26680,
+        "share": 29.93026474473351,
         "factor": 490
       },
       {
@@ -37,35 +37,44 @@
         "label": "Nuclear",
         "labelKo": "원자력",
         "color": "#ccff3e",
-        "mw": 22239,
-        "share": 24.042819570615563,
+        "mw": 22260,
+        "share": 24.97193336122117,
         "factor": 12
-      },
-      {
-        "key": "solar",
-        "label": "Solar",
-        "labelKo": "태양광",
-        "color": "#ffd75a",
-        "mw": 9284,
-        "share": 10.036919315317252,
-        "factor": 48
       },
       {
         "key": "otherRenewables",
         "label": "Other renewables",
         "labelKo": "기타 신재생",
         "color": "#58d2a0",
-        "mw": 4045,
-        "share": 4.373085652709048,
+        "mw": 4355,
+        "share": 4.885917914699537,
         "factor": 230
+      },
+      {
+        "key": "solar",
+        "label": "Solar",
+        "labelKo": "태양광",
+        "color": "#ffd75a",
+        "mw": 3267,
+        "share": 3.665320747306159,
+        "factor": 48
+      },
+      {
+        "key": "pumpedStorage",
+        "label": "Pumped storage",
+        "labelKo": "양수",
+        "color": "#5c7b82",
+        "mw": 686,
+        "share": 0.7700866712343377,
+        "factor": null
       },
       {
         "key": "hydro",
         "label": "Hydro",
         "labelKo": "수력",
         "color": "#4f7dff",
-        "mw": 649,
-        "share": 0.7013220586385117,
+        "mw": 627,
+        "share": 0.7034629144671225,
         "factor": 24
       },
       {
@@ -73,26 +82,17 @@
         "label": "Wind",
         "labelKo": "풍력",
         "color": "#58c8ff",
-        "mw": 597,
-        "share": 0.6450810266003735,
+        "mw": 594,
+        "share": 0.666549433579665,
         "factor": 11
-      },
-      {
-        "key": "pumpedStorage",
-        "label": "Pumped storage",
-        "labelKo": "양수",
-        "color": "#5c7b82",
-        "mw": 276,
-        "share": 0.29881629417057,
-        "factor": null
       },
       {
         "key": "oil",
         "label": "Oil",
         "labelKo": "유류",
         "color": "#b596ff",
-        "mw": 233,
-        "share": 0.2518381348113517,
+        "mw": 231,
+        "share": 0.2591022345130685,
         "factor": 650
       }
     ],
@@ -1566,6 +1566,90 @@
         "attributedGenerationMw": 92222,
         "carbonIntensity": 421,
         "emissionsTonnesPerHour": 38842
+      },
+      {
+        "asOf": "2026-08-11 17:35",
+        "generationMw": 92262,
+        "attributedGenerationMw": 91869,
+        "carbonIntensity": 424,
+        "emissionsTonnesPerHour": 38958
+      },
+      {
+        "asOf": "2026-08-11 17:40",
+        "generationMw": 92178,
+        "attributedGenerationMw": 91683,
+        "carbonIntensity": 426,
+        "emissionsTonnesPerHour": 39025
+      },
+      {
+        "asOf": "2026-08-11 17:45",
+        "generationMw": 92066,
+        "attributedGenerationMw": 91586,
+        "carbonIntensity": 429,
+        "emissionsTonnesPerHour": 39249
+      },
+      {
+        "asOf": "2026-08-11 17:50",
+        "generationMw": 91827,
+        "attributedGenerationMw": 91335,
+        "carbonIntensity": 431,
+        "emissionsTonnesPerHour": 39338
+      },
+      {
+        "asOf": "2026-08-11 17:55",
+        "generationMw": 91225,
+        "attributedGenerationMw": 90750,
+        "carbonIntensity": 432,
+        "emissionsTonnesPerHour": 39220
+      },
+      {
+        "asOf": "2026-08-11 18:00",
+        "generationMw": 90760,
+        "attributedGenerationMw": 90275,
+        "carbonIntensity": 433,
+        "emissionsTonnesPerHour": 39096
+      },
+      {
+        "asOf": "2026-08-11 18:05",
+        "generationMw": 90411,
+        "attributedGenerationMw": 89921,
+        "carbonIntensity": 437,
+        "emissionsTonnesPerHour": 39282
+      },
+      {
+        "asOf": "2026-08-11 18:10",
+        "generationMw": 89941,
+        "attributedGenerationMw": 89453,
+        "carbonIntensity": 440,
+        "emissionsTonnesPerHour": 39319
+      },
+      {
+        "asOf": "2026-08-11 18:15",
+        "generationMw": 90028,
+        "attributedGenerationMw": 89544,
+        "carbonIntensity": 442,
+        "emissionsTonnesPerHour": 39622
+      },
+      {
+        "asOf": "2026-08-11 18:20",
+        "generationMw": 89834,
+        "attributedGenerationMw": 89161,
+        "carbonIntensity": 445,
+        "emissionsTonnesPerHour": 39664
+      },
+      {
+        "asOf": "2026-08-11 18:25",
+        "generationMw": 89444,
+        "attributedGenerationMw": 88760,
+        "carbonIntensity": 447,
+        "emissionsTonnesPerHour": 39639
+      },
+      {
+        "asOf": "2026-08-11 18:30",
+        "generationMw": 89141,
+        "attributedGenerationMw": 88454,
+        "carbonIntensity": 448,
+        "emissionsTonnesPerHour": 39631
       }
     ]
   }
