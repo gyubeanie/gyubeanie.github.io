@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "scripts/update-kpx-snapshots.mjs"
+      - "scripts/update-kpx-snapshots.test.mjs"
       - ".github/workflows/update-kpx-snapshots.yml"
   schedule:
     - cron: "2-59/5 * * * *"
@@ -28,7 +29,9 @@ jobs:
         with:
           node-version: "20"
       - name: Fetch official KPX pages
-        run: node scripts/update-kpx-snapshots.mjs
+        # Partial source failures leave that feed's previous file untouched.
+        # The script fails the run only when neither feed can be refreshed.
+        run: node --test scripts/update-kpx-snapshots.test.mjs && node scripts/update-kpx-snapshots.mjs
       - name: Publish changed snapshots
         run: |
           if git diff --quiet -- data/kpx-live.json data/kpx-system.json; then

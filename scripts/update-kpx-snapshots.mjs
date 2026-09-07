@@ -1,4 +1,5 @@
 import { mkdir, writeFile } from "node:fs/promises";
+import { pathToFileURL } from "node:url";
 
 const GENERATION_URL = "https://www.kpx.or.kr/powerSource.es?device=chart&mid=a10404030000";
 const SYSTEM_URL = "https://www.kpx.or.kr/powerinfoSubmain.es?mid=a10404030000";
@@ -23,7 +24,7 @@ async function get(url) {
 }
 
 function arraySource(text, name) {
-  const marker = text.match(new RegExp(`\\bvar\\s+${name}\\s*=\\s*`));
+  const marker = text.match(new RegExp(`\\b(?:var|let|const)\\s+${name}\\s*=\\s*`));
   if (marker?.index === undefined) throw new Error(`Missing ${name}`);
 
   const start = marker.index + marker[0].length;
@@ -132,15 +133,15 @@ function normalizeGenerationRecord(record) {
   };
 }
 
-function generation(html) {
+export function generation(html) {
   const rows = JSON.parse(arraySource(html, "ictArr"));
   const recordsByTimestamp = new Map();
   for (const row of rows) {
     const asOf = String(row?.regDate ?? "");
-    if (!/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/.test(asOf)) continue;
+    if (!Number.isFinite(observationTime(asOf))) continue;
 
     const normalized = normalizeGenerationRecord(row);
-    if (normalized.generationMwExact > 0) recordsByTimestamp.set(asOf, normalized);
+    if (normalized.generationMwExact > 0 && normalized.generationMwExact <= 200_000) recordsByTimestamp.set(asOf, normalized);
   }
 
   const history = [...recordsByTimestamp.values()]
@@ -183,14 +184,14 @@ function numbers(html, name) {
   );
   if (!match) return [];
   return match[1].split(",").map((value) => {
-    const sanitized = value.trim().replace(/^(["'])(.*)\\1$/, "$2");
+    const sanitized = value.trim().replace(/^(["'])(.*)\1$/, "$2");
     if (!sanitized || sanitized === "null" || sanitized === "undefined") return null;
     const result = Number(sanitized);
     return Number.isFinite(result) ? result : null;
   });
 }
 
-function system(html) {
+export function system(html) {
   const capacityFromPage = byId(html, "avil");
   const marketFromPage = byId(html, "load");
   const reserveFromPage = byId(html, "supPow");
@@ -198,18 +199,22 @@ function system(html) {
   const timestamps = numbers(html, "t_time");
   const marketDemand = numbers(html, "x");
   const totalDemand = numbers(html, "v");
-  const demandHistory = Array.from(
+  const parsedHistory = Array.from(
     { length: Math.min(timestamps.length, marketDemand.length, totalDemand.length) },
     (_, index) => {
       const asOf = String(Math.trunc(timestamps[index]));
       return timestamps[index] !== null
         && marketDemand[index] > 0
         && totalDemand[index] > 0
-        && /^\d{12,14}$/.test(asOf)
+        && marketDemand[index] <= 200_000
+        && totalDemand[index] <= 200_000
+        && Number.isFinite(observationTime(asOf))
         ? { asOf, totalDemandMw: totalDemand[index], marketDemandMw: marketDemand[index] }
         : null;
     },
   ).filter(Boolean);
+  const demandHistory = [...new Map(parsedHistory.map(point => [point.asOf, point])).values()]
+    .sort((a, b) => observationTime(a.asOf) - observationTime(b.asOf));
   const latest = demandHistory.at(-1);
   const currentMarketDemandMw = marketFromPage ?? latest?.marketDemandMw ?? null;
   const supplyCapacityMw = capacityFromPage ?? (
@@ -229,7 +234,8 @@ function system(html) {
   );
   if (
     !latest
-    || supplyCapacityMw <= 0
+    || ![supplyCapacityMw, currentMarketDemandMw, supplyReserveMw, supplyReserveRate].every(Number.isFinite)
+    || supplyCapacityMw <= 0 || supplyCapacityMw > 200_000
     || currentMarketDemandMw <= 0
     || supplyReserveMw < 0
     || supplyReserveRate < 0
@@ -259,32 +265,40 @@ async function loadSystem() {
   throw lastError ?? new Error("System pages unavailable");
 }
 
-const [generationSnapshot, systemSnapshot] = await Promise.all([
-  get(GENERATION_URL).then(generation),
-  loadSystem(),
-]);
-const fetchedAt = new Date().toISOString();
-const output = {
-  "data/kpx-live.json": {
-    schemaVersion: 1,
-    kind: "kpx-generation",
-    fetchedAt,
-    sourceUrl: GENERATION_URL,
-    payload: generationSnapshot,
-  },
-  "data/kpx-system.json": {
-    schemaVersion: 1,
-    kind: "kpx-system",
-    fetchedAt,
-    sourceUrl: SYSTEM_URL,
-    payload: systemSnapshot,
-  },
-};
+export function observationTime(value) {
+  const parts = String(value ?? "").match(/^(\d{4})-?(\d{2})-?(\d{2})[ T]?(\d{2}):?(\d{2})(?::?(\d{2}))?$/);
+  if (!parts) return NaN;
+  const [, y, m, d, h, min, sec = "00"] = parts;
+  const ms = Date.UTC(+y, +m - 1, +d, +h - 9, +min, +sec);
+  const local = new Date(ms + 9 * 3_600_000);
+  return local.getUTCFullYear() === +y && local.getUTCMonth() === +m - 1 && local.getUTCDate() === +d
+    && local.getUTCHours() === +h && local.getUTCMinutes() === +min && local.getUTCSeconds() === +sec ? ms : NaN;
+}
 
-await mkdir("data", { recursive: true });
-await Promise.all(
-  Object.entries(output).map(([path, snapshot]) => (
-    writeFile(path, `${JSON.stringify(snapshot, null, 2)}\n`)
-  )),
-);
-console.log(`Updated KPX snapshots at ${fetchedAt}`);
+export async function publishSnapshots({
+  generationLoad = () => get(GENERATION_URL).then(generation), systemLoad = loadSystem,
+  write = async (path, snapshot) => { await mkdir("data", { recursive: true }); await writeFile(path, `${JSON.stringify(snapshot, null, 2)}\n`); },
+  now = Date.now(),
+} = {}) {
+  const feeds = [
+    { path: "data/kpx-live.json", kind: "kpx-generation", sourceUrl: GENERATION_URL, load: generationLoad },
+    { path: "data/kpx-system.json", kind: "kpx-system", sourceUrl: SYSTEM_URL, load: systemLoad },
+  ];
+  const results = await Promise.allSettled(feeds.map(async feed => {
+    const payload = await feed.load();
+    const observed = observationTime(payload.asOf);
+    if (!Number.isFinite(observed) || observed < now - 30 * 60_000 || observed > now + 5 * 60_000) {
+      throw new Error("Observation is invalid or not current; previous snapshot preserved");
+    }
+    await write(feed.path, { schemaVersion: 1, kind: feed.kind, fetchedAt: new Date(now).toISOString(), sourceUrl: feed.sourceUrl, payload });
+    return feed.path;
+  }));
+  const updated = results.flatMap(result => result.status === "fulfilled" ? [result.value] : []);
+  results.forEach((result, index) => { if (result.status === "rejected") console.warn(`${feeds[index].kind}: update failed; existing snapshot preserved`); });
+  if (!updated.length) throw new Error("Both KPX snapshot updates failed");
+  return updated;
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  console.log(`Updated: ${(await publishSnapshots()).join(", ")}`);
+}
