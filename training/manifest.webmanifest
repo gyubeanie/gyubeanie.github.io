@@ -1,0 +1,24 @@
+{
+  "id": "./",
+  "name": "13 / 190 · Gyubin Training",
+  "short_name": "13 / 190",
+  "description": "Your year-end running and deadlift block. Daily sessions, set logs, running splits and offline access.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#101411",
+  "theme_color": "#101411",
+  "lang": "en",
+  "categories": ["fitness", "sports", "productivity"],
+  "prefer_related_applications": false,
+  "icons": [
+    {"src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "./icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ],
+  "shortcuts": [
+    {"name": "Today's training", "url": "./?tab=today", "icons": [{"src":"./icons/icon-192.png","sizes":"192x192"}]},
+    {"name": "Programme", "url": "./?tab=week", "icons": [{"src":"./icons/icon-192.png","sizes":"192x192"}]}
+  ]
+}

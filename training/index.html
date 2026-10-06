@@ -1,0 +1,2816 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101411">
+<meta name="description" content="A personal 3 km and deadlift training block. Daily workouts, set logging, running splits and offline access.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<title>13 / 190 · Gyubin Training</title>
+<style>:root{color-scheme:dark;--bg:#101411;--surface:#191f1b;--raised:#222a24;--line:#344037;--text:#f3f5ec;--muted:#b0bbad;--subtle:#818f81;--green:#d3ee88;--blue:#99c7f2;--orange:#f6bd87;--red:#ffa59b;--radius:22px;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-size:15px;line-height:1.5;-webkit-tap-highlight-color:transparent}button,input,select,textarea{font:inherit}button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button{color:inherit;border:0;background:none}button:disabled{opacity:.35;cursor:not-allowed}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--green);outline-offset:3px}a{color:var(--green)}h1,h2,h3,p{margin:0}h1{font-size:38px;line-height:1.1;letter-spacing:-1.5px}h2{font-size:23px;line-height:1.25;letter-spacing:-.6px}h3{font-size:17px;line-height:1.3}small{font-size:12px}.muted{color:var(--muted)}.subtle{color:var(--subtle)}.eyebrow{font-size:11px;letter-spacing:1.8px;text-transform:uppercase;font-weight:700;color:var(--muted)}.mono,.number,input[type=number]{font-variant-numeric:tabular-nums}.row{display:flex;align-items:center;gap:12px}.between{justify-content:space-between}.wrap{flex-wrap:wrap}.stack>*+*{margin-top:16px}.gap8>*+*{margin-top:8px}.section{margin-top:28px}.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.section-head h2{font-size:19px}.app-header{max-width:1000px;margin:auto;padding:22px 22px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px}.brand{display:flex;align-items:center;gap:11px;color:var(--text);padding:0;text-align:left}.brand-mark{width:40px;height:40px;border:1px solid var(--line);border-radius:12px;display:grid;place-items:center;font-size:16px;font-weight:800;color:var(--green);letter-spacing:-1px;transform:rotate(-5deg)}.brand-label{font-weight:750;font-size:15px;letter-spacing:-.2px}.brand-sub{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}.iconbtn{width:44px;height:44px;border-radius:50%;background:var(--surface);display:grid;place-items:center;border:1px solid var(--line)}.icon{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle;flex-shrink:0}main{max-width:1000px;padding:8px 22px 122px;margin:auto;min-height:78vh}.page-intro{margin:7px 0 23px}.page-intro .eyebrow{margin-bottom:8px}.intro-copy{color:var(--muted);margin-top:9px;max-width:640px}.goals{display:grid;grid-template-columns:1fr 1fr;gap:12px}.goal{padding:20px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);position:relative;overflow:hidden}.goal-value{font-size:42px;font-weight:700;line-height:1.12;letter-spacing:-1.8px;margin:12px 0 7px}.goal-value .unit{font-size:17px;font-weight:450;color:var(--muted);letter-spacing:0}.goal.run .goal-value{color:var(--blue)}.goal.lift .goal-value{color:var(--green)}.goal .from{color:var(--muted);font-size:12px}.goal .date{font-size:11px;color:var(--subtle);margin-top:14px}.badge{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:99px;padding:4px 9px;color:var(--muted);font-size:11px;font-weight:600;white-space:nowrap}.badge.run{color:var(--blue);border-color:#355270}.badge.lift{color:var(--green);border-color:#536436}.badge.rest{color:var(--orange);border-color:#70523b}.badge.done{color:var(--green);border-color:#536436}.badge.today{background:var(--green);color:#202819;border-color:var(--green)}.badge.offline{color:var(--orange)}.callout{padding:17px 18px;border:1px solid var(--line);border-radius:17px;background:var(--surface);font-size:13px;color:var(--muted)}.callout strong{color:var(--text)}.callout.warning{border-color:#715636;background:#29231a;color:#e6c49e}.callout.danger{border-color:#79483e;color:var(--red)}.feature{border-radius:var(--radius);border:1px solid #748448;padding:23px;background:#20291c;position:relative}.feature .eyebrow{color:#c4d3ad}.feature h2{font-size:28px;margin:12px 0 10px;letter-spacing:-.9px}.feature-work{font-size:18px;color:var(--green);font-weight:600;margin-bottom:7px}.feature p{color:#c1cbb9;font-size:13px}.btn{min-height:46px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;border-radius:12px;font-weight:650;background:var(--raised);border:1px solid var(--line);text-decoration:none;color:var(--text);font-size:13px;line-height:1.35}.btn.primary{background:var(--green);border-color:var(--green);color:#202718}.btn.secondary{background:transparent}.btn.danger{border-color:#8c4e43;color:var(--red)}.btn.full{width:100%}.btn.compact{min-height:40px;padding:8px 12px;font-size:12px}.feature .btn{margin-top:20px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:16px 0}.metric{text-align:center}.metric+.metric{border-left:1px solid var(--line)}.metric .value{font-size:22px;font-weight:700}.metric .label{color:var(--muted);font-size:11px;margin-top:3px}.week-strip{display:flex;gap:6px;margin-top:15px}.week-dot{height:6px;flex:1;border-radius:6px;background:var(--line)}.week-dot.current{background:var(--green)}.week-dot.past{background:#7b9452}.day-list{display:grid;gap:10px}.day-card{width:100%;border:1px solid var(--line);border-radius:17px;display:flex;gap:15px;padding:16px;text-align:left;background:var(--surface);align-items:flex-start;color:var(--text)}.day-card:hover{border-color:#71816a}.day-card.current{border-color:#a4bd64}.day-card.is-rest{background:transparent;border-style:dashed}.dateblock{width:38px;text-align:center;flex-shrink:0;padding-top:2px}.dateblock .dow{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}.dateblock .num{font-size:24px;font-weight:650;line-height:1.2;margin-top:3px}.daybody{flex:1;min-width:0}.daybody h3{font-size:15px;margin:3px 0 6px}.daybody p{font-size:12px;color:var(--muted)}.daybody .summary{margin-top:5px;color:var(--text);font-size:13px}.day-arrow{color:var(--subtle);padding-top:15px}.day-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}.weeknav{display:grid;grid-template-columns:44px 1fr 44px;gap:8px;align-items:center;margin:18px 0 16px}.weeknav .iconbtn{border-radius:12px}.weeknav select{min-height:44px;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:12px;color:var(--text);padding:10px 13px}.week-summary{border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin-bottom:18px;background:var(--surface)}.week-summary h2{margin:8px 0}.week-summary p{font-size:13px;color:var(--muted)}.week-stats{display:flex;gap:20px;margin:15px 0 0}.week-stats strong{font-size:19px;font-weight:700;display:block}.week-stats span{font-size:11px;color:var(--muted)}.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(16,20,17,.97);backdrop-filter:blur(14px);border-top:1px solid var(--line);z-index:20;padding:8px 12px calc(8px + env(safe-area-inset-bottom))}.nav-inner{max-width:680px;display:grid;grid-template-columns:repeat(4,1fr);margin:auto;gap:5px}.nav-btn{display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--muted);padding:9px;border-radius:13px;font-size:10px;min-height:56px}.nav-btn.active{color:var(--green);background:#242d1f}.progress-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.stat-card{border:1px solid var(--line);border-radius:18px;padding:18px;background:var(--surface)}.stat-card .big{font-size:30px;letter-spacing:-1px;font-weight:700;margin-top:10px}.stat-card p{font-size:12px;color:var(--muted);margin-top:5px}.bars{display:grid;gap:13px}.bar-row{display:grid;grid-template-columns:26px 1fr 74px;align-items:center;gap:12px;font-size:12px}.bar-track{height:11px;background:var(--raised);border-radius:99px;position:relative}.bar-plan{background:#54604b;height:11px;border-radius:99px;position:absolute;left:0}.bar-actual{background:var(--green);height:5px;top:3px;border-radius:99px;position:absolute;left:0}.bar-value{font-variant-numeric:tabular-nums;text-align:right;color:var(--muted);font-size:11px}.legend{display:flex;gap:18px;font-size:11px;color:var(--muted);margin:13px 0 20px}.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;background:#54604b;margin-right:5px}.legend .actual{background:var(--green)}.empty{padding:28px 18px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:17px;font-size:13px}.history-row{padding:15px 0;border-bottom:1px solid var(--line);display:flex;gap:15px;align-items:flex-start}.history-row .details{flex:1;min-width:0}.history-row p{font-size:12px;color:var(--muted);margin-top:3px}.history-row button{text-align:left}.guide-block{border:1px solid var(--line);border-radius:17px;padding:18px;background:var(--surface);margin-bottom:12px}.guide-block summary{cursor:pointer;list-style:none;font-weight:650;display:flex;justify-content:space-between;align-items:center;gap:15px;min-height:26px}.guide-block summary:after{content:'+';color:var(--green);font-size:21px}.guide-block[open] summary:after{content:'−'}.guide-body{margin-top:16px;color:var(--muted);font-size:13px}.guide-body p+p{margin-top:12px}.guide-body strong{color:var(--text)}.mini-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:12px}.mini-table td,.mini-table th{text-align:left;padding:10px 7px;border-bottom:1px solid var(--line);vertical-align:top}.mini-table th{color:var(--muted);font-weight:500}.mini-table td:first-child{color:var(--text)}dialog{position:fixed;inset:0;margin:auto;width:680px;max-width:calc(100% - 24px);max-height:94dvh;padding:0;border:1px solid var(--line);border-radius:24px;background:var(--bg);color:var(--text);overscroll-behavior:contain}dialog::backdrop{background:rgba(0,0,0,.76);backdrop-filter:blur(5px)}.dialog-head{position:sticky;top:0;z-index:4;padding:16px 21px;background:var(--bg);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}.dialog-head h2{font-size:18px}.dialog-head p{font-size:11px;color:var(--muted);margin-top:3px}.dialog-body{padding:22px;padding-bottom:35px}.dialog-body>.callout{margin-bottom:20px}.block-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}.block-head h3{font-size:17px}.exercise{margin:18px 0 26px}.exercise-title{font-size:15px;font-weight:650}.prescription{font-size:13px;color:var(--green);margin:5px 0}.exercise-note{font-size:12px;color:var(--muted);margin:7px 0 13px}.set-head,.set-row{display:grid;grid-template-columns:30px minmax(0,1.2fr) minmax(0,1fr) minmax(0,1fr) 42px;gap:8px;align-items:center}.set-head{font-size:10px;text-transform:uppercase;color:var(--muted);margin-bottom:7px}.set-head span:last-child{text-align:center}.set-row{margin-bottom:8px}.set-index{font-size:12px;color:var(--muted);text-align:center}.set-row input{width:100%;min-width:0;text-align:center;background:var(--surface);border:1px solid var(--line);border-radius:9px;color:var(--text);height:46px;padding:6px;font-size:16px}.set-row.is-done input{border-color:#718653;background:#242e1f}.check-set{height:42px;width:42px;border:1px solid var(--line);border-radius:11px;color:var(--subtle);font-size:18px}.check-set[aria-pressed=true]{background:var(--green);border-color:var(--green);color:#202718}.set-feedback{font-size:12px;color:var(--orange);margin:10px 0}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.field label{display:block;color:var(--muted);font-size:12px;margin-bottom:7px}.field input,.field textarea,.field select{width:100%;min-height:47px;border:1px solid var(--line);border-radius:11px;background:var(--surface);color:var(--text);padding:11px 12px;font-size:16px;min-width:0}.field textarea{min-height:100px;resize:vertical}.field.full{grid-column:1/-1}.help{font-size:11px;color:var(--muted);margin-top:7px}.field-error{color:var(--red);font-size:12px;margin-top:6px}.run-target{border:1px solid #3c5365;border-radius:17px;padding:18px;background:#1a242a;margin-bottom:18px}.run-target .work{font-size:24px;letter-spacing:-.7px;font-weight:650;color:var(--blue);margin:8px 0}.run-target p{font-size:13px;color:var(--muted)}.splits{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.splits .field input{text-align:center}.divider{height:1px;background:var(--line);margin:24px 0}.status-actions{display:flex;gap:8px;margin-top:22px}.status-actions .primary{flex:1}.save-status{font-size:11px;color:var(--subtle);margin-top:12px;text-align:center}.toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%) translateY(20px);background:var(--text);color:var(--bg);max-width:calc(100vw - 32px);padding:12px 18px;border-radius:13px;font-size:13px;z-index:100;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.timer-display{font-size:72px;letter-spacing:-3px;line-height:1.1;font-weight:650;text-align:center;margin:24px 0 10px;color:var(--green);font-variant-numeric:tabular-nums}.timer-label{text-align:center;color:var(--muted);font-size:13px}.timer-presets{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:25px 0}.timer-mini{position:fixed;bottom:calc(84px + env(safe-area-inset-bottom));right:20px;background:var(--green);color:#202718;border-radius:99px;padding:10px 16px;box-shadow:0 5px 30px #0007;z-index:19;font-variant-numeric:tabular-nums;font-weight:700}.switch-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;gap:15px}.switch-row input{width:20px;height:20px;accent-color:var(--green)}.switch-row label{font-size:13px}.settings-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-note{display:none}.connection-dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block}.connection-dot.offline{background:var(--orange)}.notice-top{max-width:950px;margin:0 auto 10px;padding:10px 15px;border:1px solid #715636;background:#29231a;border-radius:12px;color:var(--orange);font-size:12px}.print-only{display:none}#timer-dialog{z-index:60}input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}input[type=number]{-moz-appearance:textfield}.loading{padding:60px 22px;text-align:center;color:var(--muted)}.privacy-foot{margin-top:26px;font-size:11px;color:var(--subtle);text-align:center;line-height:1.6}.session-edit{margin-bottom:22px}#storage-banner[hidden],#timer-mini[hidden]{display:none}.body-lock{overflow:hidden}.tiny{font-size:11px}.tabular{font-variant-numeric:tabular-nums}.padtop{margin-top:14px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(min-width:760px){h1{font-size:46px}.goals{max-width:100%}.goal-value{font-size:52px}.dashboard-grid{display:grid;grid-template-columns:1.12fr 1fr;gap:24px;align-items:start}.dashboard-grid .section{margin-top:22px}.dashboard-grid .right-column{padding-top:6px}.day-list.week-days{grid-template-columns:1fr 1fr}.day-list.week-days .day-card:last-child{grid-column:auto}.app-header{padding-top:28px}.bottom-nav{padding-top:6px}.feature h2{font-size:31px}.section-head h2{font-size:20px}.progress-grid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:480px){main{padding:4px 17px 125px}.app-header{padding:17px}.goal{padding:17px 15px}.goal-value{font-size:39px}.goals{gap:10px}h1{font-size:35px}.feature{padding:20px}.feature h2{font-size:26px}.day-card{padding:14px;gap:12px}.badge{font-size:10px}.dialog-body{padding:19px 16px 30px}.dialog-head{padding:14px 16px}dialog{width:100%;max-width:100%;height:100dvh;max-height:100dvh;border:0;border-radius:0;margin:0}#timer-dialog{height:auto;max-height:94dvh;max-width:calc(100% - 20px);border:1px solid var(--line);border-radius:22px;margin:auto}.set-head,.set-row{gap:7px;grid-template-columns:24px minmax(0,1.2fr) minmax(0,1fr) minmax(0,1fr) 42px}.form-grid{gap:11px}.timer-display{font-size:64px}.brand-sub{font-size:9px}.mobile-note{display:block}.week-summary{padding:18px}.progress-grid{gap:10px}.stat-card{padding:15px}.stat-card .big{font-size:27px}.page-intro{margin-top:10px}.dialog-body .status-actions{position:relative}.splits{grid-template-columns:repeat(3,minmax(0,1fr))}.splits input{padding:10px 4px}.week-stats{gap:17px}.guide-block{padding:16px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+@media print{body{background:white;color:black;font-size:10pt}.app-header,main,.bottom-nav,dialog,.toast,.timer-mini,.notice-top{display:none!important}.print-only{display:block}.print-week{break-before:page;padding:8mm 2mm}.print-week:first-child{break-before:auto}.print-week h1{font-size:20pt;color:black}.print-week h2{font-size:16pt;color:black;margin:10px 0}.print-week p{margin:7px 0;color:black}.print-week table{width:100%;border-collapse:collapse}.print-week td,.print-week th{border-bottom:1px solid #ccc;text-align:left;padding:9px 6px;vertical-align:top;font-size:10pt}.print-week tr{break-inside:avoid}.print-foot{font-size:9pt;margin-top:15px;color:#444}}
+</style>
+</head>
+<body>
+<header class="app-header"><button class="brand" data-action="tab" data-tab="today" aria-label="13 / 190, go to today"><span class="brand-mark">GH</span><span><span class="brand-label">13 / 190</span><br><span class="brand-sub">The year-end block</span></span></button><div class="row" style="gap:8px"><span id="connection" class="badge" title="Logs stay on this device"><i class="connection-dot"></i> <span id="connection-label">Local logs</span></span><button class="iconbtn" data-action="timer" aria-label="Open rest timer"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="14" r="8"/><path d="M12 10v4l3 2M9 2h6M12 2v4M18 5l2 2"/></svg></button><button class="iconbtn" data-action="settings" aria-label="Settings and backups"><svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="8" cy="6" r="2" fill="var(--bg)"/><circle cx="16" cy="12" r="2" fill="var(--bg)"/><circle cx="10" cy="18" r="2" fill="var(--bg)"/></svg></button></div></header>
+<div id="storage-banner" class="notice-top" hidden role="alert"></div>
+<main id="app"><div class="loading">Loading your training block…</div></main>
+<nav class="bottom-nav" aria-label="Main navigation"><div class="nav-inner">
+<button class="nav-btn" data-action="tab" data-tab="today"><svg class="icon" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7M5 9v11h14V9M9 20v-7h6v7"/></svg><span>Today</span></button>
+<button class="nav-btn" data-action="tab" data-tab="week"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4M17 3v4M3 11h18M8 15h2M14 15h2"/></svg><span>Programme</span></button>
+<button class="nav-btn" data-action="tab" data-tab="progress"><svg class="icon" viewBox="0 0 24 24"><path d="M4 20V4M4 20h17M8 16l4-5 4 2 5-8"/></svg><span>Progress</span></button>
+<button class="nav-btn" data-action="tab" data-tab="guide"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v16M12 5C8 2 3 4 3 4v15s5-2 9 2c4-4 9-2 9-2V4s-5-2-9 1Z"/></svg><span>Guide</span></button>
+</div></nav>
+<dialog id="session-dialog" aria-labelledby="session-title"><div id="session-content"></div></dialog>
+<dialog id="settings-dialog" aria-labelledby="settings-title"><div id="settings-content"></div></dialog>
+<dialog id="timer-dialog" aria-labelledby="timer-title"><div id="timer-content"></div></dialog>
+<button id="timer-mini" class="timer-mini" data-action="timer" hidden aria-label="Open active timer"></button>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<input type="file" id="import-file" accept="application/json,.json" hidden>
+<div id="print-area" class="print-only"></div>
+<script type="application/json" id="programme-data">{
+  "id": "gyubin-2026-13190",
+  "version": 1,
+  "start": "2026-10-06",
+  "end": "2026-12-31",
+  "runTest": "2026-12-26",
+  "liftTest": "2026-12-31",
+  "profile": {
+    "bodyweight": 90,
+    "weeklyKm": 15,
+    "run3k": "14:20",
+    "run5k": "25:00",
+    "deadlift": 160,
+    "deadliftRPE": 8.5,
+    "priorDeadlift": 180,
+    "priorDeadliftNote": "About two years ago"
+  },
+  "weeks": [
+    {
+      "n": 1,
+      "start": "2026-10-06",
+      "end": "2026-10-11",
+      "phase": "Calibrate",
+      "title": "Find your working effort",
+      "km": 12,
+      "single": [
+        140,
+        140
+      ],
+      "back": [
+        4,
+        4,
+        120
+      ],
+      "light": [
+        3,
+        3,
+        100
+      ],
+      "easy": [
+        3.5,
+        3.5
+      ],
+      "interval": [
+        5,
+        400,
+        "1:54–1:56",
+        90,
+        5
+      ],
+      "tempo": null,
+      "focus": "Keep the opening week conservative. If the 160 kg single was within the preceding 48 hours, omit the first heavy session. Count work already completed; never double up to catch up."
+    },
+    {
+      "n": 2,
+      "start": "2026-10-12",
+      "end": "2026-10-18",
+      "phase": "Build I",
+      "title": "Establish the rhythm",
+      "km": 16,
+      "single": [
+        145,
+        145
+      ],
+      "back": [
+        4,
+        4,
+        122.5
+      ],
+      "light": [
+        3,
+        3,
+        105
+      ],
+      "easy": [
+        3,
+        3
+      ],
+      "interval": [
+        6,
+        400,
+        "1:52–1:54",
+        90,
+        5.5
+      ],
+      "tempo": [
+        2,
+        5,
+        "5:15–5:25",
+        120,
+        4.5
+      ],
+      "focus": "Saturday is controlled tempo, not a race. Finish with enough in reserve to lift well on Monday."
+    },
+    {
+      "n": 3,
+      "start": "2026-10-19",
+      "end": "2026-10-25",
+      "phase": "Build I",
+      "title": "Lengthen the efforts",
+      "km": 17,
+      "single": [
+        147.5,
+        147.5
+      ],
+      "back": [
+        4,
+        4,
+        125
+      ],
+      "light": [
+        3,
+        3,
+        110
+      ],
+      "easy": [
+        3.5,
+        3
+      ],
+      "interval": [
+        5,
+        500,
+        "2:18–2:20",
+        90,
+        5.5
+      ],
+      "tempo": [
+        2,
+        6,
+        "5:10–5:20",
+        120,
+        5
+      ],
+      "focus": "Keep the last interval close to the first. Start at the slower end of the range rather than banking time."
+    },
+    {
+      "n": 4,
+      "start": "2026-10-26",
+      "end": "2026-11-01",
+      "phase": "Recover",
+      "title": "Absorb the work",
+      "km": 13,
+      "single": null,
+      "back": [
+        3,
+        3,
+        105
+      ],
+      "light": [
+        2,
+        3,
+        90
+      ],
+      "easy": [
+        3,
+        2.5
+      ],
+      "interval": [
+        4,
+        400,
+        "1:52–1:54",
+        90,
+        4.5
+      ],
+      "tempo": null,
+      "focus": "Finish fresher. This is deliberately lighter: do not fill the spare capacity with extra conditioning."
+    },
+    {
+      "n": 5,
+      "start": "2026-11-02",
+      "end": "2026-11-08",
+      "phase": "Build II",
+      "title": "Build strength and duration",
+      "km": 18.5,
+      "single": [
+        152.5,
+        152.5
+      ],
+      "back": [
+        4,
+        3,
+        130
+      ],
+      "light": [
+        3,
+        3,
+        110
+      ],
+      "easy": [
+        4,
+        3.5
+      ],
+      "interval": [
+        4,
+        600,
+        "2:43–2:46",
+        120,
+        5.5
+      ],
+      "tempo": [
+        3,
+        5,
+        "5:05–5:15",
+        90,
+        5.5
+      ],
+      "focus": "The deadlift back-off sets become heavier and drop from four repetitions to three. Effort limits still override the table."
+    },
+    {
+      "n": 6,
+      "start": "2026-11-09",
+      "end": "2026-11-15",
+      "phase": "Build II",
+      "title": "Make it repeatable",
+      "km": 19.5,
+      "single": [
+        155,
+        157.5
+      ],
+      "back": [
+        4,
+        3,
+        135
+      ],
+      "light": [
+        3,
+        3,
+        112.5
+      ],
+      "easy": [
+        4,
+        3.5
+      ],
+      "interval": [
+        5,
+        600,
+        "2:40–2:43",
+        120,
+        6.5
+      ],
+      "tempo": [
+        2,
+        8,
+        "5:05–5:15",
+        120,
+        5.5
+      ],
+      "focus": "Choose the lower end of the single range unless recent training and today’s warm-ups justify the higher weight."
+    },
+    {
+      "n": 7,
+      "start": "2026-11-16",
+      "end": "2026-11-22",
+      "phase": "Build II",
+      "title": "Stay strong as efforts grow",
+      "km": 20.5,
+      "single": [
+        160,
+        162.5
+      ],
+      "back": [
+        3,
+        3,
+        140
+      ],
+      "light": [
+        3,
+        3,
+        115
+      ],
+      "easy": [
+        4.5,
+        4
+      ],
+      "interval": [
+        4,
+        800,
+        "3:34–3:38",
+        120,
+        6.5
+      ],
+      "tempo": [
+        1,
+        15,
+        "5:00–5:10",
+        0,
+        5.5
+      ],
+      "focus": "160 kg is a training target only if it remains submaximal. Use a lighter single if your effort or position deteriorates."
+    },
+    {
+      "n": 8,
+      "start": "2026-11-23",
+      "end": "2026-11-29",
+      "phase": "Checkpoint",
+      "title": "Check the direction",
+      "km": 14,
+      "single": null,
+      "back": [
+        3,
+        3,
+        115
+      ],
+      "light": [
+        2,
+        3,
+        95
+      ],
+      "easy": [
+        3,
+        2.5
+      ],
+      "interval": null,
+      "tempo": null,
+      "focus": "An evenly paced 3 km test replaces intervals. Roughly 13:35–13:50 would be encouraging, not compulsory. If still around 14 minutes or slower, repeat manageable week 6–7 running prescriptions instead of forcing December paces."
+    },
+    {
+      "n": 9,
+      "start": "2026-11-30",
+      "end": "2026-12-06",
+      "phase": "Specific",
+      "title": "Meet your goal pace",
+      "km": 21,
+      "single": [
+        165,
+        167.5
+      ],
+      "back": [
+        3,
+        2,
+        145
+      ],
+      "light": [
+        3,
+        2,
+        120
+      ],
+      "easy": [
+        5,
+        4
+      ],
+      "interval": [
+        5,
+        600,
+        "2:35–2:37",
+        120,
+        6.5
+      ],
+      "tempo": [
+        2,
+        8,
+        "4:55–5:05",
+        120,
+        5.5
+      ],
+      "focus": "600 m at 13-minute goal pace takes 2:36. Only use the faster sessions if the preceding training remains controlled."
+    },
+    {
+      "n": 10,
+      "start": "2026-12-07",
+      "end": "2026-12-13",
+      "phase": "Specific",
+      "title": "Extend the goal pace",
+      "km": 21,
+      "single": [
+        170,
+        172.5
+      ],
+      "back": [
+        3,
+        2,
+        150
+      ],
+      "light": [
+        3,
+        2,
+        125
+      ],
+      "easy": [
+        5,
+        4
+      ],
+      "interval": [
+        4,
+        800,
+        "3:27–3:30",
+        120,
+        6.5
+      ],
+      "tempo": [
+        1,
+        15,
+        "4:55–5:05",
+        0,
+        5.5
+      ],
+      "focus": "Hold mileage steady. Saturday may be shortened to 12 minutes. Slow or shorten any tempo that starts to feel like racing."
+    },
+    {
+      "n": 11,
+      "start": "2026-12-14",
+      "end": "2026-12-20",
+      "phase": "Sharpen",
+      "title": "Confidence, not exhaustion",
+      "km": 18,
+      "single": [
+        172.5,
+        177.5
+      ],
+      "back": [
+        2,
+        2,
+        150
+      ],
+      "light": [
+        2,
+        2,
+        120
+      ],
+      "easy": [
+        4,
+        3.5
+      ],
+      "interval": [
+        3,
+        1000,
+        "4:20–4:23",
+        165,
+        6.5
+      ],
+      "tempo": null,
+      "focus": "The kilometre repetitions and clean heavier single are readiness checks, not guarantees. No extra maximum tests."
+    },
+    {
+      "n": 12,
+      "start": "2026-12-21",
+      "end": "2026-12-27",
+      "phase": "Run test",
+      "title": "Arrive fresh. Run 13.",
+      "km": 12,
+      "single": [
+        170,
+        175
+      ],
+      "back": [
+        1,
+        2,
+        140
+      ],
+      "light": null,
+      "easy": [
+        3,
+        0
+      ],
+      "interval": [
+        4,
+        200,
+        "0:51–0:52",
+        90,
+        3.5
+      ],
+      "tempo": null,
+      "focus": "Reduce the work and keep the feel for pace. Monday’s single must be RPE 8 or below: easier than last week, not a new maximum."
+    },
+    {
+      "n": 13,
+      "start": "2026-12-28",
+      "end": "2026-12-31",
+      "phase": "Lift test",
+      "title": "Finish with a strong pull",
+      "km": 0,
+      "single": null,
+      "back": null,
+      "light": [
+        3,
+        1,
+        110
+      ],
+      "easy": [
+        0,
+        0
+      ],
+      "interval": null,
+      "tempo": null,
+      "focus": "190 kg is conditional on a convincing 180 kg. If 180 is a maximal grind or your position breaks down, take a smaller increase or stop."
+    }
+  ],
+  "days": [
+    {
+      "date": "2026-10-06",
+      "week": 1,
+      "title": "Strength A",
+      "lift": [
+        {
+          "id": "single",
+          "name": "Deadlift · top single",
+          "sets": 1,
+          "reps": 1,
+          "weight": 140,
+          "maxWeight": 140,
+          "kind": "single",
+          "note": "RPE 7–8; cap 8.5 in weeks 9–11. Week 12 cap is 8. Start at the low end."
+        },
+        {
+          "id": "backoff",
+          "name": "Deadlift · back-off",
+          "sets": 4,
+          "reps": 4,
+          "weight": 120,
+          "maxWeight": 120,
+          "kind": "backoff",
+          "note": "RPE 8 maximum, including the final set."
+        },
+        {
+          "id": "bench",
+          "name": "Bench press",
+          "sets": 3,
+          "reps": 5,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve."
+        },
+        {
+          "id": "row",
+          "name": "Chest-supported row",
+          "sets": 3,
+          "reps": 8,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve. Avoid adding low-back fatigue."
+        }
+      ],
+      "run": null,
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-10-07",
+      "week": 1,
+      "title": "Easy running",
+      "lift": [],
+      "run": {
+        "type": "easy",
+        "km": 3.5,
+        "title": "Easy run",
+        "work": "3.5 km easy",
+        "pace": "6:00–6:45/km, or slower to talk comfortably",
+        "reps": 0,
+        "recovery": 0,
+        "tip": "Full-sentence conversation. Slower is fine. This is not a test."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-10-08",
+      "week": 1,
+      "title": "400 m intervals",
+      "lift": [],
+      "run": {
+        "type": "interval",
+        "km": 5,
+        "title": "Intervals",
+        "work": "5 × 400 m",
+        "pace": "1:54–1:56 per repetition",
+        "reps": 5,
+        "distance": 400,
+        "recovery": 90,
+        "tip": "Warm up ~1.5 km, add dynamic movements and 3 relaxed 15-second accelerations. Walk or jog recoveries. Cool down at least 500 m. Total distance includes all of this. Finish with one good repetition left."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-10-09",
+      "week": 1,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-10-10",
+      "week": 1,
+      "title": "Strength B + easy",
+      "lift": [
+        {
+          "id": "technique",
+          "name": "Deadlift · technique",
+          "sets": 3,
+          "reps": 3,
+          "weight": 100,
+          "maxWeight": 100,
+          "kind": "technique",
+          "note": "RPE 6 or below. Reset between repetitions."
+        },
+        {
+          "id": "squat",
+          "name": "Squat",
+          "sets": 2,
+          "reps": 5,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "squat",
+          "note": "Maintenance only. RPE 6–7."
+        },
+        {
+          "id": "press",
+          "name": "Overhead press",
+          "sets": 2,
+          "reps": 6,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve."
+        },
+        {
+          "id": "pullup",
+          "name": "Pull-ups",
+          "sets": 3,
+          "reps": null,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "Stop each set about two repetitions before failure. Assistance is fine; enter added load only, not bodyweight."
+        }
+      ],
+      "run": {
+        "type": "easy",
+        "km": 3.5,
+        "title": "Easy run",
+        "work": "3.5 km easy",
+        "pace": "6:00–6:45/km, or slower to talk comfortably",
+        "reps": 0,
+        "recovery": 0,
+        "tip": "Full-sentence conversation. Slower is fine. This is not a test."
+      },
+      "note": "Lift first, then run easily. Separate by several hours where practical.",
+      "rest": false
+    },
+    {
+      "date": "2026-10-11",
+      "week": 1,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-10-12",
+      "week": 2,
+      "title": "Strength A",
+      "lift": [
+        {
+          "id": "single",
+          "name": "Deadlift · top single",
+          "sets": 1,
+          "reps": 1,
+          "weight": 145,
+          "maxWeight": 145,
+          "kind": "single",
+          "note": "RPE 7–8; cap 8.5 in weeks 9–11. Week 12 cap is 8. Start at the low end."
+        },
+        {
+          "id": "backoff",
+          "name": "Deadlift · back-off",
+          "sets": 4,
+          "reps": 4,
+          "weight": 122.5,
+          "maxWeight": 122.5,
+          "kind": "backoff",
+          "note": "RPE 8 maximum, including the final set."
+        },
+        {
+          "id": "bench",
+          "name": "Bench press",
+          "sets": 3,
+          "reps": 5,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve."
+        },
+        {
+          "id": "row",
+          "name": "Chest-supported row",
+          "sets": 3,
+          "reps": 8,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve. Avoid adding low-back fatigue."
+        }
+      ],
+      "run": null,
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-10-13",
+      "week": 2,
+      "title": "Easy running",
+      "lift": [],
+      "run": {
+        "type": "easy",
+        "km": 3,
+        "title": "Easy run",
+        "work": "3 km easy",
+        "pace": "6:00–6:45/km, or slower to talk comfortably",
+        "reps": 0,
+        "recovery": 0,
+        "tip": "Full-sentence conversation. Slower is fine. This is not a test."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-10-14",
+      "week": 2,
+      "title": "400 m intervals",
+      "lift": [],
+      "run": {
+        "type": "interval",
+        "km": 5.5,
+        "title": "Intervals",
+        "work": "6 × 400 m",
+        "pace": "1:52–1:54 per repetition",
+        "reps": 6,
+        "distance": 400,
+        "recovery": 90,
+        "tip": "Warm up ~1.5 km, add dynamic movements and 3 relaxed 15-second accelerations. Walk or jog recoveries. Cool down at least 500 m. Total distance includes all of this. Finish with one good repetition left."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-10-15",
+      "week": 2,
+      "title": "Strength B + easy",
+      "lift": [
+        {
+          "id": "technique",
+          "name": "Deadlift · technique",
+          "sets": 3,
+          "reps": 3,
+          "weight": 105,
+          "maxWeight": 105,
+          "kind": "technique",
+          "note": "RPE 6 or below. Reset between repetitions."
+        },
+        {
+          "id": "squat",
+          "name": "Squat",
+          "sets": 2,
+          "reps": 5,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "squat",
+          "note": "Maintenance only. RPE 6–7."
+        },
+        {
+          "id": "press",
+          "name": "Overhead press",
+          "sets": 2,
+          "reps": 6,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve."
+        },
+        {
+          "id": "pullup",
+          "name": "Pull-ups",
+          "sets": 3,
+          "reps": null,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "Stop each set about two repetitions before failure. Assistance is fine; enter added load only, not bodyweight."
+        }
+      ],
+      "run": {
+        "type": "easy",
+        "km": 3,
+        "title": "Easy run",
+        "work": "3 km easy",
+        "pace": "6:00–6:45/km, or slower to talk comfortably",
+        "reps": 0,
+        "recovery": 0,
+        "tip": "Full-sentence conversation. Slower is fine. This is not a test."
+      },
+      "note": "Lift first, then run easily. Separate by several hours where practical.",
+      "rest": false
+    },
+    {
+      "date": "2026-10-16",
+      "week": 2,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-10-17",
+      "week": 2,
+      "title": "Controlled tempo",
+      "lift": [],
+      "run": {
+        "type": "tempo",
+        "km": 4.5,
+        "title": "Controlled tempo",
+        "work": "2 × 5 min",
+        "pace": "5:15–5:25/km",
+        "reps": 2,
+        "minutes": 5,
+        "recovery": 120,
+        "tip": "RPE 6–7: short phrases should remain possible. Warm up ~1.5 km with dynamic movements and 3 relaxed accelerations; cool down at least 500 m. Total distance includes warm-up, recovery and cooldown."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-10-18",
+      "week": 2,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-10-19",
+      "week": 3,
+      "title": "Strength A",
+      "lift": [
+        {
+          "id": "single",
+          "name": "Deadlift · top single",
+          "sets": 1,
+          "reps": 1,
+          "weight": 147.5,
+          "maxWeight": 147.5,
+          "kind": "single",
+          "note": "RPE 7–8; cap 8.5 in weeks 9–11. Week 12 cap is 8. Start at the low end."
+        },
+        {
+          "id": "backoff",
+          "name": "Deadlift · back-off",
+          "sets": 4,
+          "reps": 4,
+          "weight": 125,
+          "maxWeight": 125,
+          "kind": "backoff",
+          "note": "RPE 8 maximum, including the final set."
+        },
+        {
+          "id": "bench",
+          "name": "Bench press",
+          "sets": 3,
+          "reps": 5,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve."
+        },
+        {
+          "id": "row",
+          "name": "Chest-supported row",
+          "sets": 3,
+          "reps": 8,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve. Avoid adding low-back fatigue."
+        }
+      ],
+      "run": null,
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-10-20",
+      "week": 3,
+      "title": "Easy running",
+      "lift": [],
+      "run": {
+        "type": "easy",
+        "km": 3.5,
+        "title": "Easy run",
+        "work": "3.5 km easy",
+        "pace": "6:00–6:45/km, or slower to talk comfortably",
+        "reps": 0,
+        "recovery": 0,
+        "tip": "Full-sentence conversation. Slower is fine. This is not a test."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-10-21",
+      "week": 3,
+      "title": "500 m intervals",
+      "lift": [],
+      "run": {
+        "type": "interval",
+        "km": 5.5,
+        "title": "Intervals",
+        "work": "5 × 500 m",
+        "pace": "2:18–2:20 per repetition",
+        "reps": 5,
+        "distance": 500,
+        "recovery": 90,
+        "tip": "Warm up ~1.5 km, add dynamic movements and 3 relaxed 15-second accelerations. Walk or jog recoveries. Cool down at least 500 m. Total distance includes all of this. Finish with one good repetition left."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-10-22",
+      "week": 3,
+      "title": "Strength B + easy",
+      "lift": [
+        {
+          "id": "technique",
+          "name": "Deadlift · technique",
+          "sets": 3,
+          "reps": 3,
+          "weight": 110,
+          "maxWeight": 110,
+          "kind": "technique",
+          "note": "RPE 6 or below. Reset between repetitions."
+        },
+        {
+          "id": "squat",
+          "name": "Squat",
+          "sets": 2,
+          "reps": 5,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "squat",
+          "note": "Maintenance only. RPE 6–7."
+        },
+        {
+          "id": "press",
+          "name": "Overhead press",
+          "sets": 2,
+          "reps": 6,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve."
+        },
+        {
+          "id": "pullup",
+          "name": "Pull-ups",
+          "sets": 3,
+          "reps": null,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "Stop each set about two repetitions before failure. Assistance is fine; enter added load only, not bodyweight."
+        }
+      ],
+      "run": {
+        "type": "easy",
+        "km": 3,
+        "title": "Easy run",
+        "work": "3 km easy",
+        "pace": "6:00–6:45/km, or slower to talk comfortably",
+        "reps": 0,
+        "recovery": 0,
+        "tip": "Full-sentence conversation. Slower is fine. This is not a test."
+      },
+      "note": "Lift first, then run easily. Separate by several hours where practical.",
+      "rest": false
+    },
+    {
+      "date": "2026-10-23",
+      "week": 3,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-10-24",
+      "week": 3,
+      "title": "Controlled tempo",
+      "lift": [],
+      "run": {
+        "type": "tempo",
+        "km": 5,
+        "title": "Controlled tempo",
+        "work": "2 × 6 min",
+        "pace": "5:10–5:20/km",
+        "reps": 2,
+        "minutes": 6,
+        "recovery": 120,
+        "tip": "RPE 6–7: short phrases should remain possible. Warm up ~1.5 km with dynamic movements and 3 relaxed accelerations; cool down at least 500 m. Total distance includes warm-up, recovery and cooldown."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-10-25",
+      "week": 3,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-10-26",
+      "week": 4,
+      "title": "Light strength A",
+      "lift": [
+        {
+          "id": "backoff",
+          "name": "Deadlift · back-off",
+          "sets": 3,
+          "reps": 3,
+          "weight": 105,
+          "maxWeight": 105,
+          "kind": "backoff",
+          "note": "RPE 8 maximum, including the final set."
+        },
+        {
+          "id": "bench",
+          "name": "Bench press",
+          "sets": 2,
+          "reps": 5,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve."
+        },
+        {
+          "id": "row",
+          "name": "Chest-supported row",
+          "sets": 2,
+          "reps": 8,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve. Avoid adding low-back fatigue."
+        }
+      ],
+      "run": null,
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-10-27",
+      "week": 4,
+      "title": "Easy running",
+      "lift": [],
+      "run": {
+        "type": "easy",
+        "km": 3,
+        "title": "Easy run",
+        "work": "3 km easy",
+        "pace": "6:00–6:45/km, or slower to talk comfortably",
+        "reps": 0,
+        "recovery": 0,
+        "tip": "Full-sentence conversation. Slower is fine. This is not a test."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-10-28",
+      "week": 4,
+      "title": "400 m intervals",
+      "lift": [],
+      "run": {
+        "type": "interval",
+        "km": 4.5,
+        "title": "Intervals",
+        "work": "4 × 400 m",
+        "pace": "1:52–1:54 per repetition",
+        "reps": 4,
+        "distance": 400,
+        "recovery": 90,
+        "tip": "Warm up ~1.5 km, add dynamic movements and 3 relaxed 15-second accelerations. Walk or jog recoveries. Cool down at least 500 m. Total distance includes all of this. Finish with one good repetition left."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-10-29",
+      "week": 4,
+      "title": "Strength B + easy",
+      "lift": [
+        {
+          "id": "technique",
+          "name": "Deadlift · technique",
+          "sets": 2,
+          "reps": 3,
+          "weight": 90,
+          "maxWeight": 90,
+          "kind": "technique",
+          "note": "RPE 6 or below. Reset between repetitions."
+        },
+        {
+          "id": "squat",
+          "name": "Squat",
+          "sets": 1,
+          "reps": 5,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "squat",
+          "note": "Maintenance only. RPE 6–7."
+        },
+        {
+          "id": "press",
+          "name": "Overhead press",
+          "sets": 1,
+          "reps": 6,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve."
+        },
+        {
+          "id": "pullup",
+          "name": "Pull-ups",
+          "sets": 2,
+          "reps": null,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "Stop each set about two repetitions before failure. Assistance is fine; enter added load only, not bodyweight."
+        }
+      ],
+      "run": {
+        "type": "easy",
+        "km": 2.5,
+        "title": "Easy run",
+        "work": "2.5 km easy",
+        "pace": "6:00–6:45/km, or slower to talk comfortably",
+        "reps": 0,
+        "recovery": 0,
+        "tip": "Full-sentence conversation. Slower is fine. This is not a test."
+      },
+      "note": "Lift first, then run easily. Separate by several hours where practical.",
+      "rest": false
+    },
+    {
+      "date": "2026-10-30",
+      "week": 4,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-10-31",
+      "week": 4,
+      "title": "Easy running",
+      "lift": [],
+      "run": {
+        "type": "easy",
+        "km": 3,
+        "title": "Easy run",
+        "work": "3 km easy",
+        "pace": "6:00–6:45/km, or slower to talk comfortably",
+        "reps": 0,
+        "recovery": 0,
+        "tip": "Full-sentence conversation. Slower is fine. This is not a test."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-11-01",
+      "week": 4,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-11-02",
+      "week": 5,
+      "title": "Strength A",
+      "lift": [
+        {
+          "id": "single",
+          "name": "Deadlift · top single",
+          "sets": 1,
+          "reps": 1,
+          "weight": 152.5,
+          "maxWeight": 152.5,
+          "kind": "single",
+          "note": "RPE 7–8; cap 8.5 in weeks 9–11. Week 12 cap is 8. Start at the low end."
+        },
+        {
+          "id": "backoff",
+          "name": "Deadlift · back-off",
+          "sets": 4,
+          "reps": 3,
+          "weight": 130,
+          "maxWeight": 130,
+          "kind": "backoff",
+          "note": "RPE 8 maximum, including the final set."
+        },
+        {
+          "id": "bench",
+          "name": "Bench press",
+          "sets": 3,
+          "reps": 5,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve."
+        },
+        {
+          "id": "row",
+          "name": "Chest-supported row",
+          "sets": 3,
+          "reps": 8,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve. Avoid adding low-back fatigue."
+        }
+      ],
+      "run": null,
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-11-03",
+      "week": 5,
+      "title": "Easy running",
+      "lift": [],
+      "run": {
+        "type": "easy",
+        "km": 4,
+        "title": "Easy run",
+        "work": "4 km easy",
+        "pace": "6:00–6:45/km, or slower to talk comfortably",
+        "reps": 0,
+        "recovery": 0,
+        "tip": "Full-sentence conversation. Slower is fine. This is not a test."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-11-04",
+      "week": 5,
+      "title": "600 m intervals",
+      "lift": [],
+      "run": {
+        "type": "interval",
+        "km": 5.5,
+        "title": "Intervals",
+        "work": "4 × 600 m",
+        "pace": "2:43–2:46 per repetition",
+        "reps": 4,
+        "distance": 600,
+        "recovery": 120,
+        "tip": "Warm up ~1.5 km, add dynamic movements and 3 relaxed 15-second accelerations. Walk or jog recoveries. Cool down at least 500 m. Total distance includes all of this. Finish with one good repetition left."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-11-05",
+      "week": 5,
+      "title": "Strength B + easy",
+      "lift": [
+        {
+          "id": "technique",
+          "name": "Deadlift · technique",
+          "sets": 3,
+          "reps": 3,
+          "weight": 110,
+          "maxWeight": 110,
+          "kind": "technique",
+          "note": "RPE 6 or below. Reset between repetitions."
+        },
+        {
+          "id": "squat",
+          "name": "Squat",
+          "sets": 2,
+          "reps": 5,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "squat",
+          "note": "Maintenance only. RPE 6–7."
+        },
+        {
+          "id": "press",
+          "name": "Overhead press",
+          "sets": 2,
+          "reps": 6,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve."
+        },
+        {
+          "id": "pullup",
+          "name": "Pull-ups",
+          "sets": 3,
+          "reps": null,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "Stop each set about two repetitions before failure. Assistance is fine; enter added load only, not bodyweight."
+        }
+      ],
+      "run": {
+        "type": "easy",
+        "km": 3.5,
+        "title": "Easy run",
+        "work": "3.5 km easy",
+        "pace": "6:00–6:45/km, or slower to talk comfortably",
+        "reps": 0,
+        "recovery": 0,
+        "tip": "Full-sentence conversation. Slower is fine. This is not a test."
+      },
+      "note": "Lift first, then run easily. Separate by several hours where practical.",
+      "rest": false
+    },
+    {
+      "date": "2026-11-06",
+      "week": 5,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-11-07",
+      "week": 5,
+      "title": "Controlled tempo",
+      "lift": [],
+      "run": {
+        "type": "tempo",
+        "km": 5.5,
+        "title": "Controlled tempo",
+        "work": "3 × 5 min",
+        "pace": "5:05–5:15/km",
+        "reps": 3,
+        "minutes": 5,
+        "recovery": 90,
+        "tip": "RPE 6–7: short phrases should remain possible. Warm up ~1.5 km with dynamic movements and 3 relaxed accelerations; cool down at least 500 m. Total distance includes warm-up, recovery and cooldown."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-11-08",
+      "week": 5,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-11-09",
+      "week": 6,
+      "title": "Strength A",
+      "lift": [
+        {
+          "id": "single",
+          "name": "Deadlift · top single",
+          "sets": 1,
+          "reps": 1,
+          "weight": 155,
+          "maxWeight": 157.5,
+          "kind": "single",
+          "note": "RPE 7–8; cap 8.5 in weeks 9–11. Week 12 cap is 8. Start at the low end."
+        },
+        {
+          "id": "backoff",
+          "name": "Deadlift · back-off",
+          "sets": 4,
+          "reps": 3,
+          "weight": 135,
+          "maxWeight": 135,
+          "kind": "backoff",
+          "note": "RPE 8 maximum, including the final set."
+        },
+        {
+          "id": "bench",
+          "name": "Bench press",
+          "sets": 3,
+          "reps": 5,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve."
+        },
+        {
+          "id": "row",
+          "name": "Chest-supported row",
+          "sets": 3,
+          "reps": 8,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve. Avoid adding low-back fatigue."
+        }
+      ],
+      "run": null,
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-11-10",
+      "week": 6,
+      "title": "Easy running",
+      "lift": [],
+      "run": {
+        "type": "easy",
+        "km": 4,
+        "title": "Easy run",
+        "work": "4 km easy",
+        "pace": "6:00–6:45/km, or slower to talk comfortably",
+        "reps": 0,
+        "recovery": 0,
+        "tip": "Full-sentence conversation. Slower is fine. This is not a test."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-11-11",
+      "week": 6,
+      "title": "600 m intervals",
+      "lift": [],
+      "run": {
+        "type": "interval",
+        "km": 6.5,
+        "title": "Intervals",
+        "work": "5 × 600 m",
+        "pace": "2:40–2:43 per repetition",
+        "reps": 5,
+        "distance": 600,
+        "recovery": 120,
+        "tip": "Warm up ~1.5 km, add dynamic movements and 3 relaxed 15-second accelerations. Walk or jog recoveries. Cool down at least 500 m. Total distance includes all of this. Finish with one good repetition left."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-11-12",
+      "week": 6,
+      "title": "Strength B + easy",
+      "lift": [
+        {
+          "id": "technique",
+          "name": "Deadlift · technique",
+          "sets": 3,
+          "reps": 3,
+          "weight": 112.5,
+          "maxWeight": 112.5,
+          "kind": "technique",
+          "note": "RPE 6 or below. Reset between repetitions."
+        },
+        {
+          "id": "squat",
+          "name": "Squat",
+          "sets": 2,
+          "reps": 5,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "squat",
+          "note": "Maintenance only. RPE 6–7."
+        },
+        {
+          "id": "press",
+          "name": "Overhead press",
+          "sets": 2,
+          "reps": 6,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve."
+        },
+        {
+          "id": "pullup",
+          "name": "Pull-ups",
+          "sets": 3,
+          "reps": null,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "Stop each set about two repetitions before failure. Assistance is fine; enter added load only, not bodyweight."
+        }
+      ],
+      "run": {
+        "type": "easy",
+        "km": 3.5,
+        "title": "Easy run",
+        "work": "3.5 km easy",
+        "pace": "6:00–6:45/km, or slower to talk comfortably",
+        "reps": 0,
+        "recovery": 0,
+        "tip": "Full-sentence conversation. Slower is fine. This is not a test."
+      },
+      "note": "Lift first, then run easily. Separate by several hours where practical.",
+      "rest": false
+    },
+    {
+      "date": "2026-11-13",
+      "week": 6,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-11-14",
+      "week": 6,
+      "title": "Controlled tempo",
+      "lift": [],
+      "run": {
+        "type": "tempo",
+        "km": 5.5,
+        "title": "Controlled tempo",
+        "work": "2 × 8 min",
+        "pace": "5:05–5:15/km",
+        "reps": 2,
+        "minutes": 8,
+        "recovery": 120,
+        "tip": "RPE 6–7: short phrases should remain possible. Warm up ~1.5 km with dynamic movements and 3 relaxed accelerations; cool down at least 500 m. Total distance includes warm-up, recovery and cooldown."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-11-15",
+      "week": 6,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-11-16",
+      "week": 7,
+      "title": "Strength A",
+      "lift": [
+        {
+          "id": "single",
+          "name": "Deadlift · top single",
+          "sets": 1,
+          "reps": 1,
+          "weight": 160,
+          "maxWeight": 162.5,
+          "kind": "single",
+          "note": "RPE 7–8; cap 8.5 in weeks 9–11. Week 12 cap is 8. Start at the low end."
+        },
+        {
+          "id": "backoff",
+          "name": "Deadlift · back-off",
+          "sets": 3,
+          "reps": 3,
+          "weight": 140,
+          "maxWeight": 140,
+          "kind": "backoff",
+          "note": "RPE 8 maximum, including the final set."
+        },
+        {
+          "id": "bench",
+          "name": "Bench press",
+          "sets": 3,
+          "reps": 5,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve."
+        },
+        {
+          "id": "row",
+          "name": "Chest-supported row",
+          "sets": 3,
+          "reps": 8,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve. Avoid adding low-back fatigue."
+        }
+      ],
+      "run": null,
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-11-17",
+      "week": 7,
+      "title": "Easy running",
+      "lift": [],
+      "run": {
+        "type": "easy",
+        "km": 4.5,
+        "title": "Easy run",
+        "work": "4.5 km easy",
+        "pace": "6:00–6:45/km, or slower to talk comfortably",
+        "reps": 0,
+        "recovery": 0,
+        "tip": "Full-sentence conversation. Slower is fine. This is not a test."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-11-18",
+      "week": 7,
+      "title": "800 m intervals",
+      "lift": [],
+      "run": {
+        "type": "interval",
+        "km": 6.5,
+        "title": "Intervals",
+        "work": "4 × 800 m",
+        "pace": "3:34–3:38 per repetition",
+        "reps": 4,
+        "distance": 800,
+        "recovery": 120,
+        "tip": "Warm up ~1.5 km, add dynamic movements and 3 relaxed 15-second accelerations. Walk or jog recoveries. Cool down at least 500 m. Total distance includes all of this. Finish with one good repetition left."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-11-19",
+      "week": 7,
+      "title": "Strength B + easy",
+      "lift": [
+        {
+          "id": "technique",
+          "name": "Deadlift · technique",
+          "sets": 3,
+          "reps": 3,
+          "weight": 115,
+          "maxWeight": 115,
+          "kind": "technique",
+          "note": "RPE 6 or below. Reset between repetitions."
+        },
+        {
+          "id": "squat",
+          "name": "Squat",
+          "sets": 2,
+          "reps": 5,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "squat",
+          "note": "Maintenance only. RPE 6–7."
+        },
+        {
+          "id": "press",
+          "name": "Overhead press",
+          "sets": 2,
+          "reps": 6,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve."
+        },
+        {
+          "id": "pullup",
+          "name": "Pull-ups",
+          "sets": 3,
+          "reps": null,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "Stop each set about two repetitions before failure. Assistance is fine; enter added load only, not bodyweight."
+        }
+      ],
+      "run": {
+        "type": "easy",
+        "km": 4,
+        "title": "Easy run",
+        "work": "4 km easy",
+        "pace": "6:00–6:45/km, or slower to talk comfortably",
+        "reps": 0,
+        "recovery": 0,
+        "tip": "Full-sentence conversation. Slower is fine. This is not a test."
+      },
+      "note": "Lift first, then run easily. Separate by several hours where practical.",
+      "rest": false
+    },
+    {
+      "date": "2026-11-20",
+      "week": 7,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-11-21",
+      "week": 7,
+      "title": "Controlled tempo",
+      "lift": [],
+      "run": {
+        "type": "tempo",
+        "km": 5.5,
+        "title": "Controlled tempo",
+        "work": "15 min continuous",
+        "pace": "5:00–5:10/km",
+        "reps": 1,
+        "minutes": 15,
+        "recovery": 0,
+        "tip": "RPE 6–7: short phrases should remain possible. Warm up ~1.5 km with dynamic movements and 3 relaxed accelerations; cool down at least 500 m. Total distance includes warm-up, recovery and cooldown."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-11-22",
+      "week": 7,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-11-23",
+      "week": 8,
+      "title": "Light strength A",
+      "lift": [
+        {
+          "id": "backoff",
+          "name": "Deadlift · back-off",
+          "sets": 3,
+          "reps": 3,
+          "weight": 115,
+          "maxWeight": 115,
+          "kind": "backoff",
+          "note": "RPE 8 maximum, including the final set."
+        },
+        {
+          "id": "bench",
+          "name": "Bench press",
+          "sets": 2,
+          "reps": 5,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve."
+        },
+        {
+          "id": "row",
+          "name": "Chest-supported row",
+          "sets": 2,
+          "reps": 8,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve. Avoid adding low-back fatigue."
+        }
+      ],
+      "run": null,
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-11-24",
+      "week": 8,
+      "title": "Easy running",
+      "lift": [],
+      "run": {
+        "type": "easy",
+        "km": 3,
+        "title": "Easy run",
+        "work": "3 km easy",
+        "pace": "6:00–6:45/km, or slower to talk comfortably",
+        "reps": 0,
+        "recovery": 0,
+        "tip": "Full-sentence conversation. Slower is fine. This is not a test."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-11-25",
+      "week": 8,
+      "title": "3 km checkpoint",
+      "lift": [],
+      "run": {
+        "type": "test",
+        "km": 5.5,
+        "title": "3 km checkpoint",
+        "work": "3 km time trial",
+        "pace": "Evenly paced best effort",
+        "reps": 3,
+        "recovery": 0,
+        "tip": "Record your 3 km result separately from total session time. Warm up ~1.5 km with dynamic movements and 3 relaxed accelerations, then cool down at least 500 m. 13:35–13:50 would be encouraging, not a pass/fail threshold."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-11-26",
+      "week": 8,
+      "title": "Strength B + easy",
+      "lift": [
+        {
+          "id": "technique",
+          "name": "Deadlift · technique",
+          "sets": 2,
+          "reps": 3,
+          "weight": 95,
+          "maxWeight": 95,
+          "kind": "technique",
+          "note": "RPE 6 or below. Reset between repetitions."
+        },
+        {
+          "id": "press",
+          "name": "Overhead press",
+          "sets": 1,
+          "reps": 6,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve."
+        },
+        {
+          "id": "pullup",
+          "name": "Pull-ups",
+          "sets": 2,
+          "reps": null,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "Stop each set about two repetitions before failure. Assistance is fine; enter added load only, not bodyweight."
+        }
+      ],
+      "run": {
+        "type": "easy",
+        "km": 2.5,
+        "title": "Easy run",
+        "work": "2.5 km easy",
+        "pace": "6:00–6:45/km, or slower to talk comfortably",
+        "reps": 0,
+        "recovery": 0,
+        "tip": "Full-sentence conversation. Slower is fine. This is not a test."
+      },
+      "note": "Omit technique deadlifts if not recovered from the test. Run only if your gait feels normal.",
+      "rest": false
+    },
+    {
+      "date": "2026-11-27",
+      "week": 8,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-11-28",
+      "week": 8,
+      "title": "Easy running",
+      "lift": [],
+      "run": {
+        "type": "easy",
+        "km": 3,
+        "title": "Easy run",
+        "work": "3 km easy",
+        "pace": "6:00–6:45/km, or slower to talk comfortably",
+        "reps": 0,
+        "recovery": 0,
+        "tip": "Full-sentence conversation. Slower is fine. This is not a test."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-11-29",
+      "week": 8,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-11-30",
+      "week": 9,
+      "title": "Strength A",
+      "lift": [
+        {
+          "id": "single",
+          "name": "Deadlift · top single",
+          "sets": 1,
+          "reps": 1,
+          "weight": 165,
+          "maxWeight": 167.5,
+          "kind": "single",
+          "note": "RPE 7–8; cap 8.5 in weeks 9–11. Week 12 cap is 8. Start at the low end."
+        },
+        {
+          "id": "backoff",
+          "name": "Deadlift · back-off",
+          "sets": 3,
+          "reps": 2,
+          "weight": 145,
+          "maxWeight": 145,
+          "kind": "backoff",
+          "note": "RPE 8 maximum, including the final set."
+        },
+        {
+          "id": "bench",
+          "name": "Bench press",
+          "sets": 3,
+          "reps": 5,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve."
+        },
+        {
+          "id": "row",
+          "name": "Chest-supported row",
+          "sets": 3,
+          "reps": 8,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve. Avoid adding low-back fatigue."
+        }
+      ],
+      "run": null,
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-12-01",
+      "week": 9,
+      "title": "Easy running",
+      "lift": [],
+      "run": {
+        "type": "easy",
+        "km": 5,
+        "title": "Easy run",
+        "work": "5 km easy",
+        "pace": "6:00–6:45/km, or slower to talk comfortably",
+        "reps": 0,
+        "recovery": 0,
+        "tip": "Full-sentence conversation. Slower is fine. This is not a test."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-12-02",
+      "week": 9,
+      "title": "600 m intervals",
+      "lift": [],
+      "run": {
+        "type": "interval",
+        "km": 6.5,
+        "title": "Intervals",
+        "work": "5 × 600 m",
+        "pace": "2:35–2:37 per repetition",
+        "reps": 5,
+        "distance": 600,
+        "recovery": 120,
+        "tip": "Warm up ~1.5 km, add dynamic movements and 3 relaxed 15-second accelerations. Walk or jog recoveries. Cool down at least 500 m. Total distance includes all of this. Finish with one good repetition left."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-12-03",
+      "week": 9,
+      "title": "Strength B + easy",
+      "lift": [
+        {
+          "id": "technique",
+          "name": "Deadlift · technique",
+          "sets": 3,
+          "reps": 2,
+          "weight": 120,
+          "maxWeight": 120,
+          "kind": "technique",
+          "note": "RPE 6 or below. Reset between repetitions."
+        },
+        {
+          "id": "squat",
+          "name": "Squat",
+          "sets": 2,
+          "reps": 3,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "squat",
+          "note": "Maintenance only. RPE 6–7."
+        },
+        {
+          "id": "press",
+          "name": "Overhead press",
+          "sets": 2,
+          "reps": 6,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve."
+        },
+        {
+          "id": "pullup",
+          "name": "Pull-ups",
+          "sets": 3,
+          "reps": null,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "Stop each set about two repetitions before failure. Assistance is fine; enter added load only, not bodyweight."
+        }
+      ],
+      "run": {
+        "type": "easy",
+        "km": 4,
+        "title": "Easy run",
+        "work": "4 km easy",
+        "pace": "6:00–6:45/km, or slower to talk comfortably",
+        "reps": 0,
+        "recovery": 0,
+        "tip": "Full-sentence conversation. Slower is fine. This is not a test."
+      },
+      "note": "Lift first, then run easily. Separate by several hours where practical.",
+      "rest": false
+    },
+    {
+      "date": "2026-12-04",
+      "week": 9,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-12-05",
+      "week": 9,
+      "title": "Controlled tempo",
+      "lift": [],
+      "run": {
+        "type": "tempo",
+        "km": 5.5,
+        "title": "Controlled tempo",
+        "work": "2 × 8 min",
+        "pace": "4:55–5:05/km",
+        "reps": 2,
+        "minutes": 8,
+        "recovery": 120,
+        "tip": "RPE 6–7: short phrases should remain possible. Warm up ~1.5 km with dynamic movements and 3 relaxed accelerations; cool down at least 500 m. Total distance includes warm-up, recovery and cooldown."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-12-06",
+      "week": 9,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-12-07",
+      "week": 10,
+      "title": "Strength A",
+      "lift": [
+        {
+          "id": "single",
+          "name": "Deadlift · top single",
+          "sets": 1,
+          "reps": 1,
+          "weight": 170,
+          "maxWeight": 172.5,
+          "kind": "single",
+          "note": "RPE 7–8; cap 8.5 in weeks 9–11. Week 12 cap is 8. Start at the low end."
+        },
+        {
+          "id": "backoff",
+          "name": "Deadlift · back-off",
+          "sets": 3,
+          "reps": 2,
+          "weight": 150,
+          "maxWeight": 150,
+          "kind": "backoff",
+          "note": "RPE 8 maximum, including the final set."
+        },
+        {
+          "id": "bench",
+          "name": "Bench press",
+          "sets": 3,
+          "reps": 5,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve."
+        },
+        {
+          "id": "row",
+          "name": "Chest-supported row",
+          "sets": 3,
+          "reps": 8,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve. Avoid adding low-back fatigue."
+        }
+      ],
+      "run": null,
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-12-08",
+      "week": 10,
+      "title": "Easy running",
+      "lift": [],
+      "run": {
+        "type": "easy",
+        "km": 5,
+        "title": "Easy run",
+        "work": "5 km easy",
+        "pace": "6:00–6:45/km, or slower to talk comfortably",
+        "reps": 0,
+        "recovery": 0,
+        "tip": "Full-sentence conversation. Slower is fine. This is not a test."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-12-09",
+      "week": 10,
+      "title": "800 m intervals",
+      "lift": [],
+      "run": {
+        "type": "interval",
+        "km": 6.5,
+        "title": "Intervals",
+        "work": "4 × 800 m",
+        "pace": "3:27–3:30 per repetition",
+        "reps": 4,
+        "distance": 800,
+        "recovery": 120,
+        "tip": "Warm up ~1.5 km, add dynamic movements and 3 relaxed 15-second accelerations. Walk or jog recoveries. Cool down at least 500 m. Total distance includes all of this. Finish with one good repetition left."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-12-10",
+      "week": 10,
+      "title": "Strength B + easy",
+      "lift": [
+        {
+          "id": "technique",
+          "name": "Deadlift · technique",
+          "sets": 3,
+          "reps": 2,
+          "weight": 125,
+          "maxWeight": 125,
+          "kind": "technique",
+          "note": "RPE 6 or below. Reset between repetitions."
+        },
+        {
+          "id": "squat",
+          "name": "Squat",
+          "sets": 2,
+          "reps": 3,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "squat",
+          "note": "Maintenance only. RPE 6–7."
+        },
+        {
+          "id": "press",
+          "name": "Overhead press",
+          "sets": 2,
+          "reps": 6,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve."
+        },
+        {
+          "id": "pullup",
+          "name": "Pull-ups",
+          "sets": 3,
+          "reps": null,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "Stop each set about two repetitions before failure. Assistance is fine; enter added load only, not bodyweight."
+        }
+      ],
+      "run": {
+        "type": "easy",
+        "km": 4,
+        "title": "Easy run",
+        "work": "4 km easy",
+        "pace": "6:00–6:45/km, or slower to talk comfortably",
+        "reps": 0,
+        "recovery": 0,
+        "tip": "Full-sentence conversation. Slower is fine. This is not a test."
+      },
+      "note": "Lift first, then run easily. Separate by several hours where practical.",
+      "rest": false
+    },
+    {
+      "date": "2026-12-11",
+      "week": 10,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-12-12",
+      "week": 10,
+      "title": "Controlled tempo",
+      "lift": [],
+      "run": {
+        "type": "tempo",
+        "km": 5.5,
+        "title": "Controlled tempo",
+        "work": "15 min continuous",
+        "pace": "4:55–5:05/km",
+        "reps": 1,
+        "minutes": 15,
+        "recovery": 0,
+        "tip": "RPE 6–7: short phrases should remain possible. Warm up ~1.5 km with dynamic movements and 3 relaxed accelerations; cool down at least 500 m. Total distance includes warm-up, recovery and cooldown."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-12-13",
+      "week": 10,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-12-14",
+      "week": 11,
+      "title": "Strength A",
+      "lift": [
+        {
+          "id": "single",
+          "name": "Deadlift · top single",
+          "sets": 1,
+          "reps": 1,
+          "weight": 172.5,
+          "maxWeight": 177.5,
+          "kind": "single",
+          "note": "RPE 7–8; cap 8.5 in weeks 9–11. Week 12 cap is 8. Start at the low end."
+        },
+        {
+          "id": "backoff",
+          "name": "Deadlift · back-off",
+          "sets": 2,
+          "reps": 2,
+          "weight": 150,
+          "maxWeight": 150,
+          "kind": "backoff",
+          "note": "RPE 8 maximum, including the final set."
+        },
+        {
+          "id": "bench",
+          "name": "Bench press",
+          "sets": 2,
+          "reps": 5,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve."
+        },
+        {
+          "id": "row",
+          "name": "Chest-supported row",
+          "sets": 2,
+          "reps": 8,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve. Avoid adding low-back fatigue."
+        }
+      ],
+      "run": null,
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-12-15",
+      "week": 11,
+      "title": "Easy running",
+      "lift": [],
+      "run": {
+        "type": "easy",
+        "km": 4,
+        "title": "Easy run",
+        "work": "4 km easy",
+        "pace": "6:00–6:45/km, or slower to talk comfortably",
+        "reps": 0,
+        "recovery": 0,
+        "tip": "Full-sentence conversation. Slower is fine. This is not a test."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-12-16",
+      "week": 11,
+      "title": "1000 m intervals",
+      "lift": [],
+      "run": {
+        "type": "interval",
+        "km": 6.5,
+        "title": "Intervals",
+        "work": "3 × 1000 m",
+        "pace": "4:20–4:23 per repetition",
+        "reps": 3,
+        "distance": 1000,
+        "recovery": 165,
+        "tip": "Warm up ~1.5 km, add dynamic movements and 3 relaxed 15-second accelerations. Walk or jog recoveries. Cool down at least 500 m. Total distance includes all of this. Finish with one good repetition left."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-12-17",
+      "week": 11,
+      "title": "Strength B + easy",
+      "lift": [
+        {
+          "id": "technique",
+          "name": "Deadlift · technique",
+          "sets": 2,
+          "reps": 2,
+          "weight": 120,
+          "maxWeight": 120,
+          "kind": "technique",
+          "note": "RPE 6 or below. Reset between repetitions."
+        },
+        {
+          "id": "press",
+          "name": "Overhead press",
+          "sets": 1,
+          "reps": 6,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "About two repetitions in reserve."
+        },
+        {
+          "id": "pullup",
+          "name": "Pull-ups",
+          "sets": 2,
+          "reps": null,
+          "weight": null,
+          "maxWeight": null,
+          "kind": "accessory",
+          "note": "Stop each set about two repetitions before failure. Assistance is fine; enter added load only, not bodyweight."
+        }
+      ],
+      "run": {
+        "type": "easy",
+        "km": 3.5,
+        "title": "Easy run",
+        "work": "3.5 km easy",
+        "pace": "6:00–6:45/km, or slower to talk comfortably",
+        "reps": 0,
+        "recovery": 0,
+        "tip": "Full-sentence conversation. Slower is fine. This is not a test."
+      },
+      "note": "Lift first, then run easily. Separate by several hours where practical.",
+      "rest": false
+    },
+    {
+      "date": "2026-12-18",
+      "week": 11,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-12-19",
+      "week": 11,
+      "title": "Easy running",
+      "lift": [],
+      "run": {
+        "type": "easy",
+        "km": 4,
+        "title": "Easy run + strides",
+        "work": "4 km easy including 4 × 15 sec relaxed accelerations",
+        "pace": "6:00–6:45/km, or slower to talk comfortably",
+        "reps": 4,
+        "recovery": 60,
+        "tip": "The distance includes the strides. Recover fully and easily between accelerations."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-12-20",
+      "week": 11,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-12-21",
+      "week": 12,
+      "title": "Final heavy practice",
+      "lift": [
+        {
+          "id": "single",
+          "name": "Deadlift · top single",
+          "sets": 1,
+          "reps": 1,
+          "weight": 170,
+          "maxWeight": 175,
+          "kind": "single",
+          "note": "RPE 7–8; cap 8.5 in weeks 9–11. Week 12 cap is 8. Start at the low end."
+        },
+        {
+          "id": "backoff",
+          "name": "Deadlift · back-off",
+          "sets": 1,
+          "reps": 2,
+          "weight": 140,
+          "maxWeight": 140,
+          "kind": "backoff",
+          "note": "RPE 8 maximum, including the final set."
+        }
+      ],
+      "run": null,
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-12-22",
+      "week": 12,
+      "title": "Easy running",
+      "lift": [],
+      "run": {
+        "type": "easy",
+        "km": 3,
+        "title": "Easy run",
+        "work": "3 km easy",
+        "pace": "6:00–6:45/km, or slower to talk comfortably",
+        "reps": 0,
+        "recovery": 0,
+        "tip": "Full-sentence conversation. Slower is fine. This is not a test."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-12-23",
+      "week": 12,
+      "title": "Short sharpening",
+      "lift": [],
+      "run": {
+        "type": "interval",
+        "km": 3.5,
+        "title": "Intervals",
+        "work": "4 × 200 m",
+        "pace": "0:51–0:52 per repetition",
+        "reps": 4,
+        "distance": 200,
+        "recovery": 90,
+        "tip": "Warm up ~1.5 km, add dynamic movements and 3 relaxed 15-second accelerations. Walk or jog recoveries. Cool down at least 500 m. Total distance includes all of this. Finish with one good repetition left."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-12-24",
+      "week": 12,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-12-25",
+      "week": 12,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-12-26",
+      "week": 12,
+      "title": "3 km goal test",
+      "lift": [],
+      "run": {
+        "type": "test",
+        "km": 5.5,
+        "title": "3 km goal test",
+        "work": "3 km time trial",
+        "pace": "Goal 12:59 · 4:20/km",
+        "reps": 3,
+        "recovery": 0,
+        "tip": "Record your 3 km result separately from total session time. Warm up ~1.5 km with dynamic movements and 3 relaxed accelerations, then cool down at least 500 m. Target kilometre splits: 4:22 / 4:20 / 4:17 = 12:59."
+      },
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-12-27",
+      "week": 12,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-12-28",
+      "week": 13,
+      "title": "Light deadlift rehearsal",
+      "lift": [
+        {
+          "id": "technique",
+          "name": "Deadlift · technique",
+          "sets": 3,
+          "reps": 1,
+          "weight": 110,
+          "maxWeight": 120,
+          "kind": "technique",
+          "note": "110–120 kg. Easy singles. Omit if still unusually sore after the running test."
+        }
+      ],
+      "run": null,
+      "note": "",
+      "rest": false
+    },
+    {
+      "date": "2026-12-29",
+      "week": 13,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-12-30",
+      "week": 13,
+      "title": "Rest & recover",
+      "lift": [],
+      "run": null,
+      "note": "No catch-up workouts. Comfortable walking is fine.",
+      "rest": true
+    },
+    {
+      "date": "2026-12-31",
+      "week": 13,
+      "title": "Deadlift goal test",
+      "lift": [
+        {
+          "id": "attempt1",
+          "name": "Attempt 1",
+          "sets": 1,
+          "reps": 1,
+          "weight": 170,
+          "maxWeight": 170,
+          "kind": "attempt",
+          "note": "Only if December training and warm-ups support it."
+        },
+        {
+          "id": "attempt2",
+          "name": "Attempt 2",
+          "sets": 1,
+          "reps": 1,
+          "weight": 180,
+          "maxWeight": 180,
+          "kind": "attempt",
+          "note": "Only after a convincing opener."
+        },
+        {
+          "id": "attempt3",
+          "name": "Attempt 3",
+          "sets": 1,
+          "reps": 1,
+          "weight": 190,
+          "maxWeight": 190,
+          "kind": "attempt",
+          "note": "Only after a technically solid 180 kg without a maximal grind."
+        }
+      ],
+      "run": null,
+      "note": "Example warm-up: 60 × 5 → 100 × 3 → 130 × 2 → 150 × 1 → 160 × 1. Rest 4–6 minutes between attempts. 190 is optional, never mandatory.",
+      "rest": false
+    }
+  ]
+}</script>
+<script>'use strict';
+const DEPLOY_BUILD = true;
+const PLAN = JSON.parse(document.getElementById('programme-data').textContent);
+const KEY = 'gyubin.training.2026.v1';
+const TIMER_KEY = KEY + '.timer';
+const $ = (q, root=document) => root.querySelector(q);
+const $$ = (q, root=document) => [...root.querySelectorAll(q)];
+const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = n => Number.isFinite(Number(n)) ? Number(Number(n).toFixed(2)).toString() : '—';
+const todayISO = () => new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+let TODAY = todayISO();
+const dateFmt = (s, opts={day:'numeric',month:'short'}) => new Intl.DateTimeFormat('en-GB',{...opts,timeZone:'Asia/Seoul'}).format(new Date(s+'T12:00:00+09:00'));
+const activeWeek = () => (PLAN.weeks.find(w => w.start<=TODAY && w.end>=TODAY)?.n || (TODAY<PLAN.start?1:13));
+const dayByDate = date => PLAN.days.find(d=>d.date===date);
+const closeIcon = '<svg class="icon" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg>';
+let state, storageOK=true, unreadableRaw='', storageMessage='', offlineReady=false, installPrompt=null, sessionDate=null, toastTimeout;
+const defaultState=()=>({version:1,planId:PLAN.id,logs:{},prefs:{week:activeWeek(),tab:'today',sound:false,vibration:true,keepAwake:false}});
+function cleanNumber(v,min,max){if(v==null || v==='')return null;const n=Number(v);if(!Number.isFinite(n)||n<min||n>max)throw new Error('Invalid numeric log value.');return n;}
+function parseTime(v){if(!v)return null;const s=String(v).trim();if(!/^\d{1,3}:[0-5]\d(?::[0-5]\d)?(?:\.\d{1,2})?$/.test(s))return null;const p=s.split(':').map(Number);if(p.length===3&&p[1]>=60)return null;return p.reduce((a,b)=>a*60+b,0);}
+function timeText(sec){if(sec==null||!Number.isFinite(sec))return '—';sec=Math.round(sec);const h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=sec%60;return h?`${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`:`${m}:${String(s).padStart(2,'0')}`;}
+function sanitiseState(obj){
+ if(!obj||obj.version!==1||obj.planId!==PLAN.id||!obj.logs||typeof obj.logs!=='object'||Array.isArray(obj.logs))throw new Error('This is not a backup for this training block.');
+ const out=defaultState();
+ for(const d of PLAN.days){const l=obj.logs[d.date];if(!l)continue;if(typeof l!=='object'||Array.isArray(l))throw new Error('Invalid session record.');
+ const log={status:['planned','done','skipped'].includes(l.status)?l.status:'planned',notes:String(l.notes||'').slice(0,10000),updatedAt:String(l.updatedAt||'').slice(0,40),performedOn:/^\d{4}-\d{2}-\d{2}$/.test(l.performedOn||'')?l.performedOn:d.date,readiness:['','good','normal','tired','pain'].includes(l.readiness)?l.readiness:'',sets:{},run:{},override:'plan'};
+ if(l.override==='easy')log.override='easy';else if(dayByDate(l.override)?.run&&l.override<d.date)log.override=l.override;
+ for(const e of d.lift)for(let i=0;i<e.sets;i++){const id=e.id+'-'+i,s=l.sets?.[id];if(!s)continue;log.sets[id]={weight:cleanNumber(s.weight,0,500),reps:cleanNumber(s.reps,0,100),rpe:cleanNumber(s.rpe,0,10),done:!!s.done};}
+ if(d.run&&l.run){log.run={km:cleanNumber(l.run.km,0,200),totalTime:String(l.run.totalTime||'').slice(0,16),workTime:String(l.run.workTime||'').slice(0,16),rpe:cleanNumber(l.run.rpe,0,10),done:!!l.run.done,splits:{}};for(const f of ['totalTime','workTime'])if(log.run[f]&&parseTime(log.run[f])===null)throw new Error('Invalid time in backup.');for(let i=0;i<12;i++)if(l.run.splits?.[i]){const val=String(l.run.splits[i]).slice(0,16);if(parseTime(val)===null)throw new Error('Invalid split in backup.');log.run.splits[i]=val;}}
+ out.logs[d.date]=log;
+ }
+ const p=obj.prefs||{};out.prefs={week:Number.isInteger(p.week)&&p.week>=1&&p.week<=13?p.week:activeWeek(),tab:['today','week','progress','guide'].includes(p.tab)?p.tab:'today',sound:!!p.sound,vibration:p.vibration!==false,keepAwake:!!p.keepAwake};return out;
+}
+try{const raw=localStorage.getItem(KEY);state=raw?sanitiseState(JSON.parse(raw)):defaultState();localStorage.setItem(KEY+'.check','1');localStorage.removeItem(KEY+'.check');}catch(e){state=defaultState();storageOK=false;try{unreadableRaw=localStorage.getItem(KEY)||'';}catch(_){}storageMessage=unreadableRaw?'Stored data could not be read. Nothing has been overwritten. Export the raw backup in Settings before resetting.':'Browser storage is unavailable. Logs will last only for this open tab. Export a backup before closing.';}
+function showStorage(){const b=$('#storage-banner');b.hidden=storageOK;if(!storageOK)b.textContent=storageMessage;}
+function save(){if(!storageOK)return false;try{localStorage.setItem(KEY,JSON.stringify(state));return true;}catch(e){storageOK=false;storageMessage='Saving failed: storage may be full or blocked. Your current entries are in this tab only; export a backup now.';showStorage();return false;}}
+function getLog(date){return state.logs[date]||{};}
+function editLog(date){if(!state.logs[date])state.logs[date]={status:'planned',sets:{},run:{},notes:'',readiness:'',performedOn:date,override:'plan'};const l=state.logs[date];l.sets??={};l.run??={};return l;}
+function stamp(date){editLog(date).updatedAt=new Date().toISOString();const ok=save();const s=$('#session-save');if(s)s.textContent=ok?'Saved on this device · '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):'Not saved to browser storage — export a backup.';}
+function toast(text){const t=$('#toast');t.textContent=text;t.classList.add('show');clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>t.classList.remove('show'),3300);}
+function runFor(d){const mode=getLog(d.date).override;if(mode==='easy'&&d.run)return {type:'easy',km:Math.min(d.run.km,5),title:'Easy run · adjusted',work:fmt(Math.min(d.run.km,5))+' km easy',pace:'Full-sentence conversation; slow down as needed',reps:0,recovery:0,tip:'Quality work replaced with easy running to manage recovery. The weekly total is adjusted.'};if(mode&&mode!=='plan'&&dayByDate(mode)?.run)return {...dayByDate(mode).run,tip:'Repeat of '+dateFmt(mode)+'. '+dayByDate(mode).run.tip};return d.run;}
+const daysOf=w=>PLAN.days.filter(d=>d.week===Number(w));
+const plannedKm=w=>daysOf(w).reduce((a,d)=>a+(runFor(d)?.km||0),0);
+const runRecorded=(d,l)=>!!(l.status!=='skipped'&&runFor(d)&&l.run&&(l.run.done||l.status==='done'));
+const actualKm=w=>daysOf(w).reduce((a,d)=>{const l=getLog(d.date);return a+(runRecorded(d,l)?Number(l.run.km)||0:0);},0);
+const trained=w=>daysOf(w).filter(d=>!d.rest);
+const doneCount=w=>trained(w).filter(d=>getLog(d.date).status==='done').length;
+function weightRange(e){return e.weight==null?'Choose a controlled load':fmt(e.weight)+(e.maxWeight!==e.weight?'–'+fmt(e.maxWeight):'')+' kg';}
+function liftSummary(d){const e=d.lift[0];if(!e)return '';return `${e.sets} × ${e.reps??'submax'} · ${weightRange(e)}`;}
+function runSummary(d){const r=runFor(d);return r?`${r.work} · ${r.pace}`:'';}
+function statusBadge(d){const s=getLog(d.date).status;return s==='done'?'<span class="badge done">✓ Completed</span>':s==='skipped'?'<span class="badge rest">Skipped</span>':'';}
+function dayCard(d){const r=runFor(d);return `<button class="day-card ${d.rest?'is-rest':''} ${d.date===TODAY?'current':''}" data-action="session" data-date="${d.date}" aria-label="${esc(dateFmt(d.date,{weekday:'long',month:'long',day:'numeric'})+' · '+d.title)}"><span class="dateblock"><span class="dow">${dateFmt(d.date,{weekday:'short'})}</span><br><span class="num">${dateFmt(d.date,{day:'numeric'})}</span></span><span class="daybody"><h3>${esc(d.title)}</h3>${d.rest?'<p>Recover. No catch-up sessions.</p>':`${d.lift.length?`<p class="summary">${esc(liftSummary(d))}</p>`:''}${r?`<p class="summary">${esc(r.type==='easy'?r.work:r.work+' · '+r.pace)}</p>`:''}<div class="day-tags">${d.lift.length?'<span class="badge lift">Strength</span>':''}${r?`<span class="badge run">~${fmt(r.km)} km total</span>`:''}${statusBadge(d)}${d.date===TODAY?'<span class="badge today">Today</span>':''}</div>`}</span><span class="day-arrow">›</span></button>`;}
+function setTab(tab){if(!['today','week','progress','guide'].includes(tab))return;state.prefs.tab=tab;save();updateHash();render();window.scrollTo({top:0,behavior:'instant'});}
+function updateHash(){const h='#'+state.prefs.tab+(state.prefs.tab==='week'?'/'+state.prefs.week:'');if(location.hash!==h)history.replaceState(null,'',h);}
+function readRoute(){const h=location.hash.slice(1).split('/'),q=new URLSearchParams(location.search),tab=h[0]||q.get('tab');if(['today','week','progress','guide'].includes(tab))state.prefs.tab=tab;const w=Number(h[1]||q.get('week'));if(Number.isInteger(w)&&w>=1&&w<=13){state.prefs.week=w;if(!tab)state.prefs.tab='week';}}
+function render(){const tab=state.prefs.tab;$$('.nav-btn').forEach(b=>{b.classList.toggle('active',b.dataset.tab===tab);if(b.dataset.tab===tab)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});$('#app').innerHTML=({today:renderToday,week:renderWeek,progress:renderProgress,guide:renderGuide})[tab]();showStorage();updateConnection();}
+function renderToday(){const week=PLAN.weeks[activeWeek()-1],today=dayByDate(TODAY),next=PLAN.days.find(d=>!d.rest&&d.date>=TODAY&&getLog(d.date).status!=='done'&&getLog(d.date).status!=='skipped');const featured=today||next;const remaining=Math.max(0,Math.ceil((new Date(PLAN.end+'T23:59:59+09:00')-new Date())/86400000));const upcoming=PLAN.days.filter(d=>!d.rest&&d.date>(today?.date||TODAY)).slice(0,3);return `<div class="page-intro"><p class="eyebrow">${dateFmt(TODAY,{weekday:'long',day:'numeric',month:'long'})} · Seoul time</p><h1>Finish the year<br>stronger. Faster.</h1><p class="intro-copy">One session at a time. A 3 km run and a strong pull.</p></div><div class="goals"><article class="goal run"><p class="eyebrow">3 km target</p><div class="goal-value">13:00 <span class="unit">min</span></div><p class="from">Starting point · 14:20</p><p class="date">TEST · 26 DECEMBER</p></article><article class="goal lift"><p class="eyebrow">Deadlift target</p><div class="goal-value">190 <span class="unit">kg</span></div><p class="from">160 kg single · RPE 8.5</p><p class="date">TEST · 31 DECEMBER</p></article></div><div class="dashboard-grid"><div><section class="section"><div class="section-head"><h2>${today?'Today’s session':next?'Next session':'The block is complete'}</h2>${today?`<span class="badge">Week ${today.week}</span>`:''}</div>${featured?`<article class="feature"><p class="eyebrow">${dateFmt(featured.date,{weekday:'long',day:'numeric',month:'short'})}${featured.date===TODAY?' · TODAY':''}</p><h2>${esc(featured.title)}</h2>${featured.lift.length?`<div class="feature-work">${esc(liftSummary(featured))}</div>`:''}${runFor(featured)?`<div class="feature-work">${esc(runFor(featured).work)}</div>`:''}<p>${featured.rest?'Rest is part of the programme. No missed-session catch-up.':runFor(featured)?esc(runFor(featured).pace):'Build strength without making today a maximum test.'}</p><button class="btn primary full" data-action="session" data-date="${featured.date}">${featured.rest?'View recovery day':getLog(featured.date).status==='done'?'Review your log':'Open session'} <span>↗</span></button></article>`:'<div class="callout">Review your training and results in Progress. Your logs remain available after the block.</div>'}</section><div class="metrics"><div class="metric"><div class="value">${fmt(plannedKm(week.n))}<small> km</small></div><div class="label">This week’s plan</div></div><div class="metric"><div class="value">${doneCount(week.n)}<span class="muted"> / ${trained(week.n).length}</span></div><div class="label">Sessions complete</div></div><div class="metric"><div class="value">${remaining}</div><div class="label">Days to year end</div></div></div><div class="callout"><strong>Week ${week.n} · ${esc(week.phase)}</strong><p style="margin-top:6px">${esc(week.focus)}</p><div class="week-strip" aria-label="Week ${week.n} of 13 calendar weeks">${PLAN.weeks.map(w=>`<span class="week-dot ${w.n===week.n?'current':w.n<week.n?'past':''}"></span>`).join('')}</div></div></div><div class="right-column"><section class="section"><div class="section-head"><h2>Coming up</h2><button class="btn compact secondary" data-action="current-week">Full week ↗</button></div><div class="day-list">${upcoming.length?upcoming.map(dayCard).join(''):'<div class="empty">No further sessions scheduled. Check Progress for your results.</div>'}</div></section><div class="callout section"><strong>A stronger starting point.</strong><p style="margin-top:6px">Your 160 kg was a submaximal single, not a true maximum. Your earlier 180 kg is recorded as history—not current strength. Keep the effort caps; future loads remain conditional.</p></div></div></div><p class="privacy-foot">90 kg bodyweight · 15 km/week starting volume<br>Logs stay in this browser. No account, analytics or cloud sync.</p>`;}
+function renderWeek(){const n=state.prefs.week,w=PLAN.weeks[n-1],ds=daysOf(n);return `<div class="page-intro"><p class="eyebrow">6 October — 31 December 2026</p><h1>Your programme.</h1><p class="intro-copy">13 calendar weeks. 87 days. Recovery included.</p></div><div class="weeknav"><button class="iconbtn" data-action="week-step" data-delta="-1" ${n===1?'disabled':''} aria-label="Previous week">←</button><select id="week-select" aria-label="Select programme week">${PLAN.weeks.map(x=>`<option value="${x.n}" ${x.n===n?'selected':''}>Week ${x.n} · ${dateFmt(x.start)}–${dateFmt(x.end)} · ${esc(x.phase)}</option>`).join('')}</select><button class="iconbtn" data-action="week-step" data-delta="1" ${n===13?'disabled':''} aria-label="Next week">→</button></div><article class="week-summary"><div class="row between"><span class="badge ${['Recover','Checkpoint'].includes(w.phase)?'rest':'lift'}">${esc(w.phase)}</span><button class="btn compact secondary" data-action="current-week">This week</button></div><h2>${esc(w.title)}</h2><p>${esc(w.focus)}</p><div class="week-stats"><div><strong>${fmt(plannedKm(n))} km</strong><span>Planned running${Math.abs(plannedKm(n)-w.km)>.01?' · adjusted':''}</span></div><div><strong>${fmt(actualKm(n))} km</strong><span>Logged running</span></div><div><strong>${doneCount(n)} / ${trained(n).length}</strong><span>Sessions complete</span></div></div></article><div class="day-list week-days">${ds.map(dayCard).join('')}</div><p class="privacy-foot">Tap a day for every set, running recovery and warm-up.<br>All running totals include warm-up, recoveries and cooldown.</p>`;}
+function singleRecords(){const arr=[];for(const d of PLAN.days){const l=getLog(d.date);if(l.status==='skipped')continue;for(const e of d.lift.filter(x=>['single','backoff','technique','attempt'].includes(x.kind)))for(let i=0;i<e.sets;i++){const s=l.sets?.[e.id+'-'+i];if(s?.done&&s.reps===1&&s.weight>0)arr.push({date:d.date,weight:s.weight,rpe:s.rpe});}}return arr;}
+function runTests(){return PLAN.days.filter(d=>runFor(d)?.type==='test').map(d=>({d,l:getLog(d.date)})).filter(({d,l})=>runRecorded(d,l)&&parseTime(l.run.workTime)>0).map(({d,l})=>({date:d.date,time:parseTime(l.run.workTime)}));}
+function renderProgress(){const logs=PLAN.days.filter(d=>state.logs[d.date]&&(state.logs[d.date].status!=='planned'||state.logs[d.date].updatedAt)).sort((a,b)=>b.date.localeCompare(a.date));const singles=singleRecords(),tests=runTests();const bestLift=singles.length?Math.max(...singles.map(x=>x.weight)):null,bestRun=tests.length?Math.min(...tests.map(x=>x.time)):null,total=PLAN.weeks.reduce((a,w)=>a+actualKm(w.n),0),complete=PLAN.days.filter(d=>!d.rest&&getLog(d.date).status==='done').length;const maxkm=Math.max(22,...PLAN.weeks.map(w=>Math.max(plannedKm(w.n),actualKm(w.n))));return `<div class="page-intro"><p class="eyebrow">Actuals, not predictions</p><h1>Track the work.</h1><p class="intro-copy">Only checked sets and recorded runs count as results.</p></div><div class="progress-grid"><div class="stat-card"><p class="eyebrow">Best logged 3 km</p><div class="big" style="color:var(--blue)">${bestRun?timeText(bestRun):'—'}</div><p>${bestRun?'Goal · 13:00':'No test recorded yet. Baseline 14:20.'}</p></div><div class="stat-card"><p class="eyebrow">Best logged single</p><div class="big" style="color:var(--green)">${bestLift?fmt(bestLift)+' <small>kg</small>':'—'}</div><p>${bestLift?'Goal · 190 kg':'Baseline 160 kg at RPE 8.5.'}</p></div><div class="stat-card"><p class="eyebrow">Running logged</p><div class="big">${fmt(total)} <small>km</small></div><p>Marked runs, including warm-up and cooldown.</p></div><div class="stat-card"><p class="eyebrow">Training days</p><div class="big">${complete} <small>/ 60</small></div><p>Completed days. Rest days excluded.</p></div></div><section class="section"><div class="section-head"><h2>Running by programme week</h2></div><div class="legend"><span><i></i>Planned total</span><span><i class="actual"></i>Logged total</span></div><div class="bars" role="img" aria-label="Weekly planned and logged running distance. Values also shown as text.">${PLAN.weeks.map(w=>`<div class="bar-row"><span>W${w.n}</span><div class="bar-track"><span class="bar-plan" style="width:${plannedKm(w.n)/maxkm*100}%"></span><span class="bar-actual" style="width:${actualKm(w.n)/maxkm*100}%"></span></div><span class="bar-value">${fmt(actualKm(w.n))} / ${fmt(plannedKm(w.n))} km</span></div>`).join('')}</div><p class="help">Logs are grouped by the scheduled week, even when a performed date differs.</p></section><section class="section"><div class="section-head"><h2>Your training history</h2><button class="btn compact" data-action="export-csv">Export CSV</button></div>${logs.length?logs.map(d=>{const l=getLog(d.date),sets=Object.values(l.sets||{}).filter(s=>s.done).length;return `<div class="history-row"><span class="badge">${dateFmt(d.date)}</span><div class="details"><button data-action="session" data-date="${d.date}"><strong>${esc(d.title)}</strong></button><p>${l.status==='done'?'Completed':l.status==='skipped'?'Skipped':'In progress'}${sets?' · '+sets+' sets':''}${runRecorded(d,l)&&l.run.km!=null?' · '+fmt(l.run.km)+' km':''}${l.run?.workTime?' · 3 km '+esc(l.run.workTime):''}</p>${l.notes?`<p>${esc(l.notes.slice(0,180))}</p>`:''}</div><button class="iconbtn" data-action="session" data-date="${d.date}" aria-label="Edit ${dateFmt(d.date)}">↗</button></div>`;}).join(''):'<div class="empty">Your first session starts the story.<br>Open a workout, tick your sets, and record what you did.</div>'}</section><div class="callout section"><strong>Back up your training.</strong><p style="margin-top:6px">Clearing browser data or changing devices can remove these logs. Export JSON for a complete, re-importable backup; CSV is for reviewing your history.</p><button class="btn compact padtop" data-action="export">Export full backup</button></div>`;}
+function guideBlock(title,html,open=false){return `<details class="guide-block" ${open?'open':''}><summary>${title}</summary><div class="guide-body">${html}</div></details>`;}
+function renderGuide(){return `<div class="page-intro"><p class="eyebrow">The rules behind the plan</p><h1>Train. Adjust. Repeat.</h1><p class="intro-copy">Targets give direction. Your effort determines the load.</p></div>${guideBlock('Your baseline and the two targets',`<p><strong>90 kg bodyweight; approximately 15 km/week running.</strong> Current times: 14:20 for 3 km and 25:00 for 5 km, with something left on the 5 km. Current deadlift: 160 kg for a single at about RPE 8.5. Previous best: 180 kg about two years ago.</p><p><strong>13:00 on 26 December; 190 kg on 31 December.</strong> These are stretch targets, not guaranteed outcomes. 160 kg is not being treated as your true 1RM. The conservative opening and conditional later weights are retained.</p><p>87 days, organised into 13 calendar weeks—not 13 full weeks. The first week starts on Tuesday. Do not repeat a hard deadlift test within 48 hours just to fit the calendar.</p>`,true)}${guideBlock('The normal training week',`<table class="mini-table"><tbody><tr><td>Monday</td><td>Heavier deadlift + modest upper-body work</td></tr><tr><td>Tuesday</td><td>Easy running</td></tr><tr><td>Wednesday</td><td>Intervals</td></tr><tr><td>Thursday</td><td>Technique deadlift + maintenance squat + easy run</td></tr><tr><td>Friday</td><td>Rest</td></tr><tr><td>Saturday</td><td>Controlled tempo or easy running</td></tr><tr><td>Sunday</td><td>Rest</td></tr></tbody></table><p>On combined days, lift first and keep the run easy. Separate by several hours where practical. Weeks 1, 8, 12 and 13 have specific exceptions in the programme.</p>`)}${guideBlock('Running effort, paces and warm-up',`<p><strong>Easy:</strong> start around 6:00–6:45/km, slower if needed. Full sentences should remain comfortable.</p><p><strong>Tempo:</strong> RPE 6–7. Short phrases should be possible; finish knowing you could continue. Pace ranges are guides, not orders.</p><p><strong>Intervals:</strong> aim to finish with one more good repetition available. Walk or jog the listed recoveries.</p><p><strong>Warm-up for quality sessions and tests:</strong> approximately 1.5 km easy, a few dynamic movements and three relaxed 15-second accelerations. Cool down at least 500 m. All listed running totals include warm-up, recoveries and cooldown. Allow a little distance variation rather than cutting your warm-up to hit an exact number.</p><table class="mini-table"><tbody><tr><td>Goal kilometre</td><td>4:20</td></tr><tr><td>Goal 400 m</td><td>1:44</td></tr><tr><td>Goal 600 m</td><td>2:36</td></tr><tr><td>Goal 800 m</td><td>3:28</td></tr></tbody></table>`)}${guideBlock('Deadlift effort, warm-up and accessories',`<p><strong>RPE 7 ≈ three repetitions left; RPE 8 ≈ two; RPE 9 ≈ one.</strong> These are estimates. The heavy single is practice, not a weekly maximum.</p><table class="mini-table"><tbody><tr><td>Heavy single</td><td>Usually RPE 7–8. Absolute cap 8.5 in weeks 9–11; week 12 cap 8.</td></tr><tr><td>Back-off sets</td><td>RPE 8 maximum, including the last set.</td></tr><tr><td>Technique deadlift</td><td>RPE 6 or below. Reset every repetition.</td></tr><tr><td>Squat</td><td>RPE 6–7. Maintain, rather than chase another maximum.</td></tr><tr><td>Upper-body work</td><td>About two repetitions in reserve.</td></tr></tbody></table><p><strong>Example warm-up before 140 kg:</strong> 60 × 5 → 90 × 3 → 110 × 2 → 125 × 1. Warm-up sets are additional to the logged work sets.</p><p>Rest 3–5 minutes between substantial deadlift sets and about 2 minutes between accessory sets. Choose accessory loads by effort, since your starting weights were not provided. Pull-up repetitions are submaximal; assistance is fine.</p>`)}${guideBlock('When to change a session',`<p><strong>Heavy single reaches the cap early:</strong> stop increasing it. Reduce back-off load by about 5–10% and remove one set if needed. Edit actual weights directly in the log. Repeat the last successful level next week rather than obeying the date.</p><p><strong>Two lifting sessions going backwards:</strong> take an additional light week, roughly following week 4, before resuming.</p><p><strong>Intervals deteriorate or your stride becomes strained:</strong> stop the repetitions and cool down. Repeat that manageable session rather than progressing.</p><p><strong>Fatigue carries between days:</strong> first replace Saturday tempo with easy running. If Monday repeatedly compromises Wednesday, remove one Monday back-off set. The session’s “Adjust running prescription” menu can swap quality work for easy running or repeat an earlier workout.</p><p><strong>Missed session:</strong> skip it. Do not stack hard sessions together. Count sport, hard unit physical training and loaded marches as additional training stress.</p><p><strong>Sharp pain or altered gait/lifting mechanics:</strong> stop. Persistent or recurring pain needs assessment, not another progression.</p>`)}${guideBlock('Checkpoints and final test strategy',`<p><strong>25 November · 3 km checkpoint.</strong> Roughly 13:35–13:50 would be encouraging, not mandatory. Still around 14 minutes or slower, or repeated all-out intervals? Repeat manageable week 6–7 prescriptions before forcing faster work.</p><p><strong>Mid-December:</strong> controlled kilometre repetitions near 4:20 and a clean 175–180 kg single with something left are readiness indicators—not guarantees.</p><p><strong>26 December · 3 km test.</strong> Use a flat, measured course. A 12:59 pacing example is 4:22 / 4:20 / 4:17. Do not sprint the opening kilometre.</p><p><strong>31 December · deadlift test.</strong> If training and warm-ups support it: 170 → 180 → 190 kg, with 4–6 minutes rest. 190 is conditional on a convincing 180. A maximal grind or technical breakdown means a smaller increase or stopping. Use the same lift style and equipment standard as your starting single.</p>`)}${guideBlock('Recovery targets',`<p><strong>Bodyweight:</strong> stay roughly around 90 kg rather than combining this block with an aggressive cut or rapid gain.</p><p><strong>Protein:</strong> approximately 150–180 g/day. Include carbohydrate-rich meals around demanding sessions.</p><p><strong>Sleep:</strong> protect roughly 8–9 hours in bed where practical. Unusually poor sleep or exhausting work calls for lower loads and controlled running—not compensation with more work.</p>`)}${guideBlock('Using the app on Android',`<p><strong>After hosting:</strong> open the app in Chrome or Samsung Internet. Use the browser menu’s Install app / Add to Home screen option, or the install button in Settings when available.</p><p><strong>Offline:</strong> open the hosted app online once and wait for “Offline ready”. The programme then remains available without a network connection. A standalone downloaded HTML preview is not the installed PWA.</p><p><strong>Logs:</strong> saved automatically to this browser, on this device. There is no login or cross-device sync. Export JSON weekly and before clearing browser data or changing devices. Do not assume private browsing preserves your data.</p><p><strong>Timer:</strong> counts against the clock, so elapsed time stays correct when you return. Alarms are not guaranteed if Android suspends the app or locks the screen. Keep the app visible and enable Keep screen awake where supported.</p><p><strong>Privacy:</strong> no analytics or external services. Your personal starting figures are embedded in the published app; logs are stored locally. A public URL is not password protection.</p>`)}<button class="btn full" data-action="print">Print the complete programme</button><p class="privacy-foot">Programme assembled from your agreed training block.<br>Use exercise guidance within your own experience and recovery limits.</p>`;}
+function dialogHead(id,title,subtitle=''){return `<div class="dialog-head"><div><h2 id="${id}">${title}</h2>${subtitle?`<p>${subtitle}</p>`:''}</div><button class="iconbtn" data-action="close-dialog" aria-label="Close">${closeIcon}</button></div>`;}
+function showDialog(id){const d=document.getElementById(id);if(!d.open)d.showModal();document.body.classList.add('body-lock');}
+function closeDialog(d){d.close();if(d.id==='session-dialog'&&!d.open){sessionDate=null;render();}if(!$$('dialog[open]').length)document.body.classList.remove('body-lock');}
+function openSession(date){const d=dayByDate(date);if(!d)return;sessionDate=date;renderSession();showDialog('session-dialog');}
+function setRows(d,e){const l=getLog(d.date);return `<div class="exercise" data-ex="${e.id}"><div class="exercise-title">${esc(e.name)}</div><p class="prescription">${e.sets} × ${e.reps??'submaximal'} · ${esc(weightRange(e))}</p><p class="exercise-note">${esc(e.note)}</p><div class="set-head"><span>Set</span><span>Actual kg</span><span>Reps</span><span>RPE</span><span>Done</span></div>${Array.from({length:e.sets},(_,i)=>{const id=e.id+'-'+i,s=l.sets?.[id]||{},kg=s.weight??e.weight,reps=s.reps??e.reps;return `<div class="set-row ${s.done?'is-done':''}" data-set="${id}"><span class="set-index">${i+1}</span><input class="set-input" type="number" inputmode="decimal" min="0" max="500" step="0.25" data-key="weight" data-set="${id}" value="${kg??''}" placeholder="kg" aria-label="${esc(e.name)} set ${i+1} weight in kg"><input class="set-input" type="number" inputmode="numeric" min="0" max="100" step="1" data-key="reps" data-set="${id}" value="${reps??''}" placeholder="reps" aria-label="${esc(e.name)} set ${i+1} repetitions"><input class="set-input" type="number" inputmode="decimal" min="1" max="10" step="0.5" data-key="rpe" data-set="${id}" value="${s.rpe??''}" placeholder="—" aria-label="${esc(e.name)} set ${i+1} RPE"><button class="check-set" data-action="check-set" data-set="${id}" aria-pressed="${!!s.done}" aria-label="Mark ${esc(e.name)} set ${i+1} done">✓</button></div>`;}).join('')}<div class="set-feedback" id="feedback-${e.id}" role="status"></div></div>`;}
+function renderSession(){const d=dayByDate(sessionDate),l=getLog(sessionDate),r=runFor(d);let inner='';
+ if(d.rest)inner=`<div class="feature"><p class="eyebrow">Recovery is training</p><h2>Take the day off.</h2><p>${esc(d.note)}</p></div><div class="callout section">Comfortable walking is fine. Do not make up missed workouts by stacking hard sessions.</div>`;
+ else{
+ const options=PLAN.days.filter(x=>x.date<d.date&&x.run&&['interval','tempo'].includes(x.run.type)&&(d.run?.type==='tempo'?x.run.type==='tempo':x.run.type==='interval')).slice(-4);
+ inner=`<div class="form-grid session-edit"><div class="field"><label for="performed-on">Date performed</label><input id="performed-on" type="date" data-log-field="performedOn" value="${esc(l.performedOn||d.date)}"></div><div class="field"><label for="readiness">Readiness</label><select id="readiness" data-log-field="readiness"><option value="">Not recorded</option>${[['good','Feeling good'],['normal','Normal'],['tired','Unusually tired'],['pain','Pain / stop & assess']].map(([v,t])=>`<option value="${v}" ${l.readiness===v?'selected':''}>${t}</option>`).join('')}</select></div></div><div id="readiness-note" ${l.readiness==='pain'?'':'hidden'} class="callout danger">Stop for sharp pain or pain that changes your gait or lifting mechanics. Persistent or recurring pain warrants assessment.</div>${d.note?`<div class="callout">${esc(d.note)}</div>`:''}${d.lift.length?`<section><div class="block-head"><h3>Strength</h3><button class="btn compact" data-action="rest-timer" data-seconds="180">3 min rest ↗</button></div><p class="help">Work sets only; warm up separately. Prefilled numbers are the plan, not results. Edit them and tick only sets you actually completed.</p>${d.lift.map(e=>setRows(d,e)).join('')}</section>`:''}${r?`<section><div class="block-head"><h3>Running</h3><span class="badge run">~${fmt(r.km)} km total</span></div>${['interval','tempo','test'].includes(d.run.type)?`<div class="field" style="margin-bottom:16px"><label for="run-override">Adjust running prescription</label><select id="run-override"><option value="plan" ${!l.override||l.override==='plan'?'selected':''}>As programmed</option><option value="easy" ${l.override==='easy'?'selected':''}>Replace with easy running</option>${options.map(x=>`<option value="${x.date}" ${l.override===x.date?'selected':''}>Repeat ${dateFmt(x.date)} · ${esc(x.run.work)}</option>`).join('')}</select></div>`:''}<div class="run-target"><p class="eyebrow">${esc(r.title)}</p><div class="work">${esc(r.work)}</div><p style="color:var(--blue)">${esc(r.pace)}</p>${r.recovery?`<p style="margin-top:8px">${timeText(r.recovery)} ${d.week===11&&r.type==='interval'?'(2½–3 min range) ':''}walk / easy-jog recovery between repetitions.</p>`:''}<p style="margin-top:14px">${esc(r.tip)}</p>${r.recovery?`<button class="btn compact padtop" data-action="rest-timer" data-seconds="${r.recovery}">Start recovery timer ↗</button>`:''}</div><div class="form-grid"><div class="field"><label for="actual-km">Actual session distance (km)</label><input id="actual-km" type="number" min="0" max="200" step="0.01" inputmode="decimal" data-run-field="km" value="${l.run?.km??''}" placeholder="e.g. ${fmt(r.km)}"><button class="btn compact secondary padtop" data-action="use-distance">Use planned ${fmt(r.km)} km</button></div><div class="field"><label for="run-time">Total session time (mm:ss)</label><input id="run-time" inputmode="text" autocapitalize="off" autocomplete="off" spellcheck="false" data-run-field="totalTime" value="${esc(l.run?.totalTime||'')}" placeholder="e.g. 35:00"><p class="help" id="pace-result">${paceFeedback(l.run)}</p><p class="field-error" id="error-totalTime"></p></div>${r.type==='test'?`<div class="field"><label for="work-time">3 km result only (mm:ss)</label><input id="work-time" inputmode="text" autocapitalize="off" autocomplete="off" spellcheck="false" data-run-field="workTime" value="${esc(l.run?.workTime||'')}" placeholder="13:00"><p class="help">Excludes warm-up and cooldown.</p><p class="field-error" id="error-workTime"></p></div>`:''}<div class="field"><label for="run-rpe">Run effort (RPE)</label><input id="run-rpe" type="number" min="1" max="10" step="0.5" inputmode="decimal" data-run-field="rpe" value="${l.run?.rpe??''}" placeholder="1–10"></div></div>${r.reps>1?`<details class="guide-block" style="margin-top:20px"><summary>${r.type==='test'?'Kilometre splits':'Repetition splits'} (optional)</summary><div class="guide-body"><div class="splits">${Array.from({length:r.reps},(_,i)=>`<div class="field"><label for="split-${i}">${r.type==='test'?'Km':'Rep'} ${i+1}</label><input id="split-${i}" data-split="${i}" inputmode="text" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="m:ss" value="${esc(l.run?.splits?.[i]||'')}"></div>`).join('')}</div><p id="split-error" class="field-error"></p></div></details>`:''}<button class="btn full ${l.run?.done?'primary':''}" data-action="run-done" aria-pressed="${!!l.run?.done}">${l.run?.done?'✓ Run recorded':'Mark run finished'}</button><p class="help">Enter what you actually ran. Completion never auto-fills distance.</p></section>`:''}`;
+ }
+ $('#session-content').innerHTML=dialogHead('session-title',esc(d.title),`${dateFmt(d.date,{weekday:'long',day:'numeric',month:'long'})} · Week ${d.week}`)+`<div class="dialog-body">${inner}<div class="divider"></div><div class="field"><label for="session-notes">Notes</label><textarea id="session-notes" data-log-field="notes" maxlength="10000" placeholder="How it felt, substitutions, sleep, soreness…">${esc(l.notes||'')}</textarea></div>${!d.rest?`<div class="status-actions"><button class="btn primary" data-action="complete-session">${l.status==='done'?'✓ Completed · undo':'Complete session'}</button><button class="btn ${l.status==='skipped'?'danger':''}" data-action="skip-session">${l.status==='skipped'?'Unskip':'Skip'}</button></div><p class="help">Marking the day complete does not invent set or distance results.</p>`:''}<p id="session-save" class="save-status">${storageOK?'Changes save automatically on this device.':'Storage unavailable — export a backup before closing.'}</p></div>`;d.lift.forEach(e=>updateSetFeedback(d,e));
+}
+function paceFeedback(run){const t=parseTime(run?.totalTime),km=Number(run?.km);return t&&km>0?'Session average: '+timeText(t/km)+'/km (includes recoveries).':'Include warm-up and cooldown in session totals.';}
+function updateSetFeedback(d,e){const node=$('#feedback-'+e.id);if(!node)return;let cap=e.kind==='single'?(d.week>=9&&d.week<=11?8.5:8):e.kind==='technique'?6:e.kind==='squat'?7:e.kind==='backoff'?8:null;const high=cap!=null&&Array.from({length:e.sets},(_,i)=>getLog(d.date).sets?.[e.id+'-'+i]?.rpe).some(v=>v!=null&&v>cap);node.textContent=high?`Above the RPE ${cap} cap. Reduce remaining work and repeat the last manageable loading level next week.`:'';}
+function syncSet(row){const id=row.dataset.set,l=editLog(sessionDate),s=l.sets[id]||{};for(const i of $$('.set-input',row)){if(!i.checkValidity()){i.reportValidity();return null;}s[i.dataset.key]=i.value===''?null:Number(i.value);}l.sets[id]=s;return s;}
+function validateSession(){const fields=$$('input', $('#session-content'));for(const f of fields)if(!f.checkValidity()){f.reportValidity();return false;}for(const f of $$('[data-run-field="totalTime"],[data-run-field="workTime"],[data-split]', $('#session-content'))){if(f.value&&parseTime(f.value)===null){toast('Use minutes:seconds, for example 14:20.');f.focus();return false;}}return true;}
+function openSettings(){const logs=Object.keys(state.logs).length;$('#settings-content').innerHTML=dialogHead('settings-title','Your app, your data','Local-first · no sign-in or cloud sync')+`<div class="dialog-body stack"><div class="callout"><strong>${DEPLOY_BUILD&&/^https?:$/.test(location.protocol)?'Hosting-ready build':'Standalone preview'}</strong><p style="margin-top:7px">${DEPLOY_BUILD&&/^https?:$/.test(location.protocol)?'The app is designed for gyubin.io/training/. Installation requires HTTPS on your hosting service.':'This file lets you try the app. Home-screen installation and service-worker offline access require the hosted build over HTTPS.'}</p></div><button class="btn primary full" data-action="install">${installPrompt?'Install app':'Install on Android'}</button><p class="help">${offlineReady?'✓ Programme cached for offline use.':'Offline caching becomes available after opening the hosted app online.'}</p><div class="divider"></div><h3>Backups</h3><p class="muted tiny">${logs} saved session records. Export before switching phones or clearing browser data. The JSON file includes your personal workout logs.</p><div class="settings-actions"><button class="btn" data-action="export">Export JSON</button><button class="btn" data-action="import">Import JSON</button><button class="btn" data-action="export-csv">Export CSV</button><button class="btn" data-action="persist">Protect local storage</button></div>${unreadableRaw?'<button class="btn danger full" data-action="export-raw">Export unreadable raw backup</button>':''}<div class="divider"></div><h3>Timer</h3><div class="switch-row"><label for="pref-sound">Sound when rest finishes</label><input id="pref-sound" type="checkbox" data-pref="sound" ${state.prefs.sound?'checked':''}></div><div class="switch-row"><label for="pref-vibration">Vibrate when supported</label><input id="pref-vibration" type="checkbox" data-pref="vibration" ${state.prefs.vibration?'checked':''}></div><div class="switch-row"><label for="pref-awake">Keep screen awake during timer</label><input id="pref-awake" type="checkbox" data-pref="keepAwake" ${state.prefs.keepAwake?'checked':''}></div><p class="help">${'wakeLock'in navigator?'Wake lock is requested while the timer runs and the app is visible.':'Screen wake lock is not available in this browser.'} Android may suppress alarms while locked or suspended.</p><div class="divider"></div><button class="btn full" data-action="print">Print all 13 weeks</button><button class="btn danger full" data-action="reset">Reset workout logs</button><p class="help">Reset removes this block’s local logs and timer only. It does not touch other gyubin.io apps or your exported backups.</p><p class="privacy-foot">13 / 190 · v1.0.0 · 6 October 2026<br>No tracking scripts, CDNs or external fonts.</p></div>`;showDialog('settings-dialog');}
+function downloadFile(name,content,type){const blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);}
+function exportBackup(){downloadFile('gyubin-training-backup-'+todayISO()+'.json',JSON.stringify({...state,exportedAt:new Date().toISOString()},null,2),'application/json');toast('Backup exported. Keep it somewhere safe.');}
+function csvCell(v){let s=String(v??'');if(/^[=+\-@\t\r]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"';}
+function exportCsv(){const rows=[['Scheduled date','Performed date','Week','Session','Status','Run planned km','Run actual km','Session time','3 km time','Checked sets','Best checked single kg','Single RPE','Readiness','Notes']];const sr=singleRecords();for(const d of PLAN.days){const l=getLog(d.date);if(!state.logs[d.date])continue;const best=sr.filter(s=>s.date===d.date).sort((a,b)=>b.weight-a.weight)[0];rows.push([d.date,l.performedOn,d.week,d.title,l.status,runFor(d)?.km,runRecorded(d,l)?l.run.km:'',l.run?.totalTime,l.run?.workTime,Object.values(l.sets||{}).filter(s=>s.done).length,best?.weight,best?.rpe,l.readiness,l.notes]);}downloadFile('gyubin-training-log-'+todayISO()+'.csv','\ufeff'+rows.map(r=>r.map(csvCell).join(',')).join('\r\n'),'text/csv;charset=utf-8');toast('CSV exported. Use JSON for a restorable backup.');}
+function renderPrint(){return PLAN.weeks.map(w=>`<section class="print-week"><p>13 / 190 · GYUBIN TRAINING · 2026</p><h1>Week ${w.n} · ${esc(w.title)}</h1><p>${dateFmt(w.start)}–${dateFmt(w.end)} · ${fmt(plannedKm(w.n))} km planned</p><p>${esc(w.focus)}</p><table><thead><tr><th>Day</th><th>Session</th></tr></thead><tbody>${daysOf(w.n).map(d=>`<tr><td>${dateFmt(d.date,{weekday:'short',day:'numeric',month:'short'})}</td><td><strong>${esc(d.title)}</strong>${d.lift.length?'<br>'+d.lift.map(e=>esc(`${e.name}: ${e.sets} × ${e.reps??'submax'} at ${weightRange(e)}`)).join('<br>'):''}${runFor(d)?'<br>'+esc(runSummary(d))+`<br>~${fmt(runFor(d).km)} km including warm-up/recoveries/cooldown.`+(runFor(d).recovery?' Recovery: '+timeText(runFor(d).recovery)+'.':''):''}${d.note?'<br>'+esc(d.note):''}</td></tr>`).join('')}</tbody></table><div class="print-foot">Effort overrides the load. Heavy single RPE 7–8 (cap 8.5 in weeks 9–11, 8 in week 12); back-offs ≤8; technique ≤6. Warm up separately for lifting. Running: ~1.5 km warm-up before quality work plus movements/strides, ≥500 m cooldown. Do not stack missed sessions. 90 kg bodyweight; 160 kg single at RPE 8.5; past 180 kg about two years ago.</div></section>`).join('');}
+let timer={duration:180,remaining:180,end:null,running:false},wakeLock=null,audioCtx=null;
+try{const t=JSON.parse(localStorage.getItem(TIMER_KEY)||'null');if(t&&Number.isFinite(t.duration)&&t.duration>0&&t.duration<=3600&&Number.isFinite(t.remaining)&&t.remaining>=0&&t.remaining<=3600)timer={duration:t.duration,remaining:t.remaining,running:!!t.running,end:Number.isFinite(t.end)?t.end:null};if(timer.running&&!timer.end)timer.running=false;}catch(_){}
+function saveTimer(){try{localStorage.setItem(TIMER_KEY,JSON.stringify(timer));}catch(_){} }
+function timerLeft(){return timer.running?Math.max(0,Math.ceil((timer.end-Date.now())/1000)):timer.remaining;}
+function prepareAudio(){if(!state.prefs.sound)return;try{audioCtx??=new(window.AudioContext||window.webkitAudioContext)();audioCtx.resume();}catch(_){} }
+function beep(){if(state.prefs.sound&&audioCtx)try{for(let i=0;i<2;i++){const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();osc.connect(gain);gain.connect(audioCtx.destination);osc.frequency.value=740;gain.gain.value=.10;osc.start(audioCtx.currentTime+i*.3);osc.stop(audioCtx.currentTime+i*.3+.18);}}catch(_){}if(state.prefs.vibration&&navigator.vibrate)navigator.vibrate([180,100,180]);}
+async function requestWake(){if(state.prefs.keepAwake&&timer.running&&document.visibilityState==='visible'&&'wakeLock'in navigator&&!wakeLock)try{wakeLock=await navigator.wakeLock.request('screen');wakeLock.addEventListener('release',()=>wakeLock=null);}catch(_){} }
+function releaseWake(){if(wakeLock)wakeLock.release().catch(()=>{});wakeLock=null;}
+function updateTimer(){const left=timerLeft();if(timer.running&&left===0){timer.running=false;timer.remaining=0;timer.end=null;saveTimer();releaseWake();beep();toast('Rest complete. Start the next set when ready.');}const display=$('#timer-display');if(display)display.textContent=timeText(left);const button=$('#timer-start');if(button)button.textContent=timer.running?'Pause':left===0?'Start again':'Start';const mini=$('#timer-mini');mini.hidden=!timer.running&&timer.remaining===timer.duration;if(!mini.hidden)mini.textContent=(timer.running?'◷ ':'Ⅱ ')+timeText(left);}
+function openTimer(seconds){if(seconds){timer={duration:Number(seconds),remaining:Number(seconds),running:false,end:null};releaseWake();saveTimer();}$('#timer-content').innerHTML=dialogHead('timer-title','Rest timer','Use between sets or interval repetitions')+`<div class="dialog-body"><div id="timer-display" class="timer-display">${timeText(timerLeft())}</div><p class="timer-label">Recover. Then make the next effort a good one.</p><div class="timer-presets">${[90,120,180,240].map(s=>`<button class="btn" data-action="timer-preset" data-seconds="${s}">${timeText(s)}</button>`).join('')}</div><div class="form-grid"><div class="field"><label for="timer-custom">Custom rest (seconds)</label><input id="timer-custom" type="number" min="1" max="3600" inputmode="numeric" value="${timer.duration}"></div><div class="field" style="display:flex;align-items:end"><button class="btn full" data-action="timer-custom">Set duration</button></div></div><div class="status-actions"><button id="timer-start" class="btn primary" data-action="timer-start">${timer.running?'Pause':'Start'}</button><button class="btn" data-action="timer-reset">Reset</button></div><p class="help" style="margin-top:18px">The remaining time stays correct when you return. Sound and vibration are not guaranteed while Android locks or suspends the app. Keep the screen visible. Timer preferences are in Settings.</p></div>`;showDialog('timer-dialog');updateTimer();}
+function updateConnection(){const label=$('#connection-label'),dot=$('#connection .connection-dot');if(!navigator.onLine){label.textContent='Offline';dot.classList.add('offline');}else{label.textContent=offlineReady?'Offline ready':'Local logs';dot.classList.remove('offline');}}
+async function installApp(){if(installPrompt){await installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;}else toast(DEPLOY_BUILD&&location.protocol!=='file:'?'In Chrome: menu ⋮ → Install app / Add to Home screen.':'Installation needs the hosted HTTPS build, not the preview file.');}
+// Delegated listeners keep the app dependency-free and work with re-rendered views.
+document.addEventListener('click',async ev=>{const b=ev.target.closest('[data-action]');if(!b)return;const a=b.dataset.action;
+ if(a==='tab')setTab(b.dataset.tab);
+ else if(a==='session')openSession(b.dataset.date);
+ else if(a==='current-week'){state.prefs.week=activeWeek();setTab('week');}
+ else if(a==='week-step'){state.prefs.week=Math.min(13,Math.max(1,state.prefs.week+Number(b.dataset.delta)));save();updateHash();render();}
+ else if(a==='close-dialog')closeDialog(b.closest('dialog'));
+ else if(a==='settings')openSettings();
+ else if(a==='check-set'){const row=b.closest('.set-row'),s=syncSet(row);if(!s)return;if(!s.done&&!(s.reps>0)){toast('Enter the repetitions you completed first.');$('.set-input[data-key="reps"]',row).focus();return;}s.done=!s.done;row.classList.toggle('is-done',s.done);b.setAttribute('aria-pressed',String(s.done));stamp(sessionDate);}
+ else if(a==='use-distance'){const l=editLog(sessionDate);l.run.km=runFor(dayByDate(sessionDate)).km;$('#actual-km').value=l.run.km;$('#pace-result').textContent=paceFeedback(l.run);stamp(sessionDate);}
+ else if(a==='run-done'){if(!validateSession())return;const l=editLog(sessionDate);l.run.done=!l.run.done;stamp(sessionDate);renderSession();}
+ else if(a==='complete-session'){if(!validateSession())return;const l=editLog(sessionDate);l.status=l.status==='done'?'planned':'done';stamp(sessionDate);renderSession();toast(l.status==='done'?'Session completed. Actuals remain exactly as logged.':'Session reopened.');}
+ else if(a==='skip-session'){const l=editLog(sessionDate);l.status=l.status==='skipped'?'planned':'skipped';stamp(sessionDate);renderSession();}
+ else if(a==='export')exportBackup();
+ else if(a==='export-csv')exportCsv();
+ else if(a==='export-raw')downloadFile('gyubin-unreadable-backup.json',unreadableRaw,'application/json');
+ else if(a==='import')$('#import-file').click();
+ else if(a==='persist'){try{const ok=await navigator.storage?.persist?.();toast(ok?'Persistent storage granted. Still keep regular backups.':'Persistent storage was not granted. Keep regular backups.');}catch(_){toast('Storage protection is unavailable. Export regular backups.');}}
+ else if(a==='reset'){if(!confirm('Delete this block’s local workout logs and reset its timer? This cannot be undone. Export a JSON backup first.'))return;state=defaultState();timer={duration:180,remaining:180,running:false,end:null};releaseWake();unreadableRaw='';storageOK=true;save();saveTimer();render();openSettings();updateTimer();toast('Workout logs reset.');}
+ else if(a==='print'){$('#print-area').innerHTML=renderPrint();window.print();}
+ else if(a==='install')await installApp();
+ else if(a==='timer')openTimer();
+ else if(a==='rest-timer'||a==='timer-preset')openTimer(Number(b.dataset.seconds));
+ else if(a==='timer-custom'){const i=$('#timer-custom');if(!i.checkValidity()||!Number(i.value)){i.reportValidity();return;}openTimer(Math.round(Number(i.value)));}
+ else if(a==='timer-start'){prepareAudio();if(timer.running){timer.remaining=timerLeft();timer.running=false;timer.end=null;releaseWake();}else{if(timer.remaining<=0)timer.remaining=timer.duration;timer.end=Date.now()+timer.remaining*1000;timer.running=true;requestWake();}saveTimer();updateTimer();}
+ else if(a==='timer-reset'){timer.remaining=timer.duration;timer.running=false;timer.end=null;releaseWake();saveTimer();updateTimer();}
+});
+document.addEventListener('input',ev=>{const f=ev.target;if(f.matches('.set-input')&&sessionDate){if(!f.checkValidity())return;const l=editLog(sessionDate);l.sets[f.dataset.set]??={};l.sets[f.dataset.set][f.dataset.key]=f.value===''?null:Number(f.value);stamp(sessionDate);const ex=dayByDate(sessionDate).lift.find(e=>f.dataset.set.startsWith(e.id+'-'));if(ex)updateSetFeedback(dayByDate(sessionDate),ex);}
+ else if(f.matches('[data-log-field]')&&sessionDate){editLog(sessionDate)[f.dataset.logField]=f.value;stamp(sessionDate);if(f.dataset.logField==='readiness')$('#readiness-note').hidden=f.value!=='pain';}
+ else if(f.matches('[data-run-field]')&&sessionDate){const key=f.dataset.runField,l=editLog(sessionDate);if(['totalTime','workTime'].includes(key)){const valid=!f.value||parseTime(f.value)!==null;$('#error-'+key).textContent=valid?'':'Use mm:ss (for example 14:20).';if(!valid)return;l.run[key]=f.value;}else{if(!f.checkValidity())return;l.run[key]=f.value===''?null:Number(f.value);}stamp(sessionDate);$('#pace-result').textContent=paceFeedback(l.run);}
+ else if(f.matches('[data-split]')&&sessionDate){const valid=!f.value||parseTime(f.value)!==null;$('#split-error').textContent=valid?'':'Use m:ss for each split.';if(!valid)return;const l=editLog(sessionDate);l.run.splits??={};l.run.splits[f.dataset.split]=f.value;stamp(sessionDate);}
+});
+document.addEventListener('change',async ev=>{const f=ev.target;
+ if(f.id==='week-select'){state.prefs.week=Number(f.value);save();updateHash();render();}
+ else if(f.matches('[data-pref]')){state.prefs[f.dataset.pref]=f.checked;save();if(f.dataset.pref==='keepAwake'){if(f.checked)requestWake();else releaseWake();}}
+ else if(f.id==='run-override'&&sessionDate){const l=editLog(sessionDate);if(Object.keys(l.run||{}).length&&!confirm('Change this running prescription? This clears its running result and splits, but keeps lifting logs and notes.')){f.value=l.override||'plan';return;}l.override=f.value;l.run={};if(l.status==='done')l.status='planned';stamp(sessionDate);renderSession();}
+ else if(f.id==='import-file'&&f.files[0]){const file=f.files[0];try{if(file.size>2*1024*1024)throw new Error('Backup is too large (maximum 2 MB).');const incoming=sanitiseState(JSON.parse(await file.text()));if(confirm(`Import ${Object.keys(incoming.logs).length} session records? This replaces this block’s current local logs. Export a backup first.`)){state=incoming;storageOK=true;unreadableRaw='';save();render();if($('#settings-dialog').open)openSettings();toast('Backup imported.');}}catch(e){toast('Import failed: '+e.message);}finally{f.value='';}}
+});
+$$('dialog').forEach(d=>d.addEventListener('close',()=>{if(d.id==='session-dialog'&&!d.open){sessionDate=null;render();}if(!$$('dialog[open]').length)document.body.classList.remove('body-lock');}));
+window.addEventListener('hashchange',()=>{readRoute();render();});
+window.addEventListener('online',updateConnection);window.addEventListener('offline',updateConnection);
+window.addEventListener('beforeinstallprompt',ev=>{ev.preventDefault();installPrompt=ev;});
+window.addEventListener('appinstalled',()=>{installPrompt=null;toast('App installed. Your logs remain on this device.');});
+document.addEventListener('visibilitychange',()=>{updateTimer();if(document.visibilityState==='visible'){if(TODAY!==todayISO()){TODAY=todayISO();render();}requestWake();}});
+window.addEventListener('storage',ev=>{if(ev.key===KEY&&ev.newValue){if($('#session-dialog').open){toast('Another tab changed your logs. Close this session and reload to avoid conflicts.');return;}try{state=sanitiseState(JSON.parse(ev.newValue));render();}catch(_){}}});
+if(DEPLOY_BUILD&&'serviceWorker'in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('./sw.js',{scope:'./'}).then(()=>navigator.serviceWorker.ready).then(()=>{offlineReady=true;updateConnection();}).catch(()=>{offlineReady=false;});
+readRoute();render();updateTimer();setInterval(updateTimer,250);
+</script>
+<noscript><p style="padding:30px">JavaScript is required for the interactive tracker. The programme is also included as programme.json in the source package.</p></noscript>
+</body>
+</html>
