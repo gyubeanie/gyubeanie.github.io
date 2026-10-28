@@ -1,26 +1,26 @@
 {
   "schemaVersion": 1,
   "kind": "kpx-generation",
-  "fetchedAt": "2026-10-28T10:52:19.217Z",
+  "fetchedAt": "2026-10-28T16:51:38.056Z",
   "sourceUrl": "https://www.kpx.or.kr/powerSource.es?device=chart&mid=a10404030000",
   "payload": {
-    "asOf": "2026-10-28 19:50",
-    "generationMw": 68656,
+    "asOf": "2026-10-29 01:50",
+    "generationMw": 56791,
     "reportedMarketDemandMw": null,
     "estimatedTotalDemandMw": null,
-    "pumpedStorageLoadMw": 0,
-    "carbonIntensity": 438,
-    "emissionsTonnesPerHour": 29240,
-    "renewableShare": 6.9565640449858845,
-    "knownLowCarbonShare": 29.911176923917075,
+    "pumpedStorageLoadMw": 382,
+    "carbonIntensity": 444,
+    "emissionsTonnesPerHour": 25238,
+    "renewableShare": 6.068870160093427,
+    "knownLowCarbonShare": 35.85586788982256,
     "sources": [
       {
         "key": "coal",
         "label": "Coal",
         "labelKo": "석탄",
         "color": "#8a6d5e",
-        "mw": 22431,
-        "share": 32.67081955574873,
+        "mw": 23799,
+        "share": 41.9065096770896,
         "factor": 820
       },
       {
@@ -28,8 +28,8 @@
         "label": "Nuclear",
         "labelKo": "원자력",
         "color": "#ccff3e",
-        "mw": 19817,
-        "share": 28.863407485229136,
+        "mw": 19765,
+        "share": 34.8039061191533,
         "factor": 12
       },
       {
@@ -37,8 +37,8 @@
         "label": "Gas",
         "labelKo": "가스",
         "color": "#ff8552",
-        "mw": 19480,
-        "share": 28.373429422602985,
+        "mw": 9595,
+        "share": 16.895338883817917,
         "factor": 490
       },
       {
@@ -46,1720 +46,199 @@
         "label": "Other renewables",
         "labelKo": "기타 신재생",
         "color": "#58d2a0",
-        "mw": 4057,
-        "share": 5.908794606297949,
+        "mw": 2849,
+        "share": 5.016908389424167,
         "factor": 230
-      },
-      {
-        "key": "pumpedStorage",
-        "label": "Pumped storage",
-        "labelKo": "양수",
-        "color": "#5c7b82",
-        "mw": 1969,
-        "share": 2.868061245889269,
-        "factor": null
       },
       {
         "key": "wind",
         "label": "Wind",
         "labelKo": "풍력",
         "color": "#58c8ff",
-        "mw": 458,
-        "share": 0.6665959279530937,
+        "mw": 468,
+        "share": 0.8240531843058109,
         "factor": 11
-      },
-      {
-        "key": "hydro",
-        "label": "Hydro",
-        "labelKo": "수력",
-        "color": "#4f7dff",
-        "mw": 262,
-        "share": 0.3811735107348412,
-        "factor": 24
       },
       {
         "key": "oil",
         "label": "Oil",
         "labelKo": "유류",
         "color": "#b596ff",
-        "mw": 184,
-        "share": 0.26771824554399326,
+        "mw": 185,
+        "share": 0.325375159845766,
         "factor": 650
+      },
+      {
+        "key": "hydro",
+        "label": "Hydro",
+        "labelKo": "수력",
+        "color": "#4f7dff",
+        "mw": 129,
+        "share": 0.2279085863634498,
+        "factor": 24
       }
     ],
     "emissionsHistory": [
       {
-        "asOf": "2026-10-28 00:00",
-        "generationMw": 59783,
-        "attributedGenerationMw": 59783,
-        "carbonIntensity": 438,
-        "emissionsTonnesPerHour": 26156
+        "asOf": "2026-10-29 00:00",
+        "generationMw": 60735,
+        "attributedGenerationMw": 60476,
+        "carbonIntensity": 442,
+        "emissionsTonnesPerHour": 26717
       },
       {
-        "asOf": "2026-10-28 00:05",
-        "generationMw": 59418,
-        "attributedGenerationMw": 59418,
-        "carbonIntensity": 435,
-        "emissionsTonnesPerHour": 25836
+        "asOf": "2026-10-29 00:05",
+        "generationMw": 60487,
+        "attributedGenerationMw": 60364,
+        "carbonIntensity": 443,
+        "emissionsTonnesPerHour": 26725
       },
       {
-        "asOf": "2026-10-28 00:10",
-        "generationMw": 59284,
-        "attributedGenerationMw": 59284,
-        "carbonIntensity": 434,
-        "emissionsTonnesPerHour": 25708
+        "asOf": "2026-10-29 00:10",
+        "generationMw": 60198,
+        "attributedGenerationMw": 60198,
+        "carbonIntensity": 442,
+        "emissionsTonnesPerHour": 26623
       },
       {
-        "asOf": "2026-10-28 00:15",
-        "generationMw": 58936,
-        "attributedGenerationMw": 58936,
-        "carbonIntensity": 431,
-        "emissionsTonnesPerHour": 25428
+        "asOf": "2026-10-29 00:15",
+        "generationMw": 60314,
+        "attributedGenerationMw": 60314,
+        "carbonIntensity": 443,
+        "emissionsTonnesPerHour": 26713
       },
       {
-        "asOf": "2026-10-28 00:20",
-        "generationMw": 58661,
-        "attributedGenerationMw": 58661,
-        "carbonIntensity": 431,
-        "emissionsTonnesPerHour": 25264
+        "asOf": "2026-10-29 00:20",
+        "generationMw": 60165,
+        "attributedGenerationMw": 60165,
+        "carbonIntensity": 443,
+        "emissionsTonnesPerHour": 26658
       },
       {
-        "asOf": "2026-10-28 00:25",
-        "generationMw": 58328,
-        "attributedGenerationMw": 58328,
-        "carbonIntensity": 429,
-        "emissionsTonnesPerHour": 25026
+        "asOf": "2026-10-29 00:25",
+        "generationMw": 59544,
+        "attributedGenerationMw": 59544,
+        "carbonIntensity": 442,
+        "emissionsTonnesPerHour": 26329
       },
       {
-        "asOf": "2026-10-28 00:30",
-        "generationMw": 58109,
-        "attributedGenerationMw": 58109,
-        "carbonIntensity": 427,
-        "emissionsTonnesPerHour": 24820
+        "asOf": "2026-10-29 00:30",
+        "generationMw": 59396,
+        "attributedGenerationMw": 59396,
+        "carbonIntensity": 443,
+        "emissionsTonnesPerHour": 26283
       },
       {
-        "asOf": "2026-10-28 00:35",
-        "generationMw": 57790,
-        "attributedGenerationMw": 57790,
-        "carbonIntensity": 425,
-        "emissionsTonnesPerHour": 24582
+        "asOf": "2026-10-29 00:35",
+        "generationMw": 58865,
+        "attributedGenerationMw": 58865,
+        "carbonIntensity": 442,
+        "emissionsTonnesPerHour": 26024
       },
       {
-        "asOf": "2026-10-28 00:40",
-        "generationMw": 57544,
-        "attributedGenerationMw": 57544,
-        "carbonIntensity": 424,
-        "emissionsTonnesPerHour": 24401
+        "asOf": "2026-10-29 00:40",
+        "generationMw": 58776,
+        "attributedGenerationMw": 58776,
+        "carbonIntensity": 442,
+        "emissionsTonnesPerHour": 25984
       },
       {
-        "asOf": "2026-10-28 00:45",
-        "generationMw": 57077,
-        "attributedGenerationMw": 57077,
-        "carbonIntensity": 420,
-        "emissionsTonnesPerHour": 23998
+        "asOf": "2026-10-29 00:45",
+        "generationMw": 58796,
+        "attributedGenerationMw": 58796,
+        "carbonIntensity": 443,
+        "emissionsTonnesPerHour": 26031
       },
       {
-        "asOf": "2026-10-28 00:50",
-        "generationMw": 56675,
-        "attributedGenerationMw": 56675,
-        "carbonIntensity": 418,
-        "emissionsTonnesPerHour": 23670
+        "asOf": "2026-10-29 00:50",
+        "generationMw": 58513,
+        "attributedGenerationMw": 58513,
+        "carbonIntensity": 442,
+        "emissionsTonnesPerHour": 25858
       },
       {
-        "asOf": "2026-10-28 00:55",
-        "generationMw": 56677,
-        "attributedGenerationMw": 56677,
-        "carbonIntensity": 415,
-        "emissionsTonnesPerHour": 23539
+        "asOf": "2026-10-29 00:55",
+        "generationMw": 58423,
+        "attributedGenerationMw": 58423,
+        "carbonIntensity": 443,
+        "emissionsTonnesPerHour": 25872
       },
       {
-        "asOf": "2026-10-28 01:00",
-        "generationMw": 56456,
-        "attributedGenerationMw": 56456,
-        "carbonIntensity": 415,
-        "emissionsTonnesPerHour": 23451
+        "asOf": "2026-10-29 01:00",
+        "generationMw": 58072,
+        "attributedGenerationMw": 58072,
+        "carbonIntensity": 443,
+        "emissionsTonnesPerHour": 25718
       },
       {
-        "asOf": "2026-10-28 01:05",
-        "generationMw": 56509,
-        "attributedGenerationMw": 56509,
-        "carbonIntensity": 415,
-        "emissionsTonnesPerHour": 23434
+        "asOf": "2026-10-29 01:05",
+        "generationMw": 58131,
+        "attributedGenerationMw": 58131,
+        "carbonIntensity": 443,
+        "emissionsTonnesPerHour": 25768
       },
       {
-        "asOf": "2026-10-28 01:10",
-        "generationMw": 56346,
-        "attributedGenerationMw": 56346,
-        "carbonIntensity": 414,
-        "emissionsTonnesPerHour": 23329
+        "asOf": "2026-10-29 01:10",
+        "generationMw": 57846,
+        "attributedGenerationMw": 57846,
+        "carbonIntensity": 443,
+        "emissionsTonnesPerHour": 25618
       },
       {
-        "asOf": "2026-10-28 01:15",
-        "generationMw": 56192,
-        "attributedGenerationMw": 56192,
-        "carbonIntensity": 413,
-        "emissionsTonnesPerHour": 23226
+        "asOf": "2026-10-29 01:15",
+        "generationMw": 57744,
+        "attributedGenerationMw": 57744,
+        "carbonIntensity": 443,
+        "emissionsTonnesPerHour": 25609
       },
       {
-        "asOf": "2026-10-28 01:20",
-        "generationMw": 56287,
-        "attributedGenerationMw": 56287,
-        "carbonIntensity": 414,
-        "emissionsTonnesPerHour": 23327
+        "asOf": "2026-10-29 01:20",
+        "generationMw": 57700,
+        "attributedGenerationMw": 57700,
+        "carbonIntensity": 443,
+        "emissionsTonnesPerHour": 25581
       },
       {
-        "asOf": "2026-10-28 01:25",
-        "generationMw": 55984,
-        "attributedGenerationMw": 55984,
-        "carbonIntensity": 414,
-        "emissionsTonnesPerHour": 23189
+        "asOf": "2026-10-29 01:25",
+        "generationMw": 57535,
+        "attributedGenerationMw": 57535,
+        "carbonIntensity": 444,
+        "emissionsTonnesPerHour": 25520
       },
       {
-        "asOf": "2026-10-28 01:30",
-        "generationMw": 55710,
-        "attributedGenerationMw": 55710,
-        "carbonIntensity": 412,
-        "emissionsTonnesPerHour": 22947
+        "asOf": "2026-10-29 01:30",
+        "generationMw": 57322,
+        "attributedGenerationMw": 57322,
+        "carbonIntensity": 443,
+        "emissionsTonnesPerHour": 25412
       },
       {
-        "asOf": "2026-10-28 01:35",
-        "generationMw": 55557,
-        "attributedGenerationMw": 55557,
-        "carbonIntensity": 411,
-        "emissionsTonnesPerHour": 22846
+        "asOf": "2026-10-29 01:35",
+        "generationMw": 57054,
+        "attributedGenerationMw": 57054,
+        "carbonIntensity": 443,
+        "emissionsTonnesPerHour": 25260
       },
       {
-        "asOf": "2026-10-28 01:40",
-        "generationMw": 55630,
-        "attributedGenerationMw": 55630,
-        "carbonIntensity": 411,
-        "emissionsTonnesPerHour": 22841
+        "asOf": "2026-10-29 01:40",
+        "generationMw": 57165,
+        "attributedGenerationMw": 57165,
+        "carbonIntensity": 445,
+        "emissionsTonnesPerHour": 25427
       },
       {
-        "asOf": "2026-10-28 01:45",
-        "generationMw": 55755,
-        "attributedGenerationMw": 55755,
-        "carbonIntensity": 412,
-        "emissionsTonnesPerHour": 22951
+        "asOf": "2026-10-29 01:45",
+        "generationMw": 57132,
+        "attributedGenerationMw": 57132,
+        "carbonIntensity": 445,
+        "emissionsTonnesPerHour": 25439
       },
       {
-        "asOf": "2026-10-28 01:50",
-        "generationMw": 55868,
-        "attributedGenerationMw": 55868,
-        "carbonIntensity": 412,
-        "emissionsTonnesPerHour": 23038
-      },
-      {
-        "asOf": "2026-10-28 01:55",
-        "generationMw": 55693,
-        "attributedGenerationMw": 55693,
-        "carbonIntensity": 411,
-        "emissionsTonnesPerHour": 22874
-      },
-      {
-        "asOf": "2026-10-28 02:00",
-        "generationMw": 55795,
-        "attributedGenerationMw": 55795,
-        "carbonIntensity": 412,
-        "emissionsTonnesPerHour": 22975
-      },
-      {
-        "asOf": "2026-10-28 02:05",
-        "generationMw": 55834,
-        "attributedGenerationMw": 55834,
-        "carbonIntensity": 412,
-        "emissionsTonnesPerHour": 22997
-      },
-      {
-        "asOf": "2026-10-28 02:10",
-        "generationMw": 55819,
-        "attributedGenerationMw": 55819,
-        "carbonIntensity": 412,
-        "emissionsTonnesPerHour": 23022
-      },
-      {
-        "asOf": "2026-10-28 02:15",
-        "generationMw": 55364,
-        "attributedGenerationMw": 55364,
-        "carbonIntensity": 411,
-        "emissionsTonnesPerHour": 22733
-      },
-      {
-        "asOf": "2026-10-28 02:20",
-        "generationMw": 55552,
-        "attributedGenerationMw": 55552,
-        "carbonIntensity": 411,
-        "emissionsTonnesPerHour": 22819
-      },
-      {
-        "asOf": "2026-10-28 02:25",
-        "generationMw": 55521,
-        "attributedGenerationMw": 55521,
-        "carbonIntensity": 411,
-        "emissionsTonnesPerHour": 22834
-      },
-      {
-        "asOf": "2026-10-28 02:30",
-        "generationMw": 55640,
-        "attributedGenerationMw": 55640,
-        "carbonIntensity": 412,
-        "emissionsTonnesPerHour": 22896
-      },
-      {
-        "asOf": "2026-10-28 02:35",
-        "generationMw": 55604,
-        "attributedGenerationMw": 55604,
-        "carbonIntensity": 411,
-        "emissionsTonnesPerHour": 22865
-      },
-      {
-        "asOf": "2026-10-28 02:40",
-        "generationMw": 55535,
-        "attributedGenerationMw": 55535,
-        "carbonIntensity": 411,
-        "emissionsTonnesPerHour": 22807
-      },
-      {
-        "asOf": "2026-10-28 02:45",
-        "generationMw": 55497,
-        "attributedGenerationMw": 55497,
-        "carbonIntensity": 411,
-        "emissionsTonnesPerHour": 22789
-      },
-      {
-        "asOf": "2026-10-28 02:50",
-        "generationMw": 55373,
-        "attributedGenerationMw": 55373,
-        "carbonIntensity": 410,
-        "emissionsTonnesPerHour": 22690
-      },
-      {
-        "asOf": "2026-10-28 02:55",
-        "generationMw": 55432,
-        "attributedGenerationMw": 55432,
-        "carbonIntensity": 410,
-        "emissionsTonnesPerHour": 22705
-      },
-      {
-        "asOf": "2026-10-28 03:00",
-        "generationMw": 55186,
-        "attributedGenerationMw": 55186,
-        "carbonIntensity": 409,
-        "emissionsTonnesPerHour": 22547
-      },
-      {
-        "asOf": "2026-10-28 03:05",
-        "generationMw": 55451,
-        "attributedGenerationMw": 55451,
-        "carbonIntensity": 409,
-        "emissionsTonnesPerHour": 22655
-      },
-      {
-        "asOf": "2026-10-28 03:10",
-        "generationMw": 55492,
-        "attributedGenerationMw": 55492,
-        "carbonIntensity": 410,
-        "emissionsTonnesPerHour": 22724
-      },
-      {
-        "asOf": "2026-10-28 03:15",
-        "generationMw": 55686,
-        "attributedGenerationMw": 55686,
-        "carbonIntensity": 410,
-        "emissionsTonnesPerHour": 22821
-      },
-      {
-        "asOf": "2026-10-28 03:20",
-        "generationMw": 55573,
-        "attributedGenerationMw": 55573,
-        "carbonIntensity": 410,
-        "emissionsTonnesPerHour": 22792
-      },
-      {
-        "asOf": "2026-10-28 03:25",
-        "generationMw": 55643,
-        "attributedGenerationMw": 55643,
-        "carbonIntensity": 411,
-        "emissionsTonnesPerHour": 22846
-      },
-      {
-        "asOf": "2026-10-28 03:30",
-        "generationMw": 55700,
-        "attributedGenerationMw": 55700,
-        "carbonIntensity": 411,
-        "emissionsTonnesPerHour": 22870
-      },
-      {
-        "asOf": "2026-10-28 03:35",
-        "generationMw": 55811,
-        "attributedGenerationMw": 55811,
-        "carbonIntensity": 411,
-        "emissionsTonnesPerHour": 22946
-      },
-      {
-        "asOf": "2026-10-28 03:40",
-        "generationMw": 55863,
-        "attributedGenerationMw": 55863,
-        "carbonIntensity": 412,
-        "emissionsTonnesPerHour": 23028
-      },
-      {
-        "asOf": "2026-10-28 03:45",
-        "generationMw": 55664,
-        "attributedGenerationMw": 55664,
-        "carbonIntensity": 411,
-        "emissionsTonnesPerHour": 22905
-      },
-      {
-        "asOf": "2026-10-28 03:50",
-        "generationMw": 55634,
-        "attributedGenerationMw": 55634,
-        "carbonIntensity": 411,
-        "emissionsTonnesPerHour": 22879
-      },
-      {
-        "asOf": "2026-10-28 03:55",
-        "generationMw": 55764,
-        "attributedGenerationMw": 55764,
-        "carbonIntensity": 411,
-        "emissionsTonnesPerHour": 22914
-      },
-      {
-        "asOf": "2026-10-28 04:00",
-        "generationMw": 55616,
-        "attributedGenerationMw": 55616,
-        "carbonIntensity": 411,
-        "emissionsTonnesPerHour": 22885
-      },
-      {
-        "asOf": "2026-10-28 04:05",
-        "generationMw": 55661,
-        "attributedGenerationMw": 55661,
-        "carbonIntensity": 412,
-        "emissionsTonnesPerHour": 22931
-      },
-      {
-        "asOf": "2026-10-28 04:10",
-        "generationMw": 55869,
-        "attributedGenerationMw": 55869,
-        "carbonIntensity": 412,
-        "emissionsTonnesPerHour": 23046
-      },
-      {
-        "asOf": "2026-10-28 04:15",
-        "generationMw": 55924,
-        "attributedGenerationMw": 55924,
-        "carbonIntensity": 413,
-        "emissionsTonnesPerHour": 23079
-      },
-      {
-        "asOf": "2026-10-28 04:20",
-        "generationMw": 55889,
-        "attributedGenerationMw": 55889,
-        "carbonIntensity": 413,
-        "emissionsTonnesPerHour": 23064
-      },
-      {
-        "asOf": "2026-10-28 04:25",
-        "generationMw": 56007,
-        "attributedGenerationMw": 56007,
-        "carbonIntensity": 413,
-        "emissionsTonnesPerHour": 23158
-      },
-      {
-        "asOf": "2026-10-28 04:30",
-        "generationMw": 55976,
-        "attributedGenerationMw": 55976,
-        "carbonIntensity": 413,
-        "emissionsTonnesPerHour": 23127
-      },
-      {
-        "asOf": "2026-10-28 04:35",
-        "generationMw": 56183,
-        "attributedGenerationMw": 56183,
-        "carbonIntensity": 414,
-        "emissionsTonnesPerHour": 23238
-      },
-      {
-        "asOf": "2026-10-28 04:40",
-        "generationMw": 56302,
-        "attributedGenerationMw": 56302,
-        "carbonIntensity": 414,
-        "emissionsTonnesPerHour": 23302
-      },
-      {
-        "asOf": "2026-10-28 04:45",
-        "generationMw": 56436,
-        "attributedGenerationMw": 56436,
-        "carbonIntensity": 414,
-        "emissionsTonnesPerHour": 23361
-      },
-      {
-        "asOf": "2026-10-28 04:50",
-        "generationMw": 56301,
-        "attributedGenerationMw": 56301,
-        "carbonIntensity": 414,
-        "emissionsTonnesPerHour": 23301
-      },
-      {
-        "asOf": "2026-10-28 04:55",
-        "generationMw": 56326,
-        "attributedGenerationMw": 56326,
-        "carbonIntensity": 413,
-        "emissionsTonnesPerHour": 23282
-      },
-      {
-        "asOf": "2026-10-28 05:00",
-        "generationMw": 56149,
-        "attributedGenerationMw": 56149,
-        "carbonIntensity": 411,
-        "emissionsTonnesPerHour": 23093
-      },
-      {
-        "asOf": "2026-10-28 05:05",
-        "generationMw": 56117,
-        "attributedGenerationMw": 56117,
-        "carbonIntensity": 411,
-        "emissionsTonnesPerHour": 23076
-      },
-      {
-        "asOf": "2026-10-28 05:10",
-        "generationMw": 55830,
-        "attributedGenerationMw": 55830,
-        "carbonIntensity": 409,
-        "emissionsTonnesPerHour": 22835
-      },
-      {
-        "asOf": "2026-10-28 05:15",
-        "generationMw": 55885,
-        "attributedGenerationMw": 55885,
-        "carbonIntensity": 408,
-        "emissionsTonnesPerHour": 22811
-      },
-      {
-        "asOf": "2026-10-28 05:20",
-        "generationMw": 56469,
-        "attributedGenerationMw": 56469,
-        "carbonIntensity": 409,
-        "emissionsTonnesPerHour": 23111
-      },
-      {
-        "asOf": "2026-10-28 05:25",
-        "generationMw": 56482,
-        "attributedGenerationMw": 56482,
-        "carbonIntensity": 410,
-        "emissionsTonnesPerHour": 23152
-      },
-      {
-        "asOf": "2026-10-28 05:30",
-        "generationMw": 56848,
-        "attributedGenerationMw": 56848,
-        "carbonIntensity": 412,
-        "emissionsTonnesPerHour": 23404
-      },
-      {
-        "asOf": "2026-10-28 05:35",
-        "generationMw": 56971,
-        "attributedGenerationMw": 56971,
-        "carbonIntensity": 412,
-        "emissionsTonnesPerHour": 23457
-      },
-      {
-        "asOf": "2026-10-28 05:40",
-        "generationMw": 57024,
-        "attributedGenerationMw": 57024,
-        "carbonIntensity": 412,
-        "emissionsTonnesPerHour": 23479
-      },
-      {
-        "asOf": "2026-10-28 05:45",
-        "generationMw": 57169,
-        "attributedGenerationMw": 57169,
-        "carbonIntensity": 411,
-        "emissionsTonnesPerHour": 23490
-      },
-      {
-        "asOf": "2026-10-28 05:50",
-        "generationMw": 57460,
-        "attributedGenerationMw": 57460,
-        "carbonIntensity": 411,
-        "emissionsTonnesPerHour": 23630
-      },
-      {
-        "asOf": "2026-10-28 05:55",
-        "generationMw": 57746,
-        "attributedGenerationMw": 57746,
-        "carbonIntensity": 412,
-        "emissionsTonnesPerHour": 23790
-      },
-      {
-        "asOf": "2026-10-28 06:00",
-        "generationMw": 57840,
-        "attributedGenerationMw": 57840,
-        "carbonIntensity": 412,
-        "emissionsTonnesPerHour": 23829
-      },
-      {
-        "asOf": "2026-10-28 06:05",
-        "generationMw": 58466,
-        "attributedGenerationMw": 58466,
-        "carbonIntensity": 414,
-        "emissionsTonnesPerHour": 24187
-      },
-      {
-        "asOf": "2026-10-28 06:10",
-        "generationMw": 58752,
-        "attributedGenerationMw": 58752,
-        "carbonIntensity": 415,
-        "emissionsTonnesPerHour": 24379
-      },
-      {
-        "asOf": "2026-10-28 06:15",
-        "generationMw": 58977,
-        "attributedGenerationMw": 58977,
-        "carbonIntensity": 415,
-        "emissionsTonnesPerHour": 24472
-      },
-      {
-        "asOf": "2026-10-28 06:20",
-        "generationMw": 59224,
-        "attributedGenerationMw": 59224,
-        "carbonIntensity": 417,
-        "emissionsTonnesPerHour": 24672
-      },
-      {
-        "asOf": "2026-10-28 06:25",
-        "generationMw": 59347,
-        "attributedGenerationMw": 59347,
-        "carbonIntensity": 417,
-        "emissionsTonnesPerHour": 24729
-      },
-      {
-        "asOf": "2026-10-28 06:30",
-        "generationMw": 59706,
-        "attributedGenerationMw": 59706,
-        "carbonIntensity": 418,
-        "emissionsTonnesPerHour": 24980
-      },
-      {
-        "asOf": "2026-10-28 06:35",
-        "generationMw": 60055,
-        "attributedGenerationMw": 60055,
-        "carbonIntensity": 419,
-        "emissionsTonnesPerHour": 25161
-      },
-      {
-        "asOf": "2026-10-28 06:40",
-        "generationMw": 60227,
-        "attributedGenerationMw": 60227,
-        "carbonIntensity": 419,
-        "emissionsTonnesPerHour": 25263
-      },
-      {
-        "asOf": "2026-10-28 06:45",
-        "generationMw": 60470,
-        "attributedGenerationMw": 60470,
-        "carbonIntensity": 419,
-        "emissionsTonnesPerHour": 25350
-      },
-      {
-        "asOf": "2026-10-28 06:50",
-        "generationMw": 60659,
-        "attributedGenerationMw": 60659,
-        "carbonIntensity": 420,
-        "emissionsTonnesPerHour": 25452
-      },
-      {
-        "asOf": "2026-10-28 06:55",
-        "generationMw": 60825,
-        "attributedGenerationMw": 60825,
-        "carbonIntensity": 420,
-        "emissionsTonnesPerHour": 25555
-      },
-      {
-        "asOf": "2026-10-28 07:00",
-        "generationMw": 61456,
-        "attributedGenerationMw": 61456,
-        "carbonIntensity": 422,
-        "emissionsTonnesPerHour": 25938
-      },
-      {
-        "asOf": "2026-10-28 07:05",
-        "generationMw": 62334,
-        "attributedGenerationMw": 62334,
-        "carbonIntensity": 422,
-        "emissionsTonnesPerHour": 26306
-      },
-      {
-        "asOf": "2026-10-28 07:10",
-        "generationMw": 62688,
-        "attributedGenerationMw": 62688,
-        "carbonIntensity": 422,
-        "emissionsTonnesPerHour": 26432
-      },
-      {
-        "asOf": "2026-10-28 07:15",
-        "generationMw": 62872,
-        "attributedGenerationMw": 62872,
-        "carbonIntensity": 420,
-        "emissionsTonnesPerHour": 26424
-      },
-      {
-        "asOf": "2026-10-28 07:20",
-        "generationMw": 63373,
-        "attributedGenerationMw": 63373,
-        "carbonIntensity": 420,
-        "emissionsTonnesPerHour": 26633
-      },
-      {
-        "asOf": "2026-10-28 07:25",
-        "generationMw": 63535,
-        "attributedGenerationMw": 63535,
-        "carbonIntensity": 418,
-        "emissionsTonnesPerHour": 26586
-      },
-      {
-        "asOf": "2026-10-28 07:30",
-        "generationMw": 63643,
-        "attributedGenerationMw": 63643,
-        "carbonIntensity": 417,
-        "emissionsTonnesPerHour": 26520
-      },
-      {
-        "asOf": "2026-10-28 07:35",
-        "generationMw": 64023,
-        "attributedGenerationMw": 64023,
-        "carbonIntensity": 414,
-        "emissionsTonnesPerHour": 26525
-      },
-      {
-        "asOf": "2026-10-28 07:40",
-        "generationMw": 64253,
-        "attributedGenerationMw": 64253,
-        "carbonIntensity": 412,
-        "emissionsTonnesPerHour": 26451
-      },
-      {
-        "asOf": "2026-10-28 07:45",
-        "generationMw": 64370,
-        "attributedGenerationMw": 64370,
-        "carbonIntensity": 408,
-        "emissionsTonnesPerHour": 26293
-      },
-      {
-        "asOf": "2026-10-28 07:50",
-        "generationMw": 64321,
-        "attributedGenerationMw": 64321,
-        "carbonIntensity": 405,
-        "emissionsTonnesPerHour": 26069
-      },
-      {
-        "asOf": "2026-10-28 07:55",
-        "generationMw": 64700,
-        "attributedGenerationMw": 64700,
-        "carbonIntensity": 402,
-        "emissionsTonnesPerHour": 25987
-      },
-      {
-        "asOf": "2026-10-28 08:00",
-        "generationMw": 64780,
-        "attributedGenerationMw": 64780,
-        "carbonIntensity": 397,
-        "emissionsTonnesPerHour": 25696
-      },
-      {
-        "asOf": "2026-10-28 08:05",
-        "generationMw": 65545,
-        "attributedGenerationMw": 65545,
-        "carbonIntensity": 392,
-        "emissionsTonnesPerHour": 25681
-      },
-      {
-        "asOf": "2026-10-28 08:10",
-        "generationMw": 65229,
-        "attributedGenerationMw": 65229,
-        "carbonIntensity": 387,
-        "emissionsTonnesPerHour": 25229
-      },
-      {
-        "asOf": "2026-10-28 08:15",
-        "generationMw": 65968,
-        "attributedGenerationMw": 65968,
-        "carbonIntensity": 383,
-        "emissionsTonnesPerHour": 25234
-      },
-      {
-        "asOf": "2026-10-28 08:20",
-        "generationMw": 66345,
-        "attributedGenerationMw": 66345,
-        "carbonIntensity": 380,
-        "emissionsTonnesPerHour": 25220
-      },
-      {
-        "asOf": "2026-10-28 08:25",
-        "generationMw": 66797,
-        "attributedGenerationMw": 66797,
-        "carbonIntensity": 374,
-        "emissionsTonnesPerHour": 24985
-      },
-      {
-        "asOf": "2026-10-28 08:30",
-        "generationMw": 66934,
-        "attributedGenerationMw": 66934,
-        "carbonIntensity": 371,
-        "emissionsTonnesPerHour": 24809
-      },
-      {
-        "asOf": "2026-10-28 08:35",
-        "generationMw": 67445,
-        "attributedGenerationMw": 67445,
-        "carbonIntensity": 366,
-        "emissionsTonnesPerHour": 24671
-      },
-      {
-        "asOf": "2026-10-28 08:40",
-        "generationMw": 67669,
-        "attributedGenerationMw": 67669,
-        "carbonIntensity": 362,
-        "emissionsTonnesPerHour": 24475
-      },
-      {
-        "asOf": "2026-10-28 08:45",
-        "generationMw": 67734,
-        "attributedGenerationMw": 67734,
-        "carbonIntensity": 355,
-        "emissionsTonnesPerHour": 24063
-      },
-      {
-        "asOf": "2026-10-28 08:50",
-        "generationMw": 68024,
-        "attributedGenerationMw": 68024,
-        "carbonIntensity": 352,
-        "emissionsTonnesPerHour": 23911
-      },
-      {
-        "asOf": "2026-10-28 08:55",
-        "generationMw": 68532,
-        "attributedGenerationMw": 68532,
-        "carbonIntensity": 347,
-        "emissionsTonnesPerHour": 23804
-      },
-      {
-        "asOf": "2026-10-28 09:00",
-        "generationMw": 69250,
-        "attributedGenerationMw": 69250,
-        "carbonIntensity": 344,
-        "emissionsTonnesPerHour": 23798
-      },
-      {
-        "asOf": "2026-10-28 09:05",
-        "generationMw": 69561,
-        "attributedGenerationMw": 69561,
-        "carbonIntensity": 338,
-        "emissionsTonnesPerHour": 23511
-      },
-      {
-        "asOf": "2026-10-28 09:10",
-        "generationMw": 69362,
-        "attributedGenerationMw": 69362,
-        "carbonIntensity": 334,
-        "emissionsTonnesPerHour": 23137
-      },
-      {
-        "asOf": "2026-10-28 09:15",
-        "generationMw": 69731,
-        "attributedGenerationMw": 69731,
-        "carbonIntensity": 329,
-        "emissionsTonnesPerHour": 22921
-      },
-      {
-        "asOf": "2026-10-28 09:20",
-        "generationMw": 70147,
-        "attributedGenerationMw": 70147,
-        "carbonIntensity": 325,
-        "emissionsTonnesPerHour": 22817
-      },
-      {
-        "asOf": "2026-10-28 09:25",
-        "generationMw": 70500,
-        "attributedGenerationMw": 70500,
-        "carbonIntensity": 320,
-        "emissionsTonnesPerHour": 22589
-      },
-      {
-        "asOf": "2026-10-28 09:30",
-        "generationMw": 70233,
-        "attributedGenerationMw": 70233,
-        "carbonIntensity": 316,
-        "emissionsTonnesPerHour": 22186
-      },
-      {
-        "asOf": "2026-10-28 09:35",
-        "generationMw": 70980,
-        "attributedGenerationMw": 70980,
-        "carbonIntensity": 313,
-        "emissionsTonnesPerHour": 22224
-      },
-      {
-        "asOf": "2026-10-28 09:40",
-        "generationMw": 70805,
-        "attributedGenerationMw": 70805,
-        "carbonIntensity": 308,
-        "emissionsTonnesPerHour": 21833
-      },
-      {
-        "asOf": "2026-10-28 09:45",
-        "generationMw": 71054,
-        "attributedGenerationMw": 71054,
-        "carbonIntensity": 304,
-        "emissionsTonnesPerHour": 21581
-      },
-      {
-        "asOf": "2026-10-28 09:50",
-        "generationMw": 71428,
-        "attributedGenerationMw": 71428,
-        "carbonIntensity": 300,
-        "emissionsTonnesPerHour": 21446
-      },
-      {
-        "asOf": "2026-10-28 09:55",
-        "generationMw": 71634,
-        "attributedGenerationMw": 71634,
-        "carbonIntensity": 295,
-        "emissionsTonnesPerHour": 21165
-      },
-      {
-        "asOf": "2026-10-28 10:00",
-        "generationMw": 71674,
-        "attributedGenerationMw": 71674,
-        "carbonIntensity": 292,
-        "emissionsTonnesPerHour": 20952
-      },
-      {
-        "asOf": "2026-10-28 10:05",
-        "generationMw": 72497,
-        "attributedGenerationMw": 72497,
-        "carbonIntensity": 293,
-        "emissionsTonnesPerHour": 21216
-      },
-      {
-        "asOf": "2026-10-28 10:10",
-        "generationMw": 72351,
-        "attributedGenerationMw": 72351,
-        "carbonIntensity": 290,
-        "emissionsTonnesPerHour": 21018
-      },
-      {
-        "asOf": "2026-10-28 10:15",
-        "generationMw": 72716,
-        "attributedGenerationMw": 72716,
-        "carbonIntensity": 289,
-        "emissionsTonnesPerHour": 21020
-      },
-      {
-        "asOf": "2026-10-28 10:20",
-        "generationMw": 72981,
-        "attributedGenerationMw": 72981,
-        "carbonIntensity": 287,
-        "emissionsTonnesPerHour": 20980
-      },
-      {
-        "asOf": "2026-10-28 10:25",
-        "generationMw": 73168,
-        "attributedGenerationMw": 73168,
-        "carbonIntensity": 284,
-        "emissionsTonnesPerHour": 20764
-      },
-      {
-        "asOf": "2026-10-28 10:30",
-        "generationMw": 72940,
-        "attributedGenerationMw": 72940,
-        "carbonIntensity": 283,
-        "emissionsTonnesPerHour": 20611
-      },
-      {
-        "asOf": "2026-10-28 10:35",
-        "generationMw": 72863,
-        "attributedGenerationMw": 72863,
-        "carbonIntensity": 279,
-        "emissionsTonnesPerHour": 20319
-      },
-      {
-        "asOf": "2026-10-28 10:40",
-        "generationMw": 72754,
-        "attributedGenerationMw": 72754,
-        "carbonIntensity": 276,
-        "emissionsTonnesPerHour": 20048
-      },
-      {
-        "asOf": "2026-10-28 10:45",
-        "generationMw": 72812,
-        "attributedGenerationMw": 72812,
-        "carbonIntensity": 272,
-        "emissionsTonnesPerHour": 19804
-      },
-      {
-        "asOf": "2026-10-28 10:50",
-        "generationMw": 72989,
-        "attributedGenerationMw": 72989,
-        "carbonIntensity": 272,
-        "emissionsTonnesPerHour": 19855
-      },
-      {
-        "asOf": "2026-10-28 10:55",
-        "generationMw": 72926,
-        "attributedGenerationMw": 72926,
-        "carbonIntensity": 270,
-        "emissionsTonnesPerHour": 19705
-      },
-      {
-        "asOf": "2026-10-28 11:00",
-        "generationMw": 72632,
-        "attributedGenerationMw": 72632,
-        "carbonIntensity": 268,
-        "emissionsTonnesPerHour": 19455
-      },
-      {
-        "asOf": "2026-10-28 11:05",
-        "generationMw": 72530,
-        "attributedGenerationMw": 72530,
-        "carbonIntensity": 267,
-        "emissionsTonnesPerHour": 19375
-      },
-      {
-        "asOf": "2026-10-28 11:10",
-        "generationMw": 72156,
-        "attributedGenerationMw": 72156,
-        "carbonIntensity": 266,
-        "emissionsTonnesPerHour": 19211
-      },
-      {
-        "asOf": "2026-10-28 11:15",
-        "generationMw": 72650,
-        "attributedGenerationMw": 72650,
-        "carbonIntensity": 262,
-        "emissionsTonnesPerHour": 19058
-      },
-      {
-        "asOf": "2026-10-28 11:20",
-        "generationMw": 73033,
-        "attributedGenerationMw": 73033,
-        "carbonIntensity": 263,
-        "emissionsTonnesPerHour": 19202
-      },
-      {
-        "asOf": "2026-10-28 11:25",
-        "generationMw": 73183,
-        "attributedGenerationMw": 73183,
-        "carbonIntensity": 260,
-        "emissionsTonnesPerHour": 19055
-      },
-      {
-        "asOf": "2026-10-28 11:30",
-        "generationMw": 72944,
-        "attributedGenerationMw": 72944,
-        "carbonIntensity": 258,
-        "emissionsTonnesPerHour": 18846
-      },
-      {
-        "asOf": "2026-10-28 11:35",
-        "generationMw": 73144,
-        "attributedGenerationMw": 73144,
-        "carbonIntensity": 256,
-        "emissionsTonnesPerHour": 18688
-      },
-      {
-        "asOf": "2026-10-28 11:40",
-        "generationMw": 72586,
-        "attributedGenerationMw": 72586,
-        "carbonIntensity": 253,
-        "emissionsTonnesPerHour": 18377
-      },
-      {
-        "asOf": "2026-10-28 11:45",
-        "generationMw": 72575,
-        "attributedGenerationMw": 72575,
-        "carbonIntensity": 252,
-        "emissionsTonnesPerHour": 18285
-      },
-      {
-        "asOf": "2026-10-28 11:50",
-        "generationMw": 72169,
-        "attributedGenerationMw": 72169,
-        "carbonIntensity": 249,
-        "emissionsTonnesPerHour": 17983
-      },
-      {
-        "asOf": "2026-10-28 11:55",
-        "generationMw": 71833,
-        "attributedGenerationMw": 71833,
-        "carbonIntensity": 245,
-        "emissionsTonnesPerHour": 17575
-      },
-      {
-        "asOf": "2026-10-28 12:00",
-        "generationMw": 71497,
-        "attributedGenerationMw": 71497,
-        "carbonIntensity": 243,
-        "emissionsTonnesPerHour": 17406
-      },
-      {
-        "asOf": "2026-10-28 12:05",
-        "generationMw": 71403,
-        "attributedGenerationMw": 71403,
-        "carbonIntensity": 242,
-        "emissionsTonnesPerHour": 17303
-      },
-      {
-        "asOf": "2026-10-28 12:10",
-        "generationMw": 71206,
-        "attributedGenerationMw": 71206,
-        "carbonIntensity": 241,
-        "emissionsTonnesPerHour": 17135
-      },
-      {
-        "asOf": "2026-10-28 12:15",
-        "generationMw": 70989,
-        "attributedGenerationMw": 70989,
-        "carbonIntensity": 239,
-        "emissionsTonnesPerHour": 16995
-      },
-      {
-        "asOf": "2026-10-28 12:20",
-        "generationMw": 70949,
-        "attributedGenerationMw": 70949,
-        "carbonIntensity": 238,
-        "emissionsTonnesPerHour": 16875
-      },
-      {
-        "asOf": "2026-10-28 12:25",
-        "generationMw": 70839,
-        "attributedGenerationMw": 70839,
-        "carbonIntensity": 237,
-        "emissionsTonnesPerHour": 16768
-      },
-      {
-        "asOf": "2026-10-28 12:30",
-        "generationMw": 70715,
-        "attributedGenerationMw": 70715,
-        "carbonIntensity": 236,
-        "emissionsTonnesPerHour": 16672
-      },
-      {
-        "asOf": "2026-10-28 12:35",
-        "generationMw": 70856,
-        "attributedGenerationMw": 70856,
-        "carbonIntensity": 236,
-        "emissionsTonnesPerHour": 16741
-      },
-      {
-        "asOf": "2026-10-28 12:40",
-        "generationMw": 70779,
-        "attributedGenerationMw": 70779,
-        "carbonIntensity": 236,
-        "emissionsTonnesPerHour": 16718
-      },
-      {
-        "asOf": "2026-10-28 12:45",
-        "generationMw": 70982,
-        "attributedGenerationMw": 70982,
-        "carbonIntensity": 237,
-        "emissionsTonnesPerHour": 16845
-      },
-      {
-        "asOf": "2026-10-28 12:50",
-        "generationMw": 70920,
-        "attributedGenerationMw": 70920,
-        "carbonIntensity": 237,
-        "emissionsTonnesPerHour": 16840
-      },
-      {
-        "asOf": "2026-10-28 12:55",
-        "generationMw": 71289,
-        "attributedGenerationMw": 71289,
-        "carbonIntensity": 240,
-        "emissionsTonnesPerHour": 17120
-      },
-      {
-        "asOf": "2026-10-28 13:00",
-        "generationMw": 71921,
-        "attributedGenerationMw": 71921,
-        "carbonIntensity": 245,
-        "emissionsTonnesPerHour": 17617
-      },
-      {
-        "asOf": "2026-10-28 13:05",
-        "generationMw": 72775,
-        "attributedGenerationMw": 72775,
-        "carbonIntensity": 249,
-        "emissionsTonnesPerHour": 18123
-      },
-      {
-        "asOf": "2026-10-28 13:10",
-        "generationMw": 73478,
-        "attributedGenerationMw": 73478,
-        "carbonIntensity": 252,
-        "emissionsTonnesPerHour": 18550
-      },
-      {
-        "asOf": "2026-10-28 13:15",
-        "generationMw": 73852,
-        "attributedGenerationMw": 73852,
-        "carbonIntensity": 255,
-        "emissionsTonnesPerHour": 18842
-      },
-      {
-        "asOf": "2026-10-28 13:20",
-        "generationMw": 73948,
-        "attributedGenerationMw": 73948,
-        "carbonIntensity": 257,
-        "emissionsTonnesPerHour": 19033
-      },
-      {
-        "asOf": "2026-10-28 13:25",
-        "generationMw": 73851,
-        "attributedGenerationMw": 73851,
-        "carbonIntensity": 259,
-        "emissionsTonnesPerHour": 19125
-      },
-      {
-        "asOf": "2026-10-28 13:30",
-        "generationMw": 74199,
-        "attributedGenerationMw": 74199,
-        "carbonIntensity": 262,
-        "emissionsTonnesPerHour": 19428
-      },
-      {
-        "asOf": "2026-10-28 13:35",
-        "generationMw": 73572,
-        "attributedGenerationMw": 73572,
-        "carbonIntensity": 261,
-        "emissionsTonnesPerHour": 19235
-      },
-      {
-        "asOf": "2026-10-28 13:40",
-        "generationMw": 73671,
-        "attributedGenerationMw": 73671,
-        "carbonIntensity": 263,
-        "emissionsTonnesPerHour": 19412
-      },
-      {
-        "asOf": "2026-10-28 13:45",
-        "generationMw": 73791,
-        "attributedGenerationMw": 73791,
-        "carbonIntensity": 266,
-        "emissionsTonnesPerHour": 19609
-      },
-      {
-        "asOf": "2026-10-28 13:50",
-        "generationMw": 73708,
-        "attributedGenerationMw": 73708,
-        "carbonIntensity": 267,
-        "emissionsTonnesPerHour": 19683
-      },
-      {
-        "asOf": "2026-10-28 13:55",
-        "generationMw": 73907,
-        "attributedGenerationMw": 73907,
-        "carbonIntensity": 271,
-        "emissionsTonnesPerHour": 20001
-      },
-      {
-        "asOf": "2026-10-28 14:00",
-        "generationMw": 74190,
-        "attributedGenerationMw": 74190,
-        "carbonIntensity": 273,
-        "emissionsTonnesPerHour": 20286
-      },
-      {
-        "asOf": "2026-10-28 14:05",
-        "generationMw": 74338,
-        "attributedGenerationMw": 74338,
-        "carbonIntensity": 277,
-        "emissionsTonnesPerHour": 20584
-      },
-      {
-        "asOf": "2026-10-28 14:10",
-        "generationMw": 74514,
-        "attributedGenerationMw": 74514,
-        "carbonIntensity": 280,
-        "emissionsTonnesPerHour": 20863
-      },
-      {
-        "asOf": "2026-10-28 14:15",
-        "generationMw": 74511,
-        "attributedGenerationMw": 74511,
-        "carbonIntensity": 282,
-        "emissionsTonnesPerHour": 21048
-      },
-      {
-        "asOf": "2026-10-28 14:20",
-        "generationMw": 74682,
-        "attributedGenerationMw": 74682,
-        "carbonIntensity": 286,
-        "emissionsTonnesPerHour": 21336
-      },
-      {
-        "asOf": "2026-10-28 14:25",
-        "generationMw": 74805,
-        "attributedGenerationMw": 74805,
-        "carbonIntensity": 287,
-        "emissionsTonnesPerHour": 21502
-      },
-      {
-        "asOf": "2026-10-28 14:30",
-        "generationMw": 74620,
-        "attributedGenerationMw": 74620,
-        "carbonIntensity": 290,
-        "emissionsTonnesPerHour": 21674
-      },
-      {
-        "asOf": "2026-10-28 14:35",
-        "generationMw": 74572,
-        "attributedGenerationMw": 74572,
-        "carbonIntensity": 293,
-        "emissionsTonnesPerHour": 21844
-      },
-      {
-        "asOf": "2026-10-28 14:40",
-        "generationMw": 74531,
-        "attributedGenerationMw": 74531,
-        "carbonIntensity": 295,
-        "emissionsTonnesPerHour": 21985
-      },
-      {
-        "asOf": "2026-10-28 14:45",
-        "generationMw": 74769,
-        "attributedGenerationMw": 74769,
-        "carbonIntensity": 299,
-        "emissionsTonnesPerHour": 22330
-      },
-      {
-        "asOf": "2026-10-28 14:50",
-        "generationMw": 74865,
-        "attributedGenerationMw": 74865,
-        "carbonIntensity": 302,
-        "emissionsTonnesPerHour": 22646
-      },
-      {
-        "asOf": "2026-10-28 14:55",
-        "generationMw": 75010,
-        "attributedGenerationMw": 75010,
-        "carbonIntensity": 306,
-        "emissionsTonnesPerHour": 22933
-      },
-      {
-        "asOf": "2026-10-28 15:00",
-        "generationMw": 74917,
-        "attributedGenerationMw": 74917,
-        "carbonIntensity": 310,
-        "emissionsTonnesPerHour": 23255
-      },
-      {
-        "asOf": "2026-10-28 15:05",
-        "generationMw": 74627,
-        "attributedGenerationMw": 74627,
-        "carbonIntensity": 312,
-        "emissionsTonnesPerHour": 23292
-      },
-      {
-        "asOf": "2026-10-28 15:10",
-        "generationMw": 74394,
-        "attributedGenerationMw": 74394,
-        "carbonIntensity": 316,
-        "emissionsTonnesPerHour": 23503
-      },
-      {
-        "asOf": "2026-10-28 15:15",
-        "generationMw": 74413,
-        "attributedGenerationMw": 74413,
-        "carbonIntensity": 320,
-        "emissionsTonnesPerHour": 23808
-      },
-      {
-        "asOf": "2026-10-28 15:20",
-        "generationMw": 74311,
-        "attributedGenerationMw": 74311,
-        "carbonIntensity": 324,
-        "emissionsTonnesPerHour": 24075
-      },
-      {
-        "asOf": "2026-10-28 15:25",
-        "generationMw": 74071,
-        "attributedGenerationMw": 74071,
-        "carbonIntensity": 327,
-        "emissionsTonnesPerHour": 24246
-      },
-      {
-        "asOf": "2026-10-28 15:30",
-        "generationMw": 73625,
-        "attributedGenerationMw": 73625,
-        "carbonIntensity": 330,
-        "emissionsTonnesPerHour": 24314
-      },
-      {
-        "asOf": "2026-10-28 15:35",
-        "generationMw": 73893,
-        "attributedGenerationMw": 73893,
-        "carbonIntensity": 335,
-        "emissionsTonnesPerHour": 24781
-      },
-      {
-        "asOf": "2026-10-28 15:40",
-        "generationMw": 74023,
-        "attributedGenerationMw": 74023,
-        "carbonIntensity": 340,
-        "emissionsTonnesPerHour": 25173
-      },
-      {
-        "asOf": "2026-10-28 15:45",
-        "generationMw": 74150,
-        "attributedGenerationMw": 74150,
-        "carbonIntensity": 345,
-        "emissionsTonnesPerHour": 25605
-      },
-      {
-        "asOf": "2026-10-28 15:50",
-        "generationMw": 74144,
-        "attributedGenerationMw": 74144,
-        "carbonIntensity": 350,
-        "emissionsTonnesPerHour": 25930
-      },
-      {
-        "asOf": "2026-10-28 15:55",
-        "generationMw": 74544,
-        "attributedGenerationMw": 74544,
-        "carbonIntensity": 354,
-        "emissionsTonnesPerHour": 26416
-      },
-      {
-        "asOf": "2026-10-28 16:00",
-        "generationMw": 74475,
-        "attributedGenerationMw": 74475,
-        "carbonIntensity": 360,
-        "emissionsTonnesPerHour": 26793
-      },
-      {
-        "asOf": "2026-10-28 16:05",
-        "generationMw": 74179,
-        "attributedGenerationMw": 73893,
-        "carbonIntensity": 362,
-        "emissionsTonnesPerHour": 26765
-      },
-      {
-        "asOf": "2026-10-28 16:10",
-        "generationMw": 74176,
-        "attributedGenerationMw": 73674,
-        "carbonIntensity": 367,
-        "emissionsTonnesPerHour": 27037
-      },
-      {
-        "asOf": "2026-10-28 16:15",
-        "generationMw": 74290,
-        "attributedGenerationMw": 73492,
-        "carbonIntensity": 372,
-        "emissionsTonnesPerHour": 27333
-      },
-      {
-        "asOf": "2026-10-28 16:20",
-        "generationMw": 74152,
-        "attributedGenerationMw": 73342,
-        "carbonIntensity": 377,
-        "emissionsTonnesPerHour": 27650
-      },
-      {
-        "asOf": "2026-10-28 16:25",
-        "generationMw": 73894,
-        "attributedGenerationMw": 72986,
-        "carbonIntensity": 381,
-        "emissionsTonnesPerHour": 27829
-      },
-      {
-        "asOf": "2026-10-28 16:30",
-        "generationMw": 74038,
-        "attributedGenerationMw": 73067,
-        "carbonIntensity": 387,
-        "emissionsTonnesPerHour": 28270
-      },
-      {
-        "asOf": "2026-10-28 16:35",
-        "generationMw": 73968,
-        "attributedGenerationMw": 72766,
-        "carbonIntensity": 392,
-        "emissionsTonnesPerHour": 28493
-      },
-      {
-        "asOf": "2026-10-28 16:40",
-        "generationMw": 74053,
-        "attributedGenerationMw": 72852,
-        "carbonIntensity": 397,
-        "emissionsTonnesPerHour": 28936
-      },
-      {
-        "asOf": "2026-10-28 16:45",
-        "generationMw": 73482,
-        "attributedGenerationMw": 72120,
-        "carbonIntensity": 401,
-        "emissionsTonnesPerHour": 28944
-      },
-      {
-        "asOf": "2026-10-28 16:50",
-        "generationMw": 73193,
-        "attributedGenerationMw": 71817,
-        "carbonIntensity": 406,
-        "emissionsTonnesPerHour": 29169
-      },
-      {
-        "asOf": "2026-10-28 16:55",
-        "generationMw": 72847,
-        "attributedGenerationMw": 71468,
-        "carbonIntensity": 411,
-        "emissionsTonnesPerHour": 29363
-      },
-      {
-        "asOf": "2026-10-28 17:00",
-        "generationMw": 72441,
-        "attributedGenerationMw": 70929,
-        "carbonIntensity": 415,
-        "emissionsTonnesPerHour": 29468
-      },
-      {
-        "asOf": "2026-10-28 17:05",
-        "generationMw": 71921,
-        "attributedGenerationMw": 70368,
-        "carbonIntensity": 418,
-        "emissionsTonnesPerHour": 29417
-      },
-      {
-        "asOf": "2026-10-28 17:10",
-        "generationMw": 71491,
-        "attributedGenerationMw": 69697,
-        "carbonIntensity": 422,
-        "emissionsTonnesPerHour": 29391
-      },
-      {
-        "asOf": "2026-10-28 17:15",
-        "generationMw": 71179,
-        "attributedGenerationMw": 69110,
-        "carbonIntensity": 425,
-        "emissionsTonnesPerHour": 29349
-      },
-      {
-        "asOf": "2026-10-28 17:20",
-        "generationMw": 71045,
-        "attributedGenerationMw": 68673,
-        "carbonIntensity": 428,
-        "emissionsTonnesPerHour": 29365
-      },
-      {
-        "asOf": "2026-10-28 17:25",
-        "generationMw": 71032,
-        "attributedGenerationMw": 68374,
-        "carbonIntensity": 431,
-        "emissionsTonnesPerHour": 29457
-      },
-      {
-        "asOf": "2026-10-28 17:30",
-        "generationMw": 70711,
-        "attributedGenerationMw": 68136,
-        "carbonIntensity": 433,
-        "emissionsTonnesPerHour": 29472
-      },
-      {
-        "asOf": "2026-10-28 17:35",
-        "generationMw": 70872,
-        "attributedGenerationMw": 68236,
-        "carbonIntensity": 433,
-        "emissionsTonnesPerHour": 29575
-      },
-      {
-        "asOf": "2026-10-28 17:40",
-        "generationMw": 70677,
-        "attributedGenerationMw": 68173,
-        "carbonIntensity": 435,
-        "emissionsTonnesPerHour": 29676
-      },
-      {
-        "asOf": "2026-10-28 17:45",
-        "generationMw": 70713,
-        "attributedGenerationMw": 68083,
-        "carbonIntensity": 435,
-        "emissionsTonnesPerHour": 29630
-      },
-      {
-        "asOf": "2026-10-28 17:50",
-        "generationMw": 70743,
-        "attributedGenerationMw": 68106,
-        "carbonIntensity": 437,
-        "emissionsTonnesPerHour": 29782
-      },
-      {
-        "asOf": "2026-10-28 17:55",
-        "generationMw": 70993,
-        "attributedGenerationMw": 68343,
-        "carbonIntensity": 438,
-        "emissionsTonnesPerHour": 29945
-      },
-      {
-        "asOf": "2026-10-28 18:00",
-        "generationMw": 70851,
-        "attributedGenerationMw": 68228,
-        "carbonIntensity": 439,
-        "emissionsTonnesPerHour": 29935
-      },
-      {
-        "asOf": "2026-10-28 18:05",
-        "generationMw": 70580,
-        "attributedGenerationMw": 68018,
-        "carbonIntensity": 437,
-        "emissionsTonnesPerHour": 29693
-      },
-      {
-        "asOf": "2026-10-28 18:10",
-        "generationMw": 70599,
-        "attributedGenerationMw": 67975,
-        "carbonIntensity": 436,
-        "emissionsTonnesPerHour": 29612
-      },
-      {
-        "asOf": "2026-10-28 18:15",
-        "generationMw": 70497,
-        "attributedGenerationMw": 67905,
-        "carbonIntensity": 437,
-        "emissionsTonnesPerHour": 29647
-      },
-      {
-        "asOf": "2026-10-28 18:20",
-        "generationMw": 70468,
-        "attributedGenerationMw": 67936,
-        "carbonIntensity": 437,
-        "emissionsTonnesPerHour": 29664
-      },
-      {
-        "asOf": "2026-10-28 18:25",
-        "generationMw": 70561,
-        "attributedGenerationMw": 67944,
-        "carbonIntensity": 435,
-        "emissionsTonnesPerHour": 29574
-      },
-      {
-        "asOf": "2026-10-28 18:30",
-        "generationMw": 70588,
-        "attributedGenerationMw": 67990,
-        "carbonIntensity": 435,
-        "emissionsTonnesPerHour": 29590
-      },
-      {
-        "asOf": "2026-10-28 18:35",
-        "generationMw": 70326,
-        "attributedGenerationMw": 67758,
-        "carbonIntensity": 435,
-        "emissionsTonnesPerHour": 29451
-      },
-      {
-        "asOf": "2026-10-28 18:40",
-        "generationMw": 70205,
-        "attributedGenerationMw": 67615,
-        "carbonIntensity": 433,
-        "emissionsTonnesPerHour": 29283
-      },
-      {
-        "asOf": "2026-10-28 18:45",
-        "generationMw": 69985,
-        "attributedGenerationMw": 67452,
-        "carbonIntensity": 433,
-        "emissionsTonnesPerHour": 29180
-      },
-      {
-        "asOf": "2026-10-28 18:50",
-        "generationMw": 70126,
-        "attributedGenerationMw": 67521,
-        "carbonIntensity": 432,
-        "emissionsTonnesPerHour": 29161
-      },
-      {
-        "asOf": "2026-10-28 18:55",
-        "generationMw": 69821,
-        "attributedGenerationMw": 67259,
-        "carbonIntensity": 431,
-        "emissionsTonnesPerHour": 29020
-      },
-      {
-        "asOf": "2026-10-28 19:00",
-        "generationMw": 69726,
-        "attributedGenerationMw": 67382,
-        "carbonIntensity": 432,
-        "emissionsTonnesPerHour": 29077
-      },
-      {
-        "asOf": "2026-10-28 19:05",
-        "generationMw": 69948,
-        "attributedGenerationMw": 67471,
-        "carbonIntensity": 431,
-        "emissionsTonnesPerHour": 29087
-      },
-      {
-        "asOf": "2026-10-28 19:10",
-        "generationMw": 69688,
-        "attributedGenerationMw": 67556,
-        "carbonIntensity": 432,
-        "emissionsTonnesPerHour": 29190
-      },
-      {
-        "asOf": "2026-10-28 19:15",
-        "generationMw": 69544,
-        "attributedGenerationMw": 67479,
-        "carbonIntensity": 432,
-        "emissionsTonnesPerHour": 29148
-      },
-      {
-        "asOf": "2026-10-28 19:20",
-        "generationMw": 69405,
-        "attributedGenerationMw": 67283,
-        "carbonIntensity": 432,
-        "emissionsTonnesPerHour": 29068
-      },
-      {
-        "asOf": "2026-10-28 19:25",
-        "generationMw": 69287,
-        "attributedGenerationMw": 67195,
-        "carbonIntensity": 433,
-        "emissionsTonnesPerHour": 29077
-      },
-      {
-        "asOf": "2026-10-28 19:30",
-        "generationMw": 69017,
-        "attributedGenerationMw": 66910,
-        "carbonIntensity": 433,
-        "emissionsTonnesPerHour": 28965
-      },
-      {
-        "asOf": "2026-10-28 19:35",
-        "generationMw": 68713,
-        "attributedGenerationMw": 66616,
-        "carbonIntensity": 433,
-        "emissionsTonnesPerHour": 28867
-      },
-      {
-        "asOf": "2026-10-28 19:40",
-        "generationMw": 68783,
-        "attributedGenerationMw": 66681,
-        "carbonIntensity": 435,
-        "emissionsTonnesPerHour": 28985
-      },
-      {
-        "asOf": "2026-10-28 19:45",
-        "generationMw": 68697,
-        "attributedGenerationMw": 66701,
-        "carbonIntensity": 437,
-        "emissionsTonnesPerHour": 29119
-      },
-      {
-        "asOf": "2026-10-28 19:50",
-        "generationMw": 68656,
-        "attributedGenerationMw": 66687,
-        "carbonIntensity": 438,
-        "emissionsTonnesPerHour": 29240
+        "asOf": "2026-10-29 01:50",
+        "generationMw": 56791,
+        "attributedGenerationMw": 56791,
+        "carbonIntensity": 444,
+        "emissionsTonnesPerHour": 25238
       }
     ]
   }
